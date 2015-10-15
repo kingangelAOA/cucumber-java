@@ -1,7 +1,9 @@
 package junyan.cucumber.step_definitions;
 
+import com.github.mkolisnyk.cucumber.reporting.CucumberUsageReporting;
 import com.google.gson.*;
 import com.squareup.okhttp.Headers;
+import cucumber.api.java.After;
 import cucumber.api.java8.En;
 import junyan.cucumber.support.*;
 import org.testng.Assert;

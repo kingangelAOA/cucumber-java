@@ -1,10 +1,13 @@
 package junyan.cucumber.support;
 
+import com.github.mkolisnyk.cucumber.reporting.CucumberUsageReporting;
 import com.google.gson.*;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.Response;
+import cucumber.api.java.After;
 import org.testng.Assert;
 
+import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
