@@ -147,8 +147,17 @@ public class InterfaceSteps extends InterfaceEnv implements En {
 
         Given("^数据库中获取数据设置到全局变量中, sql (.*),获取行数 (.*), 获取的参数 (.*)$",
             (String sql, Integer index, String list) -> {
+
                 try {
-                    JsonElement jsonElement = mysql.getDataBySql(sql, index, list);
+                    JsonElement jsonElement;
+                    if (hasBrance(sql)){
+                        sql = regularBrace(sql, getGlobal());
+                        sql = sql.replace("\"", "");
+                        jsonElement = mysql.getDataBySql(sql, index, list);
+
+                    } else {
+                        jsonElement = mysql.getDataBySql(sql, index, list);
+                    }
                     updateGlobal(jsonElement.getAsJsonObject());
                 } catch (InterfaceException e) {
                     Assert.assertTrue(false, e.getMessage());

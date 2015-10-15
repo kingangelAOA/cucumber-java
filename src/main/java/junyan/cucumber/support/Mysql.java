@@ -40,7 +40,7 @@ public class Mysql extends Json {
      */
     public JsonElement getDataBySql(String sql, int index, String list) throws InterfaceException {
         Iterator<JsonElement> iterator = toElement(list).getAsJsonArray().iterator();
-        List queryForString = new QueryUtil(conn).executeQuery("select * from projects");
+        List queryForString = new QueryUtil(conn).executeQuery(sql);
         if (queryForString.size()-1 < index)
             throw new InterfaceException("所请求的index超出sql查询结果的条数...");
         JsonElement jsonElement = new JsonParser().parse("{}");
@@ -49,7 +49,7 @@ public class Mysql extends Json {
             JsonElement element =  iterator.next();
             Object elementType = getJsonPrimitiveType(element.getAsJsonPrimitive());
             if (elementType instanceof String) {
-                jsonElement.getAsJsonObject().add(element.getAsString(), getJsonPrimitiveType(element.getAsString()));
+                jsonElement.getAsJsonObject().add(element.getAsString(), toJsonPrimitive(map.get(element.getAsString()).toString()));
             } else {
                 throw new InterfaceException("sql字段索引只能是字符串.....");
             }

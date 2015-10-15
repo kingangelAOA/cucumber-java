@@ -7,7 +7,7 @@ formatter.feature({
   "keyword": "Feature"
 });
 formatter.before({
-  "duration": 66184,
+  "duration": 247840,
   "status": "passed"
 });
 formatter.scenario({
@@ -26,7 +26,7 @@ formatter.scenario({
 });
 formatter.step({
   "line": 4,
-  "name": "设置全局变量 {\"aaa\":\"bbbbb\", \"d\":1}",
+  "name": "设置全局变量 {\"aaa\":\"bbbbb\", \"d\":1, \"user_id\":1}",
   "keyword": "Given "
 });
 formatter.step({
@@ -71,105 +71,110 @@ formatter.step({
 });
 formatter.step({
   "line": 15,
+  "name": "数据库中获取数据设置到全局变量中, sql select * from cases where user_id \u003d ${user_id} ,获取行数 50, 获取的参数 [summary]",
+  "keyword": "Given "
+});
+formatter.step({
+  "line": 16,
   "name": "执行请求",
   "keyword": "And "
 });
 formatter.step({
-  "line": 16,
+  "line": 17,
   "name": "最近一次请求响应状态是否是 200",
   "keyword": "Then "
 });
 formatter.step({
-  "line": 17,
+  "line": 18,
   "name": "接口 test1 response的body中的 [] 的值是否包含这些字段 [\"a\", \"c\", \"d\", \"e\"]",
   "keyword": "Then "
 });
 formatter.step({
-  "line": 19,
+  "line": 20,
   "name": "从接口 test1 的response的body中获取值,值索引为 [\"a\"],字段名称为: id,设置到全局变量中",
   "keyword": "Given "
 });
 formatter.step({
-  "line": 20,
+  "line": 21,
   "name": "查看全局变量",
-  "keyword": "Given "
-});
-formatter.step({
-  "line": 22,
-  "name": "设置接口名称 test2",
   "keyword": "Given "
 });
 formatter.step({
   "line": 23,
+  "name": "设置接口名称 test2",
+  "keyword": "Given "
+});
+formatter.step({
+  "line": 24,
   "name": "设置请求url http://localhost:3000/test2",
   "keyword": "And "
 });
 formatter.step({
-  "line": 24,
+  "line": 25,
   "name": "设置method POST",
   "keyword": "And "
 });
 formatter.step({
-  "line": 25,
+  "line": 26,
   "name": "设置请求数据格式 JSON",
   "keyword": "And "
 });
 formatter.step({
-  "line": 26,
+  "line": 27,
   "name": "设置请求数据:",
   "keyword": "And ",
   "doc_string": {
     "content_type": "",
-    "line": 27,
+    "line": 28,
     "value": "{\n    \"user_id\": 111,\n    \"bbb\": \"${id}\",\n    \"ccc\": [\n        {\n            \"acd\": \"aaaa\"\n        }\n    ],\n    \"dd\": {\n        \"cc\": [\n            \"a\",\n            \"b\"\n        ]\n    }\n}"
   }
 });
 formatter.step({
-  "line": 44,
+  "line": 45,
   "name": "设置cookies aa\u003dbb;cc\u003ddd;adf_\u003dadfasf",
   "keyword": "Given "
 });
 formatter.step({
-  "line": 45,
+  "line": 46,
   "name": "设置headers {\"Content-Length\": 143}",
   "keyword": "And "
 });
 formatter.step({
-  "line": 46,
+  "line": 47,
   "name": "执行请求",
   "keyword": "And "
 });
 formatter.step({
-  "line": 48,
+  "line": 49,
   "name": "从接口 test2 的response的body中获取值,值索引为 [\"bbb\"],字段名称为: test2_id,设置到全局变量中",
   "keyword": "Given "
 });
 formatter.step({
-  "line": 49,
+  "line": 50,
   "name": "查看所有cache",
   "keyword": "Given "
 });
 formatter.step({
-  "line": 50,
+  "line": 51,
   "name": "查看全局变量",
   "keyword": "Given "
 });
 formatter.step({
-  "line": 51,
+  "line": 52,
   "name": "从全局变量中取出字段 test2_id 的值,是否等于 \"b\"",
   "keyword": "Then "
 });
 formatter.match({
   "arguments": [
     {
-      "val": "{\"aaa\":\"bbbbb\", \"d\":1}",
+      "val": "{\"aaa\":\"bbbbb\", \"d\":1, \"user_id\":1}",
       "offset": 7
     }
   ],
-  "location": "InterfaceSteps.java:87"
+  "location": "InterfaceSteps.java:94"
 });
 formatter.result({
-  "duration": 120841708,
+  "duration": 152599978,
   "status": "passed"
 });
 formatter.match({
@@ -182,7 +187,7 @@ formatter.match({
   "location": "InterfaceSteps.java:28"
 });
 formatter.result({
-  "duration": 103088,
+  "duration": 102742,
   "status": "passed"
 });
 formatter.match({
@@ -195,7 +200,7 @@ formatter.match({
   "location": "InterfaceSteps.java:33"
 });
 formatter.result({
-  "duration": 745983,
+  "duration": 681620,
   "status": "passed"
 });
 formatter.match({
@@ -208,7 +213,7 @@ formatter.match({
   "location": "InterfaceSteps.java:46"
 });
 formatter.result({
-  "duration": 87065,
+  "duration": 74046,
   "status": "passed"
 });
 formatter.match({
@@ -221,14 +226,14 @@ formatter.match({
   "location": "InterfaceSteps.java:51"
 });
 formatter.result({
-  "duration": 89398,
+  "duration": 55586,
   "status": "passed"
 });
 formatter.match({
   "location": "InterfaceSteps.java:56"
 });
 formatter.result({
-  "duration": 4571832,
+  "duration": 6283823,
   "status": "passed"
 });
 formatter.match({
@@ -241,7 +246,7 @@ formatter.match({
   "location": "InterfaceSteps.java:75"
 });
 formatter.result({
-  "duration": 306870,
+  "duration": 368716,
   "status": "passed"
 });
 formatter.match({
@@ -251,17 +256,38 @@ formatter.match({
       "offset": 10
     }
   ],
-  "location": "InterfaceSteps.java:83"
+  "location": "InterfaceSteps.java:90"
 });
 formatter.result({
-  "duration": 145051,
+  "duration": 322827,
   "status": "passed"
 });
 formatter.match({
-  "location": "InterfaceSteps.java:91"
+  "arguments": [
+    {
+      "val": "select * from cases where user_id \u003d ${user_id} ",
+      "offset": 22
+    },
+    {
+      "val": "50",
+      "offset": 75
+    },
+    {
+      "val": "[summary]",
+      "offset": 85
+    }
+  ],
+  "location": "InterfaceSteps.java:148"
 });
 formatter.result({
-  "duration": 164257564,
+  "duration": 80059108,
+  "status": "passed"
+});
+formatter.match({
+  "location": "InterfaceSteps.java:98"
+});
+formatter.result({
+  "duration": 176167205,
   "status": "passed"
 });
 formatter.match({
@@ -271,10 +297,10 @@ formatter.match({
       "offset": 14
     }
   ],
-  "location": "InterfaceSteps.java:166"
+  "location": "InterfaceSteps.java:182"
 });
 formatter.result({
-  "duration": 1790587,
+  "duration": 2214073,
   "status": "passed"
 });
 formatter.match({
@@ -292,10 +318,10 @@ formatter.match({
       "offset": 39
     }
   ],
-  "location": "InterfaceSteps.java:171"
+  "location": "InterfaceSteps.java:187"
 });
 formatter.result({
-  "duration": 235827,
+  "duration": 275459,
   "status": "passed"
 });
 formatter.match({
@@ -313,17 +339,17 @@ formatter.match({
       "offset": 47
     }
   ],
-  "location": "InterfaceSteps.java:119"
+  "location": "InterfaceSteps.java:126"
 });
 formatter.result({
-  "duration": 162144,
+  "duration": 161432,
   "status": "passed"
 });
 formatter.match({
-  "location": "InterfaceSteps.java:151"
+  "location": "InterfaceSteps.java:167"
 });
 formatter.result({
-  "duration": 190884,
+  "duration": 290644,
   "status": "passed"
 });
 formatter.match({
@@ -336,7 +362,7 @@ formatter.match({
   "location": "InterfaceSteps.java:28"
 });
 formatter.result({
-  "duration": 70240,
+  "duration": 36796,
   "status": "passed"
 });
 formatter.match({
@@ -349,7 +375,7 @@ formatter.match({
   "location": "InterfaceSteps.java:33"
 });
 formatter.result({
-  "duration": 67490,
+  "duration": 88911,
   "status": "passed"
 });
 formatter.match({
@@ -362,7 +388,7 @@ formatter.match({
   "location": "InterfaceSteps.java:46"
 });
 formatter.result({
-  "duration": 42557,
+  "duration": 36198,
   "status": "passed"
 });
 formatter.match({
@@ -375,14 +401,14 @@ formatter.match({
   "location": "InterfaceSteps.java:51"
 });
 formatter.result({
-  "duration": 48684,
+  "duration": 30935,
   "status": "passed"
 });
 formatter.match({
   "location": "InterfaceSteps.java:56"
 });
 formatter.result({
-  "duration": 381512,
+  "duration": 335473,
   "status": "passed"
 });
 formatter.match({
@@ -395,7 +421,7 @@ formatter.match({
   "location": "InterfaceSteps.java:75"
 });
 formatter.result({
-  "duration": 146192,
+  "duration": 109404,
   "status": "passed"
 });
 formatter.match({
@@ -405,17 +431,17 @@ formatter.match({
       "offset": 10
     }
   ],
-  "location": "InterfaceSteps.java:83"
+  "location": "InterfaceSteps.java:90"
 });
 formatter.result({
-  "duration": 82574,
+  "duration": 64718,
   "status": "passed"
 });
 formatter.match({
-  "location": "InterfaceSteps.java:91"
+  "location": "InterfaceSteps.java:98"
 });
 formatter.result({
-  "duration": 19203774,
+  "duration": 15527593,
   "status": "passed"
 });
 formatter.match({
@@ -433,24 +459,24 @@ formatter.match({
       "offset": 49
     }
   ],
-  "location": "InterfaceSteps.java:119"
+  "location": "InterfaceSteps.java:126"
 });
 formatter.result({
-  "duration": 142237,
+  "duration": 169800,
   "status": "passed"
 });
 formatter.match({
-  "location": "InterfaceSteps.java:115"
+  "location": "InterfaceSteps.java:122"
 });
 formatter.result({
-  "duration": 770200,
+  "duration": 4153835,
   "status": "passed"
 });
 formatter.match({
-  "location": "InterfaceSteps.java:151"
+  "location": "InterfaceSteps.java:167"
 });
 formatter.result({
-  "duration": 149829,
+  "duration": 275523,
   "status": "passed"
 });
 formatter.match({
@@ -464,14 +490,14 @@ formatter.match({
       "offset": 28
     }
   ],
-  "location": "InterfaceSteps.java:155"
+  "location": "InterfaceSteps.java:171"
 });
 formatter.result({
-  "duration": 107088,
+  "duration": 102642,
   "status": "passed"
 });
 formatter.after({
-  "duration": 17356,
+  "duration": 11203,
   "status": "passed"
 });
 });

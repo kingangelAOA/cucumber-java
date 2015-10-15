@@ -1,7 +1,7 @@
 Feature: test
   @interface
   Scenario: test
-    Given 设置全局变量 {"aaa":"bbbbb", "d":1}
+    Given 设置全局变量 {"aaa":"bbbbb", "d":1, "user_id":1}
     Given 设置接口名称 test1
     And 设置请求url http://localhost:3000/test"${d}"
     And 设置method POST
@@ -12,6 +12,7 @@ Feature: test
     """
     Given 设置cookies aa=bb;cc=dd;adf_=adfasf
     And 设置headers {"Content-Length": 143}
+    Given 数据库中获取数据设置到全局变量中, sql select * from cases where user_id = ${user_id} ,获取行数 50, 获取的参数 [summary]
     And 执行请求
     Then 最近一次请求响应状态是否是 200
     Then 接口 test1 response的body中的 [] 的值是否包含这些字段 ["a", "c", "d", "e"]
