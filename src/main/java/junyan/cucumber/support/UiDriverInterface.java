@@ -1,0 +1,124 @@
+package junyan.cucumber.support;
+
+import com.google.gson.JsonObject;
+import io.appium.java_client.MultiTouchAction;
+import io.appium.java_client.NetworkConnectionSetting;
+import io.appium.java_client.TouchAction;
+import org.openqa.selenium.*;
+import org.openqa.selenium.html5.Location;
+import org.openqa.selenium.interactions.Keyboard;
+import org.openqa.selenium.interactions.Mouse;
+import org.openqa.selenium.remote.*;
+
+import java.net.URL;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
+
+/**
+ * Created by kingangeltot on 15/10/10.
+ */
+public interface UiDriverInterface {
+    public WebElement getNamedTextField(String name) throws UiExceptions;
+    public WebElement findElementByIosUIAutomation(String using) throws UiExceptions;
+    public WebElement findElementByAndroidUIAutomator(String using) throws UiExceptions;
+    public WebElement scrollTo(String text);
+    public WebElement findElementByClassName(String className);
+    public WebElement findElementByAccessibilityId(String using);
+    public WebElement scrollToExact(String text);
+    public WebElement findElementByPartialLinkText(String using);
+    public WebElement findElementByLinkText(String using);
+    public WebElement findElementByCssSelector(String using);
+    public WebElement findElementByTagName(String using);
+    public WebElement findElementById(String using);
+    public WebElement findElementByXPath(String using);
+    public WebElement findElementByName(String using);
+    public List findElementsByAndroidUIAutomator(String using) throws UiExceptions;
+    public List findElementsById(String using);
+    public List findElementsByLinkText(String using);
+    public List findElementsByPartialLinkText(String using);
+    public List findElementsByTagName(String using);
+    public List findElementsByName(String using);
+    public List findElementsByClassName(String using);
+    public List findElementsByCssSelector(String using);
+    public List findElementsByXPath(String using);
+    public List findElementsByAccessibilityId(String using);
+    public List findElementsByIosUIAutomation(String using) throws UiExceptions;
+    public WebElement findElement(By by);
+    public boolean isLocked() throws UiExceptions;
+    public void sendKeyEvent(int key, Integer metastate) throws UiExceptions;
+    public void sendKeyEvent(int key) throws UiExceptions;
+    public void ignoreUnimportantViews(Boolean compress) throws UiExceptions;
+
+    public String currentActivity() throws UiExceptions;
+    public void pushFile(String remotePath, byte[] base64Data) throws UiExceptions;
+    public void endTestCoverage(String String) throws UiExceptions;
+    public void openNotifications() throws UiExceptions;
+    public NetworkConnectionSetting getNetworkConnection() throws UiExceptions;
+    public void setNetworkConnection(NetworkConnectionSetting connection) throws UiExceptions;
+    public void startActivity(String appPackage, String appActivity, String appWaitPackage, String appWaitActivity) throws UiExceptions;
+    public void startActivity(String appPackage, String appActivity) throws UiExceptions;
+    public void toggleLocationServices() throws UiExceptions;
+    public void shake() throws UiExceptions;
+    public void hideKeyboard(String keyName) throws UiExceptions;
+    public void hideKeyboard(String strategy, String keyName) throws UiExceptions;
+
+    public WebDriver context(String using);
+    public String getContext();
+    public void rotate(ScreenOrientation orientation);
+    public Location location();
+
+    public byte[] pullFile(String remotePath);
+    public byte[] pullFolder(String remotePath);
+    public void runAppInBackground(int seconds);
+    public TouchAction performTouchAction(TouchAction touchAction);
+    public boolean isAppInstalled(String bundleId);
+    public void installApp(String appPath);
+    public void removeApp(String bundleId);
+    public void launchApp();
+    public void closeApp();
+    public JsonObject getSettings();
+    public ExecuteMethod getExecuteMethod();
+    public void resetApp();
+    public void performMultiTouchAction(MultiTouchAction multiAction);
+    public void tap(int fingers, WebElement element, int duration);
+    public void swipe(int startx, int starty, int endx, int endy, int duration);
+    public void pinch(WebElement element);
+    public void pinch(int x, int y);
+    public void zoom(int x, int y);
+    public void zoom(WebElement element);
+    public void lockScreen(int seconds);
+    public Set getContextHandles();
+    public ScreenOrientation getOrientation();
+    public void setLocation(Location location);
+    public String getAppStrings(String language);
+    public String getAppStrings();
+    public URL getRemoteAddress();
+    public void hideKeyboard();
+    public List findElements(By by);
+    public void get(String url);
+    public void close();
+    public void setErrorHandler(ErrorHandler errorHandler);
+    public WebDriver.Options manage();
+    public void setFileDetector(FileDetector detector);
+    public SessionId getSessionId();
+    public ErrorHandler getErrorHandler();
+    public CommandExecutor getCommandExecutor();
+    public Capabilities getCapabilities();
+    public RemoteStatus getRemoteStatus();
+    //    public void screenshot(WebDriver driver, String path) throws IOException;
+    public Object executeScript(String script, Object[] args);
+    public Object executeAsyncScript(String script, Object[] args);
+    public void setLogLevel(Level level);
+    public Keyboard getKeyboard();
+    public Mouse getMouse();
+    public FileDetector getFileDetector();
+    public String getCurrentUrl();
+    public String getTitle();
+    public void quit();
+    public String getPageSource();
+    public Set getWindowHandles();
+    public String getWindowHandle();
+    public WebDriver.TargetLocator switchTo();
+    public WebDriver.Navigation navigate();
+}
