@@ -1,12 +1,9 @@
 package cucumber;
 
 
-import com.github.mkolisnyk.cucumber.reporting.CucumberUsageReporting;
 import com.github.mkolisnyk.cucumber.runner.ExtendedCucumber;
 import com.github.mkolisnyk.cucumber.runner.ExtendedCucumberOptions;
 import cucumber.api.CucumberOptions;
-import cucumber.api.java.After;
-import cucumber.api.junit.Cucumber;
 import org.junit.runner.RunWith;
 
 /**
