@@ -16,7 +16,6 @@ import java.util.regex.Pattern;
  * Created by kingangelTOT on 15/10/6.
  */
 public class Test extends Json {
-
     public static void main(String[] args) throws IOException, InterfaceException {
 
     }
