@@ -19,7 +19,7 @@ public class Mysql extends Json {
     private static final String DRIVER = "com.mysql.jdbc.Driver";
     private Connection conn;
     public Mysql(String env) throws FileNotFoundException, YamlException, ClassNotFoundException, SQLException {
-        Map<String, Map<String, String>> map = getYaml("/src/main/resources/config/connect.yaml");
+        Map<String, Map<String, String>> map = Common.toMapByYaml("/src/main/resources/config/connect.yaml");
         Map<String, String> connectConf = map.get(env);
         String userName = connectConf.get("username");
         String password = connectConf.get("password");

@@ -26,7 +26,7 @@ public class InterfaceSteps extends InterfaceEnv implements En {
     private final Mysql mysql;
     public InterfaceSteps() throws IOException, SQLException, ClassNotFoundException {
         verifyList = new ArrayList<>();
-        mysql = new Mysql(getYaml("/src/main/resources/config/run.yaml").get("run").toString());
+        mysql = new Mysql(Common.toMapByYaml("/src/main/resources/config/run.yaml").get("run").toString());
         Given("^设置接口名称 (.*)$", (String name) -> {
             setInterfaceName(name);
             verifyList.add("interfaceName");
