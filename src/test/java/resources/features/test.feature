@@ -50,3 +50,14 @@ Feature: test
     Given 查看所有cache
     Given 查看全局变量
     Then 从全局变量中取出字段 test2_id 的值,是否等于 "b"
+
+  @UI
+  Scenario: test
+    Given 设置远程url http://127.0.0.1:4723
+    And 设置platform android
+    And 设置web浏览器 chrome
+    And 初始化driver
+    And 跳转到网页address http://www.baidu.com
+#    Given 查询单个元素 我的, 查询方法 findElementByName, 查询条件 我的
+#    And 点击元素 我的
+#    Then 元素 我的 的文本信息是否等于 我的

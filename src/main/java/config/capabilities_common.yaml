@@ -24,7 +24,7 @@ app:
 
 # Description: Name of mobile web browser to automate. Should be an empty string if automating an app instead.
 # value: ‘Safari’ for iOS and ‘Chrome’, ‘Chromium’, or ‘Browser’ for Android
-browserName: 
+browserName: chrome
 
 # Description: How long (in seconds) Appium will wait for a new command from the client before 
 # assuming the client quit and ending the session
