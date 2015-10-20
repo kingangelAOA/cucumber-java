@@ -37,7 +37,7 @@ autoLaunch:
 
 # Description: Unique device identifier of the connected physical device
 # value: e.g. 1ae203187fc012g
-udid: b8e2d18
+udid: HC46GWY04694
 
 # Description: Move directly into Webview context. Default false
 # value: true, false

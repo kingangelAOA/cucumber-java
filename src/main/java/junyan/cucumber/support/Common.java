@@ -19,6 +19,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -110,6 +111,12 @@ public class Common {
         return objects;
     }
 
+    public static List<Object> toList(Object object){
+        List<Object> list = new ArrayList<>();
+        list.add(object);
+        return list;
+    }
+
     public static Object convert(Class<?> target, String s) {
         if (target == Object.class || target == String.class || s == null) {
             return s;
@@ -163,6 +170,40 @@ public class Common {
             }
         }
         throw new IllegalArgumentException("Don't know how to instantiate " + className);
+    }
+
+    public static Object instantiate(String className, Class<?>[] classes, Object[] objects) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
+        Class<?> classType = Class.forName(className);
+        classType.getConstructors();
+        Constructor<?> constructor = classType
+                .getConstructor(classes);
+        return constructor.newInstance(objects);
+    }
+
+    public static Object instantiate(Object object, Class<?>[] classes, Object[] objects) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
+        Class<?> classType = object.getClass();
+        classType.getConstructors();
+        Constructor<?> constructor = classType
+                .getConstructor(classes);
+        return constructor.newInstance(objects);
+    }
+
+    public static Object execMethod(Object Object, String method, Object[] args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Object[] convertedArgs = new Object[args.length];
+        Class<?>[] paramsClass = new Class[args.length];
+        for (int i = 0; i < convertedArgs.length; i++) {
+            paramsClass[i] = args[i].getClass();
+        }
+        Method getMethod = Object.getClass().getMethod(method, paramsClass);
+        return getMethod.invoke(Object, args);
+    }
+
+    public static List<String> toList(String[] strings){
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < strings.length; i++){
+            list.add(strings[i]);
+        }
+        return list;
     }
 
     public static void run(String classPath) throws ClassNotFoundException {
