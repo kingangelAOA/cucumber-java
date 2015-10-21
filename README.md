@@ -18,75 +18,49 @@
 
     -Dcucumber.options="features/BrowserCommands.feature:5 --plugin pretty" test
     
-##Cucumber interface公共接口定义(支持接口关联测试), UI测试未完成
+##Cucumber interface公共接口定义(支持接口关联测试)
 ###目录结构 
 1.目录含义
 
-    ├── \ cucumber-html-reports //测试报告
-        │   ├── cucumber.json
-        │   ├── formatter.js
-        │   ├── index.html
-        │   ├── jquery-1.8.2.min.js
-        │   ├── report.js
-        │   └── style.css
-        ├── AIC.iml
-        ├── README.md
-        ├── cucumber-auto.iml
-        ├── pom.xml
-        └── src
-        ├── main
-        │   ├── java
-        │   │   └── junyan
-        │   │       └── cucumber
-        │   │           ├── step_definitions
-        │   │           │   ├── AppiumSteps.java //appium接口定义(未完成)
-        │   │           │   └── InterfaceSteps.java //接口测试接口定义
-        │   │           └── support
-        │   │               ├── Appium.java //未完成
-        │   │               ├── AppiumEnv.java //未完成
-        │   │               ├── Common.java //通用方法类
-        │   │               ├── Http.java //okhttp底层封装
-        │   │               ├── InterfaceEnv.java //接口测试环境类
-        │   │               ├── InterfaceException.java //接口测试异常类
-        │   │               ├── Json.java //json处理封装,底层是Gson
-        │   │               ├── Mysql.java //mysql连接封装
-        │   │               ├── Reflect.java //未完成
-        │   │               ├── RunDriver.java //未完成
-        │   │               ├── Test.java
-        │   │               ├── UiCommon.java //未完成
-        │   │               ├── UiDriver.java //未完成
-        │   │               ├── UiDriverInterface.java //未完成
-        │   │               ├── UiExceptions.java //未完成
-        │   │               ├── models //未完成
-        │   │               │   ├── Assert.java
-        │   │               │   ├── Case.java
-        │   │               │   ├── Element.java
-        │   │               │   ├── Left.java
-        │   │               │   ├── Right.java
-        │   │               │   ├── Step.java
-        │   │               │   ├── TestSuite.java
-        │   │               │   ├── Trans.java
-        │   │               │   └── Worker.java
-        │   │               └── uimodule //未完成
-        │   │                   ├── MyAndroidDriver.java
-        │   │                   └── MyIosDriver.java
-        │   └── resources
-        │       └── config
-        │           ├── connect.yaml //数据库连接配置文件
-        │           └── run.yaml //环境设置
-        └── test
+    ├── main
+    │   ├── java
+    │   │   ├── config
+    │   │   │   ├── capabilities_android.yaml //android配置文件
+    │   │   │   ├── capabilities_common.yaml //通用
+    │   │   │   ├── capabilities_ios.yaml //ios
+    │   │   │   ├── connect.yaml //mysql连接信息
+    │   │   │   └── run.yaml //运行配置
+    │   │   └── junyan
+    │   │       └── cucumber
+    │   │           ├── step_definitions
+    │   │           │   ├── AppiumSteps.java //android, ios, web步骤
+    │   │           │   └── InterfaceSteps.java //接口测试步骤
+    │   │           └── support
+    │   │               ├── AppiumEnv.java // android, ios, web 环境
+    │   │               ├── Common.java //通用
+    │   │               ├── Http.java //http底层
+    │   │               ├── InterfaceEnv.java //接口测试 环境
+    │   │               ├── InterfaceException.java // 接口异常类
+    │   │               ├── Json.java //json处理
+    │   │               ├── Mysql.java //mysql封装
+    │   │               ├── Reflect.java //没用
+    │   │               ├── Test.java 
+    │   │               ├── UiDriverInterface.java //没用
+    │   │               └── UiExceptions.java //UI测试异常
+    │   └── resources
+    └── test
         └── java
-        ├── cucumber
-        │   └── RunTest.java //执行入口类
-        └── resources
-        ├── features
-        │   └── test.feature //测试feature文件
-        └── test_data
-        ├── testData_android.json //接口测试json数据,文件路径可变
-        └── test_data.json //同上
+            ├── cucumber
+            │   └── RunTest.java
+            └── resources
+                ├── features
+                │   └── test.feature
+                └── test_data
+                    ├── testData_android.json
+                    └── test_data.json
     
 
-###cucumber接口测试使用方法
+###cucumber接口测试步骤
 1.Given 设置全局变量 {"aaa":"bbbbb", "d":1}
 
     全局变量为接口与接口的数据中转站, 是关联接口测试的关键;
@@ -202,3 +176,80 @@
         result:true
         
 20.可以自己二次开发,根据不同的项目开发不同的接口,因为不同的项目断言差异性很大,只能写比较通用的接口和断言.......
+
+##android, IOS, web 自动化测试
+###环境配置
+1.appium
+
+    配置appium环境, 具体请查看 http://appium.io
+
+2.grid2
+
+    启动grid2,具体信息请查看 https://code.google.com/p/selenium/wiki/Grid2
+    
+3.因为启动的时候会先连接数据库,所以在数据库配置文件中连接一个可用的mysql数据否则报错(待优化)
+
+    mysql数据库会根据,run.yaml中的配置选择对应的数据库
+    
+###接口步骤
+
+1.设置远程url http://127.0.0.1:4723
+
+    运行用例的目标ip, appium server运行的目标机器IP, grid2运行的hub的IP
+
+2.设置platform XXX
+
+    设置运行的平台: android, ios 或者 web, ios 未调试
+     
+3.设置web浏览器 XXX
+
+    假如平台设置的是web, 这个接口可以设置 firefox, chrome等
+
+4.初始化driver
+  
+    设置完必须的配置后, 生成driver
+    
+5.跳转到网页address http://www.baidu.com
+
+    假如初始化driver后可以用这个接口跳转到目标页面
+    
+6.查询单个元素 (.*), 查询方法 (.*), 查询条件 (.*)
+
+    第一个参数是元素名称(不能重复),第二个参数方法名称(对应源码中的方法),第三个为查询条件
+    以下是查询单个元素的方法:
+    "getNamedTextField",
+    "findElementByIosUIAutomation",
+    "findElementByAndroidUIAutomator",
+    "scrollTo",
+    "findElementByClassName",
+    "findElementByAccessibilityId",
+    "scrollToExact",
+    "findElementByPartialLinkText",
+    "findElementByLinkText",
+    "findElementByCssSelector",
+    "findElementByTagName",
+    "findElementById",
+    "findElementByXPath",
+    "findElementByName"
+    具体意思可以到appium源码或者selenium源码去查询
+    
+7.设置超时时间 xxx
+    
+    设置查询元素的超时时间,默认是10秒
+    
+8.查看缓存的元素
+
+    查看缓存过的元素
+    
+9.点击元素 xxx
+
+    点击元素
+    
+10.输入 xxx 到元素 xxxx中
+
+    输入数据到已经被查询到的元素中区
+    
+11.元素 xxx 的文本信息是否等于 xxx
+
+    获取已经查询到的元素的文本是否与设置的文本相同
+    
