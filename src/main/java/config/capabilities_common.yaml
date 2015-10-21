@@ -4,7 +4,7 @@ automationName:
 
 # Description: Which mobile OS platform to use;
 # value:iOS, Android, or FirefoxOS
-platformName: Android
+platformName: android
 
 # Mobile OS version; value: e.g., 7.1, 4.4
 platformVersion: 
@@ -24,7 +24,7 @@ app:
 
 # Description: Name of mobile web browser to automate. Should be an empty string if automating an app instead.
 # value: ‘Safari’ for iOS and ‘Chrome’, ‘Chromium’, or ‘Browser’ for Android
-browserName: chrome
+browserName:
 
 # Description: How long (in seconds) Appium will wait for a new command from the client before 
 # assuming the client quit and ending the session
@@ -37,7 +37,7 @@ autoLaunch:
 
 # Description: Unique device identifier of the connected physical device
 # value: e.g. 1ae203187fc012g
-udid: HC46GWY04694
+udid: b8e2d18
 
 # Description: Move directly into Webview context. Default false
 # value: true, false
@@ -51,4 +51,4 @@ noReset:
 # app instead of clearing app data. On Android, this will also remove the app after the session is 
 # complete. Default false
 # value: true, false
-fullReset: 
+fullReset:

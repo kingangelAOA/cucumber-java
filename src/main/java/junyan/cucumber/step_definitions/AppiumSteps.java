@@ -11,6 +11,7 @@ import org.testng.Assert;
 
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +45,11 @@ public class AppiumSteps extends AppiumEnv implements En {
             if (!(verifyList.contains("url") && verifyList.contains("platform")))
                 Assert.assertTrue(false, "请先设置url或者platform");
             try {
-                initDriver();
+                try {
+                    initDriver();
+                } catch (MalformedURLException e) {
+                    Assert.assertTrue(false, e.getMessage());
+                }
                 verifyList.add("initDriver");
             } catch (InvocationTargetException | NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InstantiationException | FileNotFoundException | YamlException | UiExceptions e) {
                 e.printStackTrace();

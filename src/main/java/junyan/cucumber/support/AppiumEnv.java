@@ -2,11 +2,13 @@ package junyan.cucumber.support;
 
 import com.esotericsoftware.yamlbeans.YamlException;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -18,7 +20,7 @@ public class AppiumEnv extends Common{
     private String url;
     private String platform;
     private String browser;
-    private Capabilities desiredCapabilities;
+    private DesiredCapabilities desiredCapabilities;
     private int defaultTimeOut = 10;
     private String driverName;
     private int timeOut = 0;
@@ -64,14 +66,19 @@ public class AppiumEnv extends Common{
     }
 
     public void initData() throws UiExceptions, FileNotFoundException, YamlException {
-        this.desiredCapabilities = initCapabilities(platform);
+        initCapabilities(platform);
         setDriverName(platform);
     }
 
-    public Object initDriver() throws InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException, FileNotFoundException, YamlException, UiExceptions {
+    public Object initDriver() throws InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException, FileNotFoundException, YamlException, UiExceptions, MalformedURLException {
         initData();
-
-        Object object = instantiate(driverName, new Class[] {URL.class, Capabilities.class}, new Object[] {getUrl(url), desiredCapabilities});
+        Object object;
+//        if (platform.equals("web")) {
+//            object = new RemoteWebDriver(getUrl(url), desiredCapabilities);
+//        }else {
+//        DesiredCapabilities desiredCapabilities = DesiredCapabilities.firefox();
+            object = instantiate(driverName, new Class[]{URL.class, Capabilities.class}, new Object[]{getUrl(url), desiredCapabilities});
+//        }
         setDriver((RemoteWebDriver)object);
         this.driver = object;
         return object;
@@ -86,23 +93,21 @@ public class AppiumEnv extends Common{
         driver.manage().timeouts().implicitlyWait(defaultTimeOut, TimeUnit.SECONDS);
     }
 
-    private Capabilities initCapabilities(String platform) throws FileNotFoundException, YamlException, UiExceptions {
+    private void initCapabilities(String platform) throws FileNotFoundException, YamlException, UiExceptions {
         Map<String, Object> map_com = deleteNull(toMapByYaml("/src/main/java/config/capabilities_common.yaml"));
         Map<String, Object> map_and = deleteNull(toMapByYaml("/src/main/java/config/capabilities_android.yaml"));
         Map<String, Object> map_ios = deleteNull(toMapByYaml("/src/main/java/config/capabilities_ios.yaml"));
-        Capabilities capabilities;
         if (platform.equals("android"))
-            capabilities = new DesiredCapabilities(toMap(map_com, map_and));
+            desiredCapabilities = new DesiredCapabilities(toMap(map_com, map_and));
         else if (platform.equals("ios"))
-            capabilities = new DesiredCapabilities(toMap(map_com, map_ios));
+            desiredCapabilities = new DesiredCapabilities(toMap(map_com, map_ios));
         else if (platform.equals("web")){
             if (browser == null)
                 throw new UiExceptions("还没有设置浏览器...");
-            capabilities = getBrowserCap(browser);
+            desiredCapabilities = getBrowserCap(browser);
         }
         else
             throw new UiExceptions("不支持此平台:"+platform);
-        return capabilities;
     }
 
     public void setDriverName(String driverName) throws UiExceptions {

@@ -174,7 +174,6 @@ public class Common {
 
     public static Object instantiate(String className, Class<?>[] classes, Object[] objects) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
         Class<?> classType = Class.forName(className);
-        classType.getConstructors();
         Constructor<?> constructor = classType
                 .getConstructor(classes);
 //        puts(objects);
@@ -183,7 +182,6 @@ public class Common {
 
     public static Object instantiate(Object object, Class<?>[] classes, Object[] objects) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
         Class<?> classType = object.getClass();
-        classType.getConstructors();
         Constructor<?> constructor = classType
                 .getConstructor(classes);
         return constructor.newInstance(objects);
@@ -242,14 +240,8 @@ public class Common {
         return -1;
     }
 
-    public static URL getUrl(String url){
-        URL caseUrl = null;
-        try {
-            caseUrl = new URL(url);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return caseUrl;
+    public static URL getUrl(String url) throws MalformedURLException {
+        return new URL(url);
     }
 
     public static Class<?> getClassType(String string) throws ClassNotFoundException {
