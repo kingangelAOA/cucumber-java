@@ -40,16 +40,19 @@ public class Common {
      * @throws FileNotFoundException
      * @throws YamlException
      */
-    public static Map toMapByYaml(String yamlPath) throws FileNotFoundException, YamlException {
+    public static Map toMapByYaml(String yamlPath){
         YamlReader reader;
         Object object;
-        Map map;
-        System.out.println(System.getProperty("user.dir") + yamlPath);
-        reader = new YamlReader(new FileReader(System.getProperty("user.dir") + yamlPath));
-
-        object = reader.read();
-        map = (Map)object;
-
+        Map map = null;
+        try {
+            reader = new YamlReader(new FileReader(System.getProperty("user.dir") + yamlPath));
+            object = reader.read();
+            map = (Map)object;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (YamlException e) {
+            e.printStackTrace();
+        }
         return map;
     }
 
@@ -172,29 +175,45 @@ public class Common {
         throw new IllegalArgumentException("Don't know how to instantiate " + className);
     }
 
-    public static Object instantiate(String className, Class<?>[] classes, Object[] objects) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
-        Class<?> classType = Class.forName(className);
-        Constructor<?> constructor = classType
-                .getConstructor(classes);
-//        puts(objects);
-        return constructor.newInstance(objects);
+    public static Object instantiate(String className, Class<?>[] classes, Object[] objects) {
+        Object object = null;
+        try {
+            Class<?> classType = classType = Class.forName(className);
+            Constructor<?> constructor = classType.getConstructor(classes);
+            object = constructor.newInstance(objects);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return object;
     }
 
-    public static Object instantiate(Object object, Class<?>[] classes, Object[] objects) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, ClassNotFoundException {
-        Class<?> classType = object.getClass();
-        Constructor<?> constructor = classType
-                .getConstructor(classes);
-        return constructor.newInstance(objects);
-    }
-
-    public static Object execMethod(Object Object, String method, Object[] args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public static Object execMethod(Object Object, String method, Object[] args){
         Object[] convertedArgs = new Object[args.length];
         Class<?>[] paramsClass = new Class[args.length];
         for (int i = 0; i < convertedArgs.length; i++) {
             paramsClass[i] = args[i].getClass();
         }
-        Method getMethod = Object.getClass().getMethod(method, paramsClass);
-        return getMethod.invoke(Object, args);
+        Class clazz = Object.getClass();
+        Object object = null;
+        try {
+            Method getMethod = clazz.getMethod(method, paramsClass);
+            object = getMethod.invoke(Object, args);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return object;
     }
 
     public static List<String> toList(String[] strings){
@@ -240,8 +259,14 @@ public class Common {
         return -1;
     }
 
-    public static URL getUrl(String url) throws MalformedURLException {
-        return new URL(url);
+    public static URL getUrl(String url){
+        URL newUrl = null;
+        try {
+            newUrl = new URL(url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return newUrl;
     }
 
     public static Class<?> getClassType(String string) throws ClassNotFoundException {

@@ -45,16 +45,12 @@ public class AppiumSteps extends AppiumEnv implements En {
             if (!(verifyList.contains("url") && verifyList.contains("platform")))
                 Assert.assertTrue(false, "请先设置url或者platform");
             try {
-                try {
-                    initDriver();
-                } catch (MalformedURLException e) {
-                    Assert.assertTrue(false, e.getMessage());
-                }
-                verifyList.add("initDriver");
-            } catch (InvocationTargetException | NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InstantiationException | FileNotFoundException | YamlException | UiExceptions e) {
-                e.printStackTrace();
-                Assert.assertTrue(false, e.getMessage());
+                initDriver();
+            } catch (UiExceptions uiExceptions) {
+                Assert.assertTrue(false, uiExceptions.getMessage());
             }
+            verifyList.add("initDriver");
+
         });
         And("^跳转到网页address (.*)$", (String address) -> {
             RemoteWebDriver driver = (RemoteWebDriver)getDriver();
@@ -66,18 +62,14 @@ public class AppiumSteps extends AppiumEnv implements En {
                 Assert.assertTrue(false, "请先初始化driver");
             if (!toList(FIND_ELEMENT_METHOD).contains(how))
                 Assert.assertTrue(false, "查询方法错误,或者不是查询单个元素的方法....");
-            try {
-                elements.put(elementName, findElement(how, what));
-            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                Assert.assertTrue(false, e.getMessage());
-            }
+            elements.put(elementName, findElement(how, what));
         });
 
         Given("^设置超时时间 (.*)", (Integer time) -> {
             setTimeOut(time);
         });
 
-        Given("^查看缓存的元素$", (String url) -> {
+        Given("^查看缓存的元素$", () -> {
             puts(elements);
         });
 
@@ -96,33 +88,24 @@ public class AppiumSteps extends AppiumEnv implements En {
         And("^点击元素 (.*)$", (String elementName) -> {
             if (!elementName.contains(elementName))
                 Assert.assertTrue(false, "元素: " + elementName + " 不存在");
-            try {
-                execMethod(elements.get(elementName), "click", new Object[]{});
-            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-                Assert.assertTrue(false, e.getMessage());
-            }
+            execMethod(elements.get(elementName), "click", new Object[]{});
+
         });
 
-        Given("^输入 (.*) 到元素 (.*)中$", (String value, String elementName) -> {
+        Given("^输入 (.*) 到元素 (.*) 中$", (String value, String elementName) -> {
             if (!elementName.contains(elementName))
                 Assert.assertTrue(false, "元素: "+elementName+" 不存在");
-            try {
-                execMethod(elements.get(elementName), "click", new Object[]{});
-                execMethod(elements.get(elementName), "sendKeys", new Object[]{value});
-            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-                Assert.assertTrue(false, e.getMessage());
-            }
+            execMethod(elements.get(elementName), "click", new Object[]{});
+            execMethod(elements.get(elementName), "sendKeys", new Object[]{new CharSequence[]{value}});
+
         });
 
         Then("^元素 (.*) 的文本信息是否等于 (.*)$", (String elementName, String target) -> {
             if (!elementName.contains(elementName))
                 Assert.assertTrue(false, "元素: " + elementName + " 不存在");
-            try {
-                String str = execMethod(elements.get(elementName), "getText", new Object[]{}).toString();
-                Assert.assertEquals(str, target, "元素: " + elementName + " 的文本信息的只 " + str + " 不等于 " + target);
-            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-                Assert.assertTrue(false, e.getMessage());
-            }
+
+            String str = execMethod(elements.get(elementName), "getText", new Object[]{}).toString();
+            Assert.assertEquals(str, target, "元素: " + elementName + " 的文本信息的只 " + str + " 不等于 " + target);
         });
     }
 }

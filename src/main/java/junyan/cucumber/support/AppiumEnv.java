@@ -65,26 +65,21 @@ public class AppiumEnv extends Common{
     public AppiumEnv() {
     }
 
-    public void initData() throws UiExceptions, FileNotFoundException, YamlException {
+    public void initData() throws UiExceptions {
         initCapabilities(platform);
         setDriverName(platform);
     }
 
-    public Object initDriver() throws InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException, FileNotFoundException, YamlException, UiExceptions, MalformedURLException {
+    public Object initDriver() throws UiExceptions {
         initData();
         Object object;
-//        if (platform.equals("web")) {
-//            object = new RemoteWebDriver(getUrl(url), desiredCapabilities);
-//        }else {
-//        DesiredCapabilities desiredCapabilities = DesiredCapabilities.firefox();
-            object = instantiate(driverName, new Class[]{URL.class, Capabilities.class}, new Object[]{getUrl(url), desiredCapabilities});
-//        }
+        object = instantiate(driverName, new Class[]{URL.class, Capabilities.class}, new Object[]{getUrl(url), desiredCapabilities});
         setDriver((RemoteWebDriver)object);
         this.driver = object;
         return object;
     }
 
-    public Object findElement(String how, String what) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public Object findElement(String how, String what){
         return execMethod(driver, how, toCollection(toList(what)));
     }
 
@@ -93,7 +88,7 @@ public class AppiumEnv extends Common{
         driver.manage().timeouts().implicitlyWait(defaultTimeOut, TimeUnit.SECONDS);
     }
 
-    private void initCapabilities(String platform) throws FileNotFoundException, YamlException, UiExceptions {
+    private void initCapabilities(String platform) throws UiExceptions {
         Map<String, Object> map_com = deleteNull(toMapByYaml("/src/main/java/config/capabilities_common.yaml"));
         Map<String, Object> map_and = deleteNull(toMapByYaml("/src/main/java/config/capabilities_android.yaml"));
         Map<String, Object> map_ios = deleteNull(toMapByYaml("/src/main/java/config/capabilities_ios.yaml"));

@@ -59,11 +59,20 @@ Feature: test
     Given 查询单个元素 我的, 查询方法 findElementByName, 查询条件 我的
     And 点击元素 我的
     Then 元素 我的 的文本信息是否等于 我的
-  @UI
+  @UI,@web
   Scenario: web
     Given 设置远程url http://127.0.0.1:4444
     And 设置platform web
     And 设置web浏览器 firefox
     And 初始化driver
     And 跳转到网页address http://www.baidu.com
+
+    Given 查询单个元素 百度搜索内容框, 查询方法 findElementById, 查询条件 kw
+    Given 查看缓存的元素
+    And 输入 钢铁雄心4 到元素 百度搜索内容框 中
+    Given 查看缓存的元素
+    And 查询单个元素 百度一下, 查询方法 findElementById, 查询条件 su
+    Given 查看缓存的元素
+    And 点击元素 百度一下
+    Given 查看缓存的元素
 
