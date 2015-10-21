@@ -1,5 +1,5 @@
 Feature: test
-  @UI
+  @UI,@interface
   Scenario: test
     Given 设置全局变量 {"aaa":"bbbbb", "d":1, "user_id":1}
     Given 设置接口名称 test1

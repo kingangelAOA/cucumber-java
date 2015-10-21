@@ -1,17 +1,11 @@
 package junyan.cucumber.step_definitions;
 
-import com.esotericsoftware.yamlbeans.YamlException;
-import com.google.gson.JsonObject;
 import cucumber.api.java8.En;
 import junyan.cucumber.support.AppiumEnv;
 import junyan.cucumber.support.UiExceptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.remote.RemoteWebElement;
 import org.testng.Assert;
 
-import java.io.FileNotFoundException;
-import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

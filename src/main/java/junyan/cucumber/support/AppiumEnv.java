@@ -1,14 +1,9 @@
 package junyan.cucumber.support;
 
-import com.esotericsoftware.yamlbeans.YamlException;
 import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import java.io.FileNotFoundException;
-import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -65,11 +60,20 @@ public class AppiumEnv extends Common{
     public AppiumEnv() {
     }
 
+    /**
+     * 初始化平台数据
+     * @throws UiExceptions
+     */
     public void initData() throws UiExceptions {
         initCapabilities(platform);
         setDriverName(platform);
     }
 
+    /**
+     * 初始化driver
+     * @return
+     * @throws UiExceptions
+     */
     public Object initDriver() throws UiExceptions {
         initData();
         Object object;
@@ -79,32 +83,21 @@ public class AppiumEnv extends Common{
         return object;
     }
 
+    /**
+     * 查询元素
+     * @param how
+     * @param what
+     * @return
+     */
     public Object findElement(String how, String what){
         return execMethod(driver, how, toCollection(toList(what)));
     }
 
-    private void setDriver(RemoteWebDriver driver){
-        defaultTimeOut = timeOut == 0 ? defaultTimeOut : timeOut;
-        driver.manage().timeouts().implicitlyWait(defaultTimeOut, TimeUnit.SECONDS);
-    }
-
-    private void initCapabilities(String platform) throws UiExceptions {
-        Map<String, Object> map_com = deleteNull(toMapByYaml("/src/main/java/config/capabilities_common.yaml"));
-        Map<String, Object> map_and = deleteNull(toMapByYaml("/src/main/java/config/capabilities_android.yaml"));
-        Map<String, Object> map_ios = deleteNull(toMapByYaml("/src/main/java/config/capabilities_ios.yaml"));
-        if (platform.equals("android"))
-            desiredCapabilities = new DesiredCapabilities(toMap(map_com, map_and));
-        else if (platform.equals("ios"))
-            desiredCapabilities = new DesiredCapabilities(toMap(map_com, map_ios));
-        else if (platform.equals("web")){
-            if (browser == null)
-                throw new UiExceptions("还没有设置浏览器...");
-            desiredCapabilities = getBrowserCap(browser);
-        }
-        else
-            throw new UiExceptions("不支持此平台:"+platform);
-    }
-
+    /**
+     * 根据平台名称获取类名
+     * @param driverName
+     * @throws UiExceptions
+     */
     public void setDriverName(String driverName) throws UiExceptions {
         if (driverName.equals("android"))
             this.driverName = ANDROID_DRIVER;
@@ -144,6 +137,12 @@ public class AppiumEnv extends Common{
         this.browser = browser;
     }
 
+    /**
+     * 根据浏览器获取Capabilities配置
+     * @param browser
+     * @return
+     * @throws UiExceptions
+     */
     private DesiredCapabilities getBrowserCap(String browser) throws UiExceptions {
         if (browser.equals("chrome"))
             return DesiredCapabilities.chrome();
@@ -156,6 +155,37 @@ public class AppiumEnv extends Common{
         else
             throw new UiExceptions("浏览器: "+browser+" 暂时不支持");
 
+    }
+
+    /**
+     * 设置driver配置
+     * @param driver
+     */
+    private void setDriver(RemoteWebDriver driver){
+        defaultTimeOut = timeOut == 0 ? defaultTimeOut : timeOut;
+        driver.manage().timeouts().implicitlyWait(defaultTimeOut, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 获取Capabilities数据
+     * @param platform
+     * @throws UiExceptions
+     */
+    private void initCapabilities(String platform) throws UiExceptions {
+        Map<String, Object> map_com = deleteNull(toMapByYaml("/src/main/java/config/capabilities_common.yaml"));
+        Map<String, Object> map_and = deleteNull(toMapByYaml("/src/main/java/config/capabilities_android.yaml"));
+        Map<String, Object> map_ios = deleteNull(toMapByYaml("/src/main/java/config/capabilities_ios.yaml"));
+        if (platform.equals("android"))
+            desiredCapabilities = new DesiredCapabilities(toMap(map_com, map_and));
+        else if (platform.equals("ios"))
+            desiredCapabilities = new DesiredCapabilities(toMap(map_com, map_ios));
+        else if (platform.equals("web")){
+            if (browser == null)
+                throw new UiExceptions("还没有设置浏览器...");
+            desiredCapabilities = getBrowserCap(browser);
+        }
+        else
+            throw new UiExceptions("不支持此平台:"+platform);
     }
 
 }

@@ -2,7 +2,6 @@ package junyan.cucumber.support;
 
 import com.esotericsoftware.yamlbeans.YamlException;
 import com.esotericsoftware.yamlbeans.YamlReader;
-import org.apache.bcel.generic.FLOAD;
 import org.apache.commons.io.FileUtils;
 import org.openjdk.jmh.generators.core.MethodInfo;
 import org.openjdk.jmh.generators.core.ParameterInfo;
@@ -11,14 +10,11 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.Augmenter;
-import org.openqa.selenium.remote.DesiredCapabilities;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -106,6 +102,11 @@ public class Common {
         return list;
     }
 
+    /**
+     * list 转换成 数组
+     * @param list
+     * @return
+     */
     public static Object[] toCollection(List<Object> list){
         Object[] objects = new Object[list.size()];
         for (int i = 0; i < list.size(); i++){
@@ -175,6 +176,13 @@ public class Common {
         throw new IllegalArgumentException("Don't know how to instantiate " + className);
     }
 
+    /**
+     * 根据类路径获取生成该类的对象
+     * @param className
+     * @param classes
+     * @param objects
+     * @return
+     */
     public static Object instantiate(String className, Class<?>[] classes, Object[] objects) {
         Object object = null;
         try {
@@ -195,6 +203,13 @@ public class Common {
         return object;
     }
 
+    /**
+     * 根据对象动态调用该对象的方法
+    * @param Object
+     * @param method
+     * @param args
+     * @return
+     */
     public static Object execMethod(Object Object, String method, Object[] args){
         Object[] convertedArgs = new Object[args.length];
         Class<?>[] paramsClass = new Class[args.length];
