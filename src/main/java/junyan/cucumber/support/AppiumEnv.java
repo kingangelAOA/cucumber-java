@@ -19,7 +19,7 @@ public class AppiumEnv extends Common{
     private int defaultTimeOut = 10;
     private String driverName;
     private int timeOut = 0;
-    private Object driver;
+    private static Object driver;
 
     private final String ANDROID_DRIVER = "io.appium.java_client.android.AndroidDriver";
     private final String IOS_DRIVER = "io.appium.java_client.ios.IOSDriver";
@@ -80,7 +80,7 @@ public class AppiumEnv extends Common{
         Object object;
         object = instantiate(driverName, new Object[]{getUrl(url), desiredCapabilities});
         setDriver((RemoteWebDriver)object);
-        this.driver = object;
+        driver = object;
         return object;
     }
 
@@ -91,7 +91,7 @@ public class AppiumEnv extends Common{
      * @return
      */
     public Object findElement(String how, String what){
-        return execMethod(Cache.getDriver(), how, toCollection(toList(what)));
+        return execMethod(getDriver(), how, toCollection(toList(what)));
     }
 
     /**
@@ -122,7 +122,7 @@ public class AppiumEnv extends Common{
         this.timeOut = timeOut;
     }
 
-    public Object getDriver() {
+    public static Object getDriver() {
         return driver;
     }
 

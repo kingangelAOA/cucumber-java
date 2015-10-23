@@ -1,9 +1,7 @@
 package junyan.cucumber.step_definitions;
 
-import cucumber.api.java.After;
 import cucumber.api.java8.En;
 import junyan.cucumber.support.AppiumEnv;
-import junyan.cucumber.support.Cache;
 import junyan.cucumber.support.UiExceptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.Assert;
@@ -42,7 +40,7 @@ public class AppiumSteps extends AppiumEnv implements En {
             if (!(verifyList.contains("url") && verifyList.contains("platform")))
                 Assert.assertTrue(false, "请先设置url或者platform");
             try {
-                Cache.setDriver(initDriver());
+                initDriver();
             } catch (UiExceptions uiExceptions) {
                 Assert.assertTrue(false, uiExceptions.getMessage());
             }
@@ -51,7 +49,7 @@ public class AppiumSteps extends AppiumEnv implements En {
         });
 
         And("^打开应用 (.*) Activity (.*)$", (String app, String activity) -> {
-            execMethod(Cache.getDriver(), "startActivity", new Object[]{app, activity});
+            execMethod(getDriver(), "startActivity", new Object[]{app, activity});
         });
 
         And("^跳转到网页address (.*)$", (String address) -> {
