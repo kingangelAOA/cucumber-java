@@ -104,7 +104,7 @@ unicodeKeyboard: true
 # Description: Reset keyboard to its original state, after running Unicode tests with 
 # unicodeKeyboard capability. Ignored if used alone. Default false
 # value: true or false
-resetKeyboard:
+resetKeyboard: true
 
 # Description: Skip checking and signing of app with debug keys, will work only with UiAutomator 
 # and not with selendroid, default false

@@ -14,9 +14,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
@@ -179,19 +177,18 @@ public class Common {
     /**
      * 根据类路径获取生成该类的对象
      * @param className
-     * @param classes
      * @param objects
      * @return
      */
-    public static Object instantiate(String className, Class<?>[] classes, Object[] objects) {
+    public static Object instantiate(String className, Object[] objects) {
         Object object = null;
         try {
-            Class<?> classType = classType = Class.forName(className);
-            Constructor<?> constructor = classType.getConstructor(classes);
+            Class<?> classType = Class.forName(className);
+
+            Constructor<?> constructor = getRightConstructor(classType, objects);
+            puts(constructor);
             object = constructor.newInstance(objects);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
             e.printStackTrace();
@@ -204,6 +201,46 @@ public class Common {
     }
 
     /**
+     * 根据入参获取构造函数
+     * @param classType
+     * @param objects
+     * @return
+     */
+    private static Constructor getRightConstructor(Class<?> classType, Object[] objects){
+        Constructor reConstructor = null;
+        LinkedList<Object> linkList = toLinkedList(objects);
+        for (Constructor constructor:classType.getConstructors()){
+            if (constructor.getParameters().length != objects.length)
+                continue;
+            List<Boolean> flagList = new LinkedList<>();
+            for (Parameter parameter : constructor.getParameters()) {
+                boolean flag = false;
+                for (Object object : linkList) {
+                    if (parameter.getType() == object.getClass()) {
+                        flag = true;
+                        linkList.remove(object);
+                        break;
+                    } else {
+                        for (Class<?> clazz : object.getClass().getInterfaces()) {
+                            Class<?> targetClazz = parameter.getType();
+                            if (clazz == targetClazz) {
+                                flag = true;
+                                linkList.remove(object);
+                                break;
+                            }
+                        }
+                    }
+                }
+                flagList.add(flag);
+            }
+
+            if (!flagList.contains(false))
+                reConstructor = constructor;
+        }
+        return reConstructor;
+    }
+
+    /**
      * 根据对象动态调用该对象的方法
     * @param Object
      * @param method
@@ -211,15 +248,15 @@ public class Common {
      * @return
      */
     public static Object execMethod(Object Object, String method, Object[] args){
-        Object[] convertedArgs = new Object[args.length];
-        Class<?>[] paramsClass = new Class[args.length];
-        for (int i = 0; i < convertedArgs.length; i++) {
-            paramsClass[i] = args[i].getClass();
-        }
+//        Object[] convertedArgs = new Object[args.length];
+//        Class<?>[] paramsClass = new Class[args.length];
+//        for (int i = 0; i < convertedArgs.length; i++) {
+//            paramsClass[i] = args[i].getClass();
+//        }
         Class clazz = Object.getClass();
         Object object = null;
         try {
-            Method getMethod = clazz.getMethod(method, paramsClass);
+            Method getMethod = clazz.getMethod(method, toClass(args));
             object = getMethod.invoke(Object, args);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
@@ -231,12 +268,29 @@ public class Common {
         return object;
     }
 
-    public static List<String> toList(String[] strings){
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < strings.length; i++){
-            list.add(strings[i]);
+    private static Class<?>[] toClass(Object[] args){
+        Object[] convertedArgs = new Object[args.length];
+        Class<?>[] paramsClass = new Class[args.length];
+        for (int i = 0; i < convertedArgs.length; i++) {
+            paramsClass[i] = args[i].getClass();
+        }
+        return paramsClass;
+    }
+
+    public static List<Object> toList(Object[] objects){
+        List<Object> list = new ArrayList<>();
+        for (int i = 0; i < objects.length; i++){
+            list.add(objects[i]);
         }
         return list;
+    }
+
+    public static LinkedList<Object> toLinkedList(Object[] objects){
+        LinkedList<Object> linkList = new LinkedList<>();
+        for (int i = 0; i < objects.length; i++){
+            linkList.add(objects[i]);
+        }
+        return linkList;
     }
 
     public static void run(String classPath) throws ClassNotFoundException {

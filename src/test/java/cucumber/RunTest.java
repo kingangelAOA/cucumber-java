@@ -24,7 +24,7 @@ import org.junit.runner.RunWith;
         "json:target/cucumber-docstring.json", "pretty:target/cucumber-docstring-pretty.txt",
         "usage:target/cucumber-docstring-usage.json", "junit:target/cucumber-docstring-results.xml" },
         features = { "src/test/java/resources/features" },
-        tags = {"@interface"},
+        tags = {"@android"},
         glue = { "junyan.cucumber" }
 )
 

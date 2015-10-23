@@ -15,7 +15,7 @@ public class AppiumEnv extends Common{
     private String url;
     private String platform;
     private String browser;
-    private DesiredCapabilities desiredCapabilities;
+    private Capabilities desiredCapabilities;
     private int defaultTimeOut = 10;
     private String driverName;
     private int timeOut = 0;
@@ -77,7 +77,7 @@ public class AppiumEnv extends Common{
     public Object initDriver() throws UiExceptions {
         initData();
         Object object;
-        object = instantiate(driverName, new Class[]{URL.class, Capabilities.class}, new Object[]{getUrl(url), desiredCapabilities});
+        object = instantiate(driverName, new Object[]{getUrl(url), desiredCapabilities});
         setDriver((RemoteWebDriver)object);
         this.driver = object;
         return object;
@@ -186,6 +186,10 @@ public class AppiumEnv extends Common{
         }
         else
             throw new UiExceptions("不支持此平台:"+platform);
+    }
+
+    public Capabilities getDesiredCapabilities(){
+        return this.desiredCapabilities;
     }
 
 }

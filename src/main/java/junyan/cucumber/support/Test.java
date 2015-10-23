@@ -1,7 +1,11 @@
 package junyan.cucumber.support;
 
+import org.openqa.selenium.Capabilities;
+import sun.swing.CachedPainter;
+
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -14,10 +18,12 @@ public class Test extends Common{
         puts(cs.getClass());
     }
     public static void main(String[] args) throws IOException, InterfaceException, UiExceptions, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        String str = new String("aaaaaa");
-
-        CharSequence[] cs = new String[]{"a","b"};
-
-        test(cs);
+        AppiumEnv appiumEnv = new AppiumEnv();
+        appiumEnv.setBrowser("firefox");
+        appiumEnv.setPlatform("web");
+        appiumEnv.initData();
+        URL url = getUrl("http://localhost:4444/wd/hub");
+        Capabilities capabilities = appiumEnv.getDesiredCapabilities();
+        instantiate("org.openqa.selenium.remote.RemoteWebDriver", new Object[]{url, capabilities});
     }
 }

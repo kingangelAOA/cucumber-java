@@ -1,5 +1,5 @@
 Feature: test
-  @UI,@interface
+  @all,@interface
   Scenario: test
     Given 设置全局变量 {"aaa":"bbbbb", "d":1, "user_id":1}
     Given 设置接口名称 test1
@@ -51,7 +51,7 @@ Feature: test
     Given 查看全局变量
     Then 从全局变量中取出字段 test2_id 的值,是否等于 "b"
 
-  @UI
+  @all,@android
   Scenario: android
     Given 设置远程url http://127.0.0.1:4723
     And 设置platform android
@@ -59,7 +59,7 @@ Feature: test
     Given 查询单个元素 我的, 查询方法 findElementByName, 查询条件 我的
     And 点击元素 我的
     Then 元素 我的 的文本信息是否等于 我的
-  @UI,@web
+  @all,@web
   Scenario: web
     Given 设置远程url http://127.0.0.1:4444
     And 设置platform web
