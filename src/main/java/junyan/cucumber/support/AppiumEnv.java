@@ -58,6 +58,7 @@ public class AppiumEnv extends Common{
     };
 
     public AppiumEnv() {
+        puts("beging***************************");
     }
 
     /**
@@ -90,7 +91,7 @@ public class AppiumEnv extends Common{
      * @return
      */
     public Object findElement(String how, String what){
-        return execMethod(driver, how, toCollection(toList(what)));
+        return execMethod(Cache.getDriver(), how, toCollection(toList(what)));
     }
 
     /**

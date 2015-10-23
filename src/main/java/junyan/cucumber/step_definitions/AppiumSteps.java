@@ -1,7 +1,9 @@
 package junyan.cucumber.step_definitions;
 
+import cucumber.api.java.After;
 import cucumber.api.java8.En;
 import junyan.cucumber.support.AppiumEnv;
+import junyan.cucumber.support.Cache;
 import junyan.cucumber.support.UiExceptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.Assert;
@@ -17,6 +19,7 @@ import java.util.Map;
 public class AppiumSteps extends AppiumEnv implements En {
     private List<String> verifyList;
     private Map<String, Object> elements;
+    private Map<String, Object> global;
     public AppiumSteps(){
         verifyList = new ArrayList<>();
         elements = new HashMap<>();
@@ -39,21 +42,26 @@ public class AppiumSteps extends AppiumEnv implements En {
             if (!(verifyList.contains("url") && verifyList.contains("platform")))
                 Assert.assertTrue(false, "请先设置url或者platform");
             try {
-                initDriver();
+                Cache.setDriver(initDriver());
             } catch (UiExceptions uiExceptions) {
                 Assert.assertTrue(false, uiExceptions.getMessage());
             }
             verifyList.add("initDriver");
 
         });
+
+        And("^打开应用 (.*) Activity (.*)$", (String app, String activity) -> {
+            execMethod(Cache.getDriver(), "startActivity", new Object[]{app, activity});
+        });
+
         And("^跳转到网页address (.*)$", (String address) -> {
             RemoteWebDriver driver = (RemoteWebDriver)getDriver();
             driver.get(address);
         });
 
         Given("^查询单个元素 (.*), 查询方法 (.*), 查询条件 (.*)$", (String elementName, String how, String what) -> {
-            if (!verifyList.contains("initDriver"))
-                Assert.assertTrue(false, "请先初始化driver");
+//            if (!verifyList.contains("initDriver"))
+//                Assert.assertTrue(false, "请先初始化driver");
             if (!toList(FIND_ELEMENT_METHOD).contains(how))
                 Assert.assertTrue(false, "查询方法错误,或者不是查询单个元素的方法....");
             elements.put(elementName, findElement(how, what));
@@ -102,4 +110,9 @@ public class AppiumSteps extends AppiumEnv implements En {
             Assert.assertEquals(str, target, "元素: " + elementName + " 的文本信息的只 " + str + " 不等于 " + target);
         });
     }
+//
+//    @After
+//    public void quitDriver(){
+//        execMethod(Cache.getDriver(), "closeApp", new Object[]{});
+//    }
 }

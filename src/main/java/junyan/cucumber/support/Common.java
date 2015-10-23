@@ -248,11 +248,6 @@ public class Common {
      * @return
      */
     public static Object execMethod(Object Object, String method, Object[] args){
-//        Object[] convertedArgs = new Object[args.length];
-//        Class<?>[] paramsClass = new Class[args.length];
-//        for (int i = 0; i < convertedArgs.length; i++) {
-//            paramsClass[i] = args[i].getClass();
-//        }
         Class clazz = Object.getClass();
         Object object = null;
         try {

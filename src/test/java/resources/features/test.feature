@@ -59,6 +59,17 @@ Feature: test
     Given 查询单个元素 我的, 查询方法 findElementByName, 查询条件 我的
     And 点击元素 我的
     Then 元素 我的 的文本信息是否等于 我的
+
+  @all,@android
+  Scenario: android
+#    Given 设置远程url http://127.0.0.1:4723
+#    And 设置platform android
+#    And 初始化driver
+    And 打开应用 me.ele Activity .Launcher
+    Given 查询单个元素 我的, 查询方法 findElementByName, 查询条件 我的
+    And 点击元素 我的
+    Then 元素 我的 的文本信息是否等于 我的
+
   @all,@web
   Scenario: web
     Given 设置远程url http://127.0.0.1:4444
@@ -75,4 +86,3 @@ Feature: test
     Given 查看缓存的元素
     And 点击元素 百度一下
     Given 查看缓存的元素
-
