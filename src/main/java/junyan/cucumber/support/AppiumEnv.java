@@ -3,11 +3,11 @@ package junyan.cucumber.support;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import java.net.URL;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,12 +21,14 @@ public class AppiumEnv extends Common{
     private String url;
     private String platform;
     private String browser;
-    private Capabilities desiredCapabilities;
+    private DesiredCapabilities desiredCapabilities;
     private int defaultTimeOut = 10;
     private String driverName;
     private int timeOut = 0;
     private static Object driver;
     private static JsonObject elementsData;
+    private String scenario;
+    private Thread thread;
 
     private final String ANDROID_DRIVER = "io.appium.java_client.android.AndroidDriver";
     private final String IOS_DRIVER = "io.appium.java_client.ios.IOSDriver";
@@ -67,13 +69,18 @@ public class AppiumEnv extends Common{
 
     public AppiumEnv() {
         elementsData = getElements().getAsJsonObject();
+        createDirectory(System.getProperty("user.dir")+"/target/"+getRunConf().get("project"));
+    }
+
+    public Map getRunConf(){
+        return runConf;
     }
 
     public static JsonElement getElements(){
         String project = runConf.get("project").toString();
         List<String> list = new ArrayList<>();
         Map<String, Object> allMap = new HashMap<>();
-        list = getFiles(System.getProperty("user.dir")+"/src/test/java/resources/UI_data/android_elements/" + project, list);
+        list = getFiles(System.getProperty("user.dir")+"/src/test/java/resources/UI_data/" + project, list);
         for (String file:list){
             allMap = toMap(allMap, toMap(file));
         }
@@ -95,6 +102,24 @@ public class AppiumEnv extends Common{
     public void initData() throws UiExceptions {
         initCapabilities(platform);
         setDriverName(platform);
+    }
+
+    public void runLogCat(String filePath){
+        String startDir = System.getProperty("user.dir"); // start in current dir (change if needed)
+        ProcessBuilder pb = new ProcessBuilder("adb","logcat");
+        pb.directory(new File(startDir));  // start directory
+        pb.redirectErrorStream(true); // redirect the error stream to stdout
+        Process p; // start the process
+        Thread thread = null;
+        try {
+            p = pb.start();
+            // start a new thread to handle the stream input
+            thread = new Thread(new ProcessLogcatRunnable(p, filePath));
+            thread.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.thread = thread;
     }
 
     /**
@@ -216,9 +241,20 @@ public class AppiumEnv extends Common{
             throw new UiExceptions("不支持此平台:"+platform);
     }
 
-    public Capabilities getDesiredCapabilities(){
+    public DesiredCapabilities getDesiredCapabilities(){
         return this.desiredCapabilities;
     }
 
 
+    public String getScenario() {
+        return scenario;
+    }
+
+    public void setScenario(String scenario) {
+        this.scenario = scenario;
+    }
+
+    public Thread getThread() {
+        return thread;
+    }
 }

@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.lang.reflect.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -64,6 +65,28 @@ public class Common {
             e.printStackTrace();
         }
         return map;
+    }
+
+    public String getTime(){
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        return sdf.format(date);
+    }
+
+    public static boolean deleteDir(File dir) {
+        if (dir.exists()) {
+            if (dir.isDirectory()) {
+                String[] children = dir.list();
+                for (int i = 0; i < children.length; i++) {
+                    boolean success = deleteDir(new File(dir, children[i]));
+                    if (!success) {
+                        return false;
+                    }
+                }
+            }
+        }
+        // 目录此时为空，可以删除
+        return dir.delete();
     }
 
     public static List<String> getFiles(String filePath, List<String> fileList) {
@@ -149,59 +172,36 @@ public class Common {
         return list;
     }
 
-    public static Object convert(Class<?> target, String s) {
-        if (target == Object.class || target == String.class || s == null) {
-            return s;
+    public static int convert(Class<?> target) {
+        if (target == Object.class || target == String.class) {
+            return 1;
         }
         if (target == Character.class || target == char.class) {
-            return s.charAt(0);
+            return 2;
         }
         if (target == Byte.class || target == byte.class) {
-            return Byte.parseByte(s);
+            return 3;
         }
         if (target == Short.class || target == short.class) {
-            return Short.parseShort(s);
+            return 4;
         }
         if (target == Integer.class || target == int.class) {
-            return Integer.parseInt(s);
+            return 5;
         }
         if (target == Long.class || target == long.class) {
-            return Long.parseLong(s);
+            return 6;
         }
         if (target == Float.class || target == float.class) {
-            return Float.parseFloat(s);
+            return 7;
         }
         if (target == Double.class || target == double.class) {
-            return Double.parseDouble(s);
+            return 8;
         }
         if (target == Boolean.class || target == boolean.class) {
-            return Boolean.parseBoolean(s);
+            return 9;
         }
-        throw new IllegalArgumentException("Don't know how to convert to " + target);
-    }
-
-    public static Object instantiate(List<String> args, String className) throws Exception {
-        // Load the class.
-        Class<?> clazz = Class.forName(className);
-
-        // Search for an "appropriate" constructor.
-        for (Constructor<?> ctor : clazz.getConstructors()) {
-            Class<?>[] paramTypes = ctor.getParameterTypes();
-
-            // If the arity matches, let's use it.
-            if (args.size() == paramTypes.length) {
-
-                // Convert the String arguments into the parameters' types.
-                Object[] convertedArgs = new Object[args.size()];
-                for (int i = 0; i < convertedArgs.length; i++) {
-                    convertedArgs[i] = convert(paramTypes[i], args.get(i));
-                }
-
-                // Instantiate the object with the converted arguments.
-                return ctor.newInstance(convertedArgs);
-            }
-        }
-        throw new IllegalArgumentException("Don't know how to instantiate " + className);
+        return 0;
+//        throw new IllegalArgumentException("Don't know how to convert to " + target);
     }
 
     /**
@@ -214,9 +214,8 @@ public class Common {
         Object object = null;
         try {
             Class<?> classType = Class.forName(className);
-
             Constructor<?> constructor = getRightConstructor(classType, objects);
-            puts(constructor);
+//            puts(constructor);
             object = constructor.newInstance(objects);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -258,6 +257,10 @@ public class Common {
                                 linkList.remove(object);
                                 break;
                             }
+                            if (convert(object.getClass()) == convert(parameter.getType())){
+                                flag = true;
+                                break;
+                            }
                         }
                     }
                 }
@@ -270,6 +273,23 @@ public class Common {
         return reConstructor;
     }
 
+    public void createDirectory(String path){
+        File file =new File(path);
+        if  (!file .exists() && !file .isDirectory())
+            file .mkdir();
+    }
+
+    public void createFile(String path){
+        File file=new File(path);
+        if(!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     /**
      * 根据对象动态调用该对象的方法
     * @param Object
@@ -278,28 +298,67 @@ public class Common {
      * @return
      */
     public static Object execMethod(Object Object, String method, Object[] args){
-        Class clazz = Object.getClass();
+        Class<?> clazz = Object.getClass();
         Object object = null;
         Method getMethod;
         try {
-            puts("***********************");
-            for (Method method1:clazz.getMethods()){
-                puts("method: "+method1.getName());
-                for (Parameter parameter:method1.getParameters()){
-                    puts("param: "+parameter.getType());
-                }
-            }
-            puts("***********************\n\n");
-            getMethod = clazz.getMethod(method, toClass(args));
+
+            getMethod = selectMethod(clazz, method, args);
+//            puts(getMethod);
             object = getMethod.invoke(Object, args);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
         return object;
+    }
+
+    /**
+     * 动态获取method对象
+     * @param clazz
+     * @param name
+     * @param args
+     * @return
+     */
+    private static Method selectMethod(Class<?> clazz, String name, Object[] args){
+        Method method = null;
+        LinkedList<Object> linkList = toLinkedList(args);
+        for (Method remethod:clazz.getMethods()){
+            if (!remethod.getName().equals(name))
+                continue;
+            if (remethod.getParameters().length != args.length)
+                continue;
+            List<Boolean> flagList = new LinkedList<>();
+            for (Parameter parameter : remethod.getParameters()) {
+                boolean flag = false;
+                for (Object object : linkList) {
+                    if (parameter.getType() == object.getClass()) {
+                        flag = true;
+                        linkList.remove(object);
+                        break;
+                    } else{
+                        for (Class<?> reClazz : object.getClass().getInterfaces()) {
+                            Class<?> targetClazz = parameter.getType();
+                            if (reClazz == targetClazz) {
+                                flag = true;
+                                linkList.remove(object);
+                                break;
+                            }
+                            if (convert(object.getClass()) == convert(parameter.getType())){
+                                flag = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                flagList.add(flag);
+            }
+
+            if (!flagList.contains(false))
+                method = remethod;
+        }
+        return method;
     }
 
     private static Class<?>[] toClass(Object[] args){

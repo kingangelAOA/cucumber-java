@@ -1,12 +1,17 @@
 package junyan.cucumber.step_definitions;
 
 import com.google.gson.JsonObject;
+import cucumber.api.java.After;
+import cucumber.api.java.Before;
 import cucumber.api.java8.En;
 import junyan.cucumber.support.AppiumEnv;
 import junyan.cucumber.support.UiExceptions;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.Assert;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,21 +70,45 @@ public class AppiumSteps extends AppiumEnv implements En {
         });
 
         Given("^查询单个元素 (.*)$", (String elementName) -> {
+            if (getScenario() == null)
+                Assert.assertTrue(false, "请先设置场景名称.....");
             if (!getElementsData().has(elementName))
                 Assert.assertTrue(false, "元素: "+elementName+" 不存在");
             JsonObject jsonObject = getElementsData().get(elementName).getAsJsonObject();
             if (!toList(FIND_ELEMENT_METHOD).contains(jsonObject.get("method").getAsJsonPrimitive().getAsString()))
                 Assert.assertTrue(false, "查询方法错误,或者不是查询单个元素的方法....");
             elements.put(elementName, findElement(jsonObject.get("method").getAsJsonPrimitive().getAsString(), jsonObject.get("value").getAsJsonPrimitive().getAsString()));
+            try {
+                screenshot((WebDriver)getDriver(), System.getProperty("user.dir")+"/target/"+getRunConf().get("project")+"/pictures/"+getScenario()+"/"+getTime()+".jpg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
 
         Given("^设置超时时间 (.*)", (Integer time) -> {
             setTimeOut(time);
         });
 
+        Given("^启动log", () -> {
+            String directory = System.getProperty("user.dir")+"/target/"+getRunConf().get("project")+"/log";
+            createDirectory(directory);
+            String file = directory+"/"+getTime()+".log";
+            createFile(file);
+            runLogCat(file);
+        });
+
         Given("^查看缓存的元素$", () -> {
             puts(elements);
         });
+
+        Given("^设置场景名称 (.*)$", (String name) -> {
+            deleteDir(new File(System.getProperty("user.dir")+"/target/"+getRunConf().get("project")+"/pictures/"+getScenario()));
+            setScenario(name);
+        });
+
+//        Given("^截图,图片路径 (.*)", (String path) -> {
+//
+//        });
 
 //        Given("^查询多个元素 (.*), 查询方法 (.*), 查询条件 (.*)$", (String elementName, String how, String what) -> {
 //            if (!verifyList.contains("initDriver"))
@@ -119,9 +148,9 @@ public class AppiumSteps extends AppiumEnv implements En {
             Assert.assertEquals(str, target, "元素: " + elementName + " 的文本信息的只 " + str + " 不等于 " + target);
         });
     }
-//
-//    @After
-//    public void quitDriver(){
-//        execMethod(Cache.getDriver(), "closeApp", new Object[]{});
-//    }
+
+    @After
+    public void quitDriver(){
+        getThread().stop();
+    }
 }

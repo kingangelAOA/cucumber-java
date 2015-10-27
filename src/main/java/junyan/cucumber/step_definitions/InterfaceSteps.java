@@ -3,6 +3,7 @@ package junyan.cucumber.step_definitions;
 
 import com.esotericsoftware.yamlbeans.YamlException;
 import com.google.gson.*;
+import cucumber.api.java.Before;
 import cucumber.api.java8.En;
 import junyan.cucumber.support.*;
 import org.testng.Assert;
@@ -283,4 +284,6 @@ public class InterfaceSteps extends InterfaceEnv implements En {
     private void initDatabase() throws ClassNotFoundException, FileNotFoundException, YamlException, SQLException {
         mysql = new Mysql(toMapByYaml("/src/main/java/config/run.yaml").get("run").toString());
     }
+
+
 }

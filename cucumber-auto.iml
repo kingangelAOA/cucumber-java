@@ -8,12 +8,15 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/src/test/java/resources/UI_data/android_elements" />
+      <excludeFolder url="file://$MODULE_DIR$/src/test/java/resources/UI_data/eleme" />
+      <excludeFolder url="file://$MODULE_DIR$/src/test/java/resources/UI_data/eleme/android/elements" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: com.squareup.okhttp:okhttp:2.5.0" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.okio:okio:1.6.0" level="project" />
+    <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
     <orderEntry type="library" name="Maven: com.github.mkolisnyk:cucumber-reports:0.0.11" level="project" />
     <orderEntry type="library" name="Maven: com.cedarsoftware:json-io:2.2.31" level="project" />
     <orderEntry type="library" name="Maven: info.cukes:cucumber-picocontainer:1.2.2" level="project" />
