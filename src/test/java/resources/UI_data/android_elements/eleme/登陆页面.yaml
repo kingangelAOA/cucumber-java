@@ -1,0 +1,24 @@
+注册:
+  method: findElementByName
+  value: 注册
+手机/邮箱/用户名:
+  method: findElementByName
+  value: 手机/邮箱/用户名
+登陆密码:
+  method: findElementByXPath
+  value: //android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.LinearLayout[1]/android.widget.RelativeLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[2]/android.widget.LinearLayout[1]/android.widget.EditText[1]
+登陆:
+  method: findElementByName
+  value: 登陆
+忘记密码:
+  method: findElementByName
+  value: 忘记密码？
+短信验证码登录:
+  method: findElementByName
+  value: 短信验证码登录
+QQ登陆:
+  method: findElementByXPath
+  value: //android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.LinearLayout[1]/android.widget.LinearLayout[1]/android.widget.LinearLayout[2]/android.widget.LinearLayout[2]/android.widget.ImageView[1]
+重置密码:
+  method: findElementByXPath
+  value: //android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.webkit.WebView[1]/android.view.View[1]/android.widget.Button[1]

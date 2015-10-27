@@ -1,5 +1,6 @@
 package junyan.cucumber.step_definitions;
 
+import com.google.gson.JsonObject;
 import cucumber.api.java8.En;
 import junyan.cucumber.support.AppiumEnv;
 import junyan.cucumber.support.UiExceptions;
@@ -58,11 +59,18 @@ public class AppiumSteps extends AppiumEnv implements En {
         });
 
         Given("^查询单个元素 (.*), 查询方法 (.*), 查询条件 (.*)$", (String elementName, String how, String what) -> {
-//            if (!verifyList.contains("initDriver"))
-//                Assert.assertTrue(false, "请先初始化driver");
             if (!toList(FIND_ELEMENT_METHOD).contains(how))
                 Assert.assertTrue(false, "查询方法错误,或者不是查询单个元素的方法....");
             elements.put(elementName, findElement(how, what));
+        });
+
+        Given("^查询单个元素 (.*)$", (String elementName) -> {
+            if (!getElementsData().has(elementName))
+                Assert.assertTrue(false, "元素: "+elementName+" 不存在");
+            JsonObject jsonObject = getElementsData().get(elementName).getAsJsonObject();
+            if (!toList(FIND_ELEMENT_METHOD).contains(jsonObject.get("method").getAsJsonPrimitive().getAsString()))
+                Assert.assertTrue(false, "查询方法错误,或者不是查询单个元素的方法....");
+            elements.put(elementName, findElement(jsonObject.get("method").getAsJsonPrimitive().getAsString(), jsonObject.get("value").getAsJsonPrimitive().getAsString()));
         });
 
         Given("^设置超时时间 (.*)", (Integer time) -> {
@@ -89,7 +97,10 @@ public class AppiumSteps extends AppiumEnv implements En {
             if (!elementName.contains(elementName))
                 Assert.assertTrue(false, "元素: " + elementName + " 不存在");
             execMethod(elements.get(elementName), "click", new Object[]{});
+        });
 
+        And("^点击返回键$", () -> {
+            execMethod(getDriver(), "sendKeyEvent", new Object[]{4});
         });
 
         Given("^输入 (.*) 到元素 (.*) 中$", (String value, String elementName) -> {

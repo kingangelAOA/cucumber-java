@@ -1,0 +1,15 @@
+检查更新:
+  method: findElementByName
+  value: 检查更新
+非WIFI下图片质量:
+  method: findElementByName
+  value: 非WIFI下图片质量
+关于饿了么:
+  method: findElementByName
+  value: 关于饿了么
+商务合作:
+  method: findElementByName
+  value: 商务合作
+退出登陆:
+  method: findElementByName
+  value: 退出登陆

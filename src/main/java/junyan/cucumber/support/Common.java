@@ -50,6 +50,36 @@ public class Common {
         return map;
     }
 
+    public static Map toMap(String yamlPath){
+        YamlReader reader;
+        Object object;
+        Map map = null;
+        try {
+            reader = new YamlReader(new FileReader(yamlPath));
+            object = reader.read();
+            map = (Map)object;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (YamlException e) {
+            e.printStackTrace();
+        }
+        return map;
+    }
+
+    public static List<String> getFiles(String filePath, List<String> fileList) {
+        File root = new File(filePath);
+        File[] files = root.listFiles();
+        for (File file:files){
+            if (file.isDirectory())
+                getFiles(file.getAbsolutePath(), fileList);
+            else
+                fileList.add(filePath+"/"+file.getName());
+
+        }
+        return fileList;
+    }
+
+
     public String getClassName(Object object){
         return object.getClass().getSimpleName();
     }
@@ -250,8 +280,17 @@ public class Common {
     public static Object execMethod(Object Object, String method, Object[] args){
         Class clazz = Object.getClass();
         Object object = null;
+        Method getMethod;
         try {
-            Method getMethod = clazz.getMethod(method, toClass(args));
+            puts("***********************");
+            for (Method method1:clazz.getMethods()){
+                puts("method: "+method1.getName());
+                for (Parameter parameter:method1.getParameters()){
+                    puts("param: "+parameter.getType());
+                }
+            }
+            puts("***********************\n\n");
+            getMethod = clazz.getMethod(method, toClass(args));
             object = getMethod.invoke(Object, args);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
@@ -306,6 +345,7 @@ public class Common {
     }
 
     public static Map<String, Object> toMap(Map<String, Object> oldMap, Map<String, Object> targetMap){
+
         oldMap.putAll(targetMap);
         return oldMap;
     }

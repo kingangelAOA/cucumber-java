@@ -6,6 +6,7 @@ import sun.swing.CachedPainter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.nio.channels.FileLock;
 import java.util.*;
 
 /**
@@ -19,11 +20,12 @@ public class Test extends Common{
     }
     public static void main(String[] args) throws IOException, InterfaceException, UiExceptions, InvocationTargetException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         AppiumEnv appiumEnv = new AppiumEnv();
-        appiumEnv.setBrowser("firefox");
-        appiumEnv.setPlatform("web");
+//        appiumEnv.setBrowser("firefox");
+        appiumEnv.setPlatform("android");
         appiumEnv.initData();
-        URL url = getUrl("http://localhost:4444/wd/hub");
+        URL url = getUrl("http://localhost:4723/wd/hub");
         Capabilities capabilities = appiumEnv.getDesiredCapabilities();
-        instantiate("org.openqa.selenium.remote.RemoteWebDriver", new Object[]{url, capabilities});
+        Object driver = instantiate("org.openqa.selenium.remote.RemoteWebDriver", new Object[]{url, capabilities});
+        execMethod(driver, "sendKeyEvent", new Object[]{4});
     }
 }

@@ -30,7 +30,7 @@ public class Json extends Common{
      * if spacer = &
      * @return a=b&b=c
      */
-    public String toString(Map<String, String> map, String spacer){
+    public static String toString(Map<String, String> map, String spacer){
         StringBuilder stringBuilder = new StringBuilder();
         for (String key : map.keySet()) {
             if (stringBuilder.length() > 0) {
@@ -56,7 +56,7 @@ public class Json extends Common{
      * if input = "a=b&c=d"
      * @return {a=b,c=d}
      */
-    public Map<String, String> toMap(String input, String spacer) {
+    public static Map<String, String> toMap(String input, String spacer) {
         Map<String, String> map = new HashMap<String, String>();
 
         String[] nameValuePairs = input.split(spacer);
@@ -72,15 +72,17 @@ public class Json extends Common{
         return map;
     }
 
+
+
     /**
      *
      * @param type
      * @return reqeuestBody的类型
      * @throws InterfaceException
      */
-    private MediaType setContentType(String type) throws InterfaceException {
+    private static MediaType setContentType(String type) throws InterfaceException {
         if (type.equals("JSON"))
-            return MediaType.parse("application/test_data; charset=utf-8");
+            return MediaType.parse("application/interface_data; charset=utf-8");
         else if (type.equals("FORM"))
             return MediaType.parse("multipart/form-data");
         else if(type.equals("URL_ENCODE_FORM"))
@@ -96,7 +98,7 @@ public class Json extends Common{
      * @return RequestBody
      * @throws InterfaceException
      */
-    public RequestBody setBodyByType(String json, String contentType) throws InterfaceException {
+    public static RequestBody setBodyByType(String json, String contentType) throws InterfaceException {
         FormEncodingBuilder formEncodingBuilder =  new FormEncodingBuilder();
         if (contentType.equals("FORM")){
             for(Map.Entry<String, String> entry : toMap(toElement(json)).entrySet()){
@@ -142,7 +144,7 @@ public class Json extends Common{
      * @param str
      * @return
      */
-    public boolean isNumeric(String str){
+    public static boolean isNumeric(String str){
         for (int i = 0; i < str.length(); i++){
             if (!Character.isDigit(str.charAt(i))){
                 return false;
@@ -165,7 +167,7 @@ public class Json extends Common{
      * @param map
      * @return
      */
-    public Map toMap(Map<String, List<String>> map){
+    public static Map toMap(Map<String, List<String>> map){
         Map newMap = new HashMap<>();
         for (String key : map.keySet()){
             List<String> list = map.get(key);
@@ -191,7 +193,7 @@ public class Json extends Common{
      * @param jsonElement
      * @return
      */
-    public Map<String, String> toMap(JsonElement jsonElement){
+    public static Map<String, String> toMap(JsonElement jsonElement){
         Type type = new TypeToken<Map<String, String>>(){}.getType();
         return new Gson().fromJson(jsonElement, type);
     }
@@ -393,7 +395,7 @@ public class Json extends Common{
      * @param json
      * @return
      */
-    public JsonElement toElement(String json){
+    public static JsonElement toElement(String json){
         return new JsonParser().parse(json);
     }
 
@@ -442,7 +444,7 @@ public class Json extends Common{
      * @param reader
      * @return
      */
-    public JsonElement toElement(Reader reader){
+    public static JsonElement toElement(Reader reader){
         return new JsonParser().parse(reader);
     }
 
@@ -463,8 +465,8 @@ public class Json extends Common{
 ////
 ////        System.out.println(common.strToJson(jsonStr).getAsJsonObject().get("test").isJsonArray());
 //        String target = "select * from users where id = ${user_id} and aaa = '${bbb}'";
-//        String test_data = "{\"user_id\":1111, \"bbb\":\"cccccccccc\"}";
-//        Map sources = common.jsonToMap(test_data);
+//        String interface_data = "{\"user_id\":1111, \"bbb\":\"cccccccccc\"}";
+//        Map sources = common.jsonToMap(interface_data);
 //        String str = common.regularBrace(target, sources);
 //        puts("**************");
 //        puts(str);

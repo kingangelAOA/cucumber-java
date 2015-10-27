@@ -59,8 +59,8 @@ public class Mysql extends Json {
 //    public static void main(String[] args) throws ClassNotFoundException, FileNotFoundException, YamlException, SQLException, InterfaceException {
 //        Mysql mysql = new Mysql("debug");
 //        String target = "select * from users where id = {user_id} and status = '{bbb}'";
-//        String test_data = "{\"user_id\":1, \"bbb\":\"life\"}";
-//        Map sources = mysql.jsonToMap(test_data);
+//        String interface_data = "{\"user_id\":1, \"bbb\":\"life\"}";
+//        Map sources = mysql.jsonToMap(interface_data);
 //        String str = mysql.regularBrace(target, sources);
 //
 //        Map map = mysql.getDataBySql(str, 0, "[\"name\", \"platform\"]");

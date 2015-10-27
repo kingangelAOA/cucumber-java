@@ -1,10 +1,16 @@
 package junyan.cucumber.support;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -20,10 +26,12 @@ public class AppiumEnv extends Common{
     private String driverName;
     private int timeOut = 0;
     private static Object driver;
+    private static JsonObject elementsData;
 
     private final String ANDROID_DRIVER = "io.appium.java_client.android.AndroidDriver";
     private final String IOS_DRIVER = "io.appium.java_client.ios.IOSDriver";
     private final String WEB_DRIVER = "org.openqa.selenium.remote.RemoteWebDriver";
+    private static final Map runConf = toMapByYaml("/src/main/java/config/run.yaml");
 
     protected final String[] FIND_ELEMENT_METHOD = {
             "getNamedTextField",
@@ -58,7 +66,26 @@ public class AppiumEnv extends Common{
     };
 
     public AppiumEnv() {
-        puts("beging***************************");
+        elementsData = getElements().getAsJsonObject();
+    }
+
+    public static JsonElement getElements(){
+        String project = runConf.get("project").toString();
+        List<String> list = new ArrayList<>();
+        Map<String, Object> allMap = new HashMap<>();
+        list = getFiles(System.getProperty("user.dir")+"/src/test/java/resources/UI_data/android_elements/" + project, list);
+        for (String file:list){
+            allMap = toMap(allMap, toMap(file));
+        }
+        return Json.toElement(new Gson().toJson(allMap));
+    }
+
+    public static JsonObject getElementsData() {
+        return elementsData;
+    }
+
+    public static void setElementsData(JsonObject elementsData) {
+        AppiumEnv.elementsData = elementsData;
     }
 
     /**
@@ -192,5 +219,6 @@ public class AppiumEnv extends Common{
     public Capabilities getDesiredCapabilities(){
         return this.desiredCapabilities;
     }
+
 
 }

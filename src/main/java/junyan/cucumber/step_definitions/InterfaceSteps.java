@@ -1,6 +1,7 @@
 package junyan.cucumber.step_definitions;
 
 
+import com.esotericsoftware.yamlbeans.YamlException;
 import com.google.gson.*;
 import cucumber.api.java8.En;
 import junyan.cucumber.support.*;
@@ -21,10 +22,9 @@ public class InterfaceSteps extends InterfaceEnv implements En {
     private final List<String> NO_BODY = new ArrayList<>(Arrays.asList("interfaceName", "url", "method"));
     private final List<String> BODY = new ArrayList<>(Arrays.asList("interfaceName", "url", "method",
             "contentType", "requestBody"));
-    private final Mysql mysql;
-    public InterfaceSteps() throws IOException, SQLException, ClassNotFoundException {
+    private Mysql mysql;
+    public InterfaceSteps() throws IOException {
         verifyList = new ArrayList<>();
-        mysql = new Mysql(toMapByYaml("/src/main/java/config/run.yaml").get("run").toString());
         Given("^设置接口名称 (.*)$", (String name) -> {
             setInterfaceName(name);
             verifyList.add("interfaceName");
@@ -149,6 +149,7 @@ public class InterfaceSteps extends InterfaceEnv implements En {
             (String sql, Integer index, String list) -> {
 
                 try {
+                    initDatabase();
                     JsonElement jsonElement;
                     if (hasBrance(sql)){
                         sql = regularBrace(sql, getGlobal());
@@ -161,8 +162,16 @@ public class InterfaceSteps extends InterfaceEnv implements En {
                     updateGlobal(jsonElement.getAsJsonObject());
                 } catch (InterfaceException e) {
                     Assert.assertTrue(false, e.getMessage());
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (YamlException e) {
+                    e.printStackTrace();
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
-        });
+            });
 
         Given("^查看全局变量$", () -> {
             puts(getGlobal());
@@ -269,5 +278,9 @@ public class InterfaceSteps extends InterfaceEnv implements En {
         } catch (InterfaceException e) {
             Assert.assertTrue(false, e.getMessage());
         }
+    }
+
+    private void initDatabase() throws ClassNotFoundException, FileNotFoundException, YamlException, SQLException {
+        mysql = new Mysql(toMapByYaml("/src/main/java/config/run.yaml").get("run").toString());
     }
 }

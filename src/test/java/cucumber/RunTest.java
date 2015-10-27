@@ -23,11 +23,10 @@ import org.junit.runner.RunWith;
         plugin = { "html:target/cucumber-docstring-html-report",
         "json:target/cucumber-docstring.json", "pretty:target/cucumber-docstring-pretty.txt",
         "usage:target/cucumber-docstring-usage.json", "junit:target/cucumber-docstring-results.xml" },
-        features = { "src/test/java/resources/features" },
-        tags = {"@android"},
+        features = { "src/test/java/resources/features/eleme" },
+        tags = {"@compatibility"},
         glue = { "junyan.cucumber" }
 )
 
 public class RunTest {
-
 }

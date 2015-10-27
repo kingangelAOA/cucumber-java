@@ -1,0 +1,18 @@
+菜单:
+  method: findElementByName
+  value: 菜单
+评价:
+  method: findElementByName
+  value: 评价
+商家:
+  method: findElementByName
+  value: 商家
+第一个食品:
+  method: findElementByXPath
+  value: //android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.support.v4.view.ViewPager[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.ListView[2]/android.widget.RelativeLayout[1]
+去结算:
+  method: findElementByName
+  value: 去结算
+食物列表加号:
+  method: findElementByXPath
+  value: //android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.support.v4.view.ViewPager[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.ListView[2]/android.widget.RelativeLayout[1]/android.widget.RelativeLayout[1]/android.widget.TextView[3]
