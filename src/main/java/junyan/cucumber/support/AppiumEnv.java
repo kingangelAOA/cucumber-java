@@ -3,15 +3,15 @@ package junyan.cucumber.support;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import cucumber.api.java.After;
+import cucumber.api.java8.En;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.testng.Assert;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -21,14 +21,14 @@ public class AppiumEnv extends Common{
     private String url;
     private String platform;
     private String browser;
-    private DesiredCapabilities desiredCapabilities;
+    private static DesiredCapabilities desiredCapabilities;
     private int defaultTimeOut = 10;
     private String driverName;
     private int timeOut = 0;
     private static Object driver;
     private static JsonObject elementsData;
     private String scenario;
-    private Thread thread;
+    private static Thread thread;
 
     private final String ANDROID_DRIVER = "io.appium.java_client.android.AndroidDriver";
     private final String IOS_DRIVER = "io.appium.java_client.ios.IOSDriver";
@@ -67,8 +67,7 @@ public class AppiumEnv extends Common{
             "findElementsByIosUIAutomation"
     };
 
-    public AppiumEnv() {
-        elementsData = getElements().getAsJsonObject();
+    public AppiumEnv(){
         createDirectory(System.getProperty("user.dir")+"/target/"+getRunConf().get("project"));
     }
 
@@ -76,11 +75,12 @@ public class AppiumEnv extends Common{
         return runConf;
     }
 
-    public static JsonElement getElements(){
+    public static JsonElement getElements() throws UiExceptions {
         String project = runConf.get("project").toString();
         List<String> list = new ArrayList<>();
         Map<String, Object> allMap = new HashMap<>();
-        list = getFiles(System.getProperty("user.dir")+"/src/test/java/resources/UI_data/" + project, list);
+        puts(System.getProperty("user.dir")+"/src/test/java/resources/UI_data/"+project+"/"+desiredCapabilities.getCapability("platformName"));
+        list = getFiles(System.getProperty("user.dir")+"/src/test/java/resources/UI_data/" + project+"/"+desiredCapabilities.getCapability("platformName"), list);
         for (String file:list){
             allMap = toMap(allMap, toMap(file));
         }
@@ -127,13 +127,22 @@ public class AppiumEnv extends Common{
      * @return
      * @throws UiExceptions
      */
+
     public Object initDriver() throws UiExceptions {
         initData();
+        try {
+            elementsData = getElements().getAsJsonObject();
+        } catch (UiExceptions uiExceptions) {
+            Assert.assertTrue(false, uiExceptions.getMessage());
+        }
         Object object;
         object = instantiate(driverName, new Object[]{getUrl(url), desiredCapabilities});
         setDriver((RemoteWebDriver)object);
         driver = object;
         return object;
+    }
+    public void testControl(){
+
     }
 
     /**
@@ -254,7 +263,7 @@ public class AppiumEnv extends Common{
         this.scenario = scenario;
     }
 
-    public Thread getThread() {
+    public static Thread getThread() {
         return thread;
     }
 }

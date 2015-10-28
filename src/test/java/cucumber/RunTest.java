@@ -20,8 +20,8 @@ import org.junit.runner.RunWith;
         reportPrefix = "cucumber-docstring-report")
 @CucumberOptions(
         plugin = { "html:target/cucumber-report",
-        "json:target/cucumber-docstring.json", "pretty:target/cucumber-report/cucumber-docstring-pretty.txt",
-        "usage:target/cucumber-docstring-usage.json", "junit:target/cucumber-report/cucumber-docstring-results.xml" },
+        "json:target/cucumber-report/cucumber-docstring.json", "pretty:target/cucumber-report/cucumber-docstring-pretty.txt",
+        "usage:target/cucumber-report/cucumber-docstring-usage.json", "junit:target/cucumber-report/cucumber-docstring-results.xml" },
         features = { "src/test/java/resources/features/eleme" },
         tags = {"@compatibility"},
         glue = { "junyan.cucumber" }

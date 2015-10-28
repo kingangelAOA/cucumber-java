@@ -16,7 +16,7 @@ QQ:
 微博:
   method: findElementByName
   value: 微博
-登录密码:
+账户详情登录密码:
   method: findElementByName
   value: 登录密码
 每日余额支付限额:

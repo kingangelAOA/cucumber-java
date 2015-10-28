@@ -403,11 +403,21 @@ public class Common {
         return map;
     }
 
-    public static Map<String, Object> toMap(Map<String, Object> oldMap, Map<String, Object> targetMap){
-
+    public static Map<String, Object> toMap(Map<String, Object> oldMap, Map<String, Object> targetMap) throws UiExceptions {
+        Set<String> allKeys = oldMap.keySet();
+        Set<String> targetKeys = targetMap.keySet();
+        List<String> same = hasSame(allKeys, targetKeys);
+        if (same.size() > 0)
+            throw new UiExceptions(allKeys+"和"+targetKeys+" 有重复key: "+same);
         oldMap.putAll(targetMap);
         return oldMap;
     }
+
+    public static List<String> hasSame(Set<String> oneSet, Set<String> twoSet){
+        List<String> same = twoSet.stream().filter(key -> oneSet.contains(key)).collect(Collectors.toList());
+        return same;
+    }
+
     public static <AnyType extends Comparable<? super AnyType>> int binarySearch(AnyType [] a, AnyType x){
         int low = 0, high = a.length - 1;
         while (low <= high){
