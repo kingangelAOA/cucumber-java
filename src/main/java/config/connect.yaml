@@ -1,9 +1,9 @@
 test:
-  host: 172.16.10.92
-  username: eleme
-  password: eleMe
-  database: eleme
-  port: 3306
+  host:
+  username:
+  password:
+  database:
+  port: 
 
 alpha:
   host:
