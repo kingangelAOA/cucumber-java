@@ -22,6 +22,7 @@ public class InterfaceEnv extends Http {
     private Response response;
 
     public InterfaceEnv() throws IOException {
+        System.setProperty("logPath", (System.getProperty("user.dir")+"/target/extended-cucumber-report/cucumber.log"));
         this.global = new JsonParser().parse("{}");
         this.cache = new JsonParser().parse("{}");
         this.requestHeaders = new JsonParser().parse("{}");

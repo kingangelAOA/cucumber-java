@@ -51,7 +51,6 @@ public class AppiumSteps extends AppiumEnv implements En{
                 Assert.assertTrue(false, uiExceptions.getMessage());
             }
             verifyList.add("initDriver");
-
         });
 
         Given("^打开应用 (.*) Activity (.*)$", (String app, String activity) -> {

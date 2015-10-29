@@ -127,7 +127,6 @@ public class AppiumEnv extends Common{
      * @return
      * @throws UiExceptions
      */
-
     public Object initDriver() throws UiExceptions {
         initData();
         try {
