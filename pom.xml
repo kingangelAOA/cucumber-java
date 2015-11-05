@@ -13,6 +13,7 @@
         <junit.version>4.12</junit.version>
         <cucumber.version>1.2.4</cucumber.version>
         <maven.compiler.version>3.3</maven.compiler.version>
+        <udid></udid>
     </properties>
 
     <dependencies>
@@ -32,6 +33,12 @@
             <groupId>com.github.mkolisnyk</groupId>
             <artifactId>cucumber-reports</artifactId>
             <version>0.0.11</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jayway.restassured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>2.7.0</version>
         </dependency>
 
         <dependency>

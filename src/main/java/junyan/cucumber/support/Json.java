@@ -2,6 +2,7 @@ package junyan.cucumber.support;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
+import com.jayway.restassured.path.json.JsonPath;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
@@ -260,29 +261,32 @@ public class Json extends Common{
      * @throws InterfaceException
      */
     public JsonElement getDataByIndex(String indexStr, JsonElement jsonElement) throws InterfaceException {
-        Iterator<JsonElement> iterator = toElement(indexStr).getAsJsonArray().iterator();
-        while (iterator.hasNext()){
-            JsonElement element =  iterator.next();
-            Object elementType = getJsonPrimitiveType(element.getAsJsonPrimitive());
-
-            if (elementType instanceof String) {
-                if (!jsonElement.isJsonObject())
-                    throw new InterfaceException(jsonElement + " 不是json对象, 索引 " + element.getAsString() + "取不到值...");
-                jsonElement = jsonElement.getAsJsonObject().get(element.getAsString());
-            } else if (elementType instanceof Number) {
-
-                if (!jsonElement.isJsonArray())
-                    throw new InterfaceException(jsonElement + " 不是json数组, 索引 " + element.getAsInt() + "取不到值...");
-//                puts(jsonElement.getAsJsonArray().size());
-//                puts(element.getAsInt());
-
-                if (jsonElement.getAsJsonArray().size() - 1 < element.getAsInt())
-                    throw new InterfaceException(element.getAsInt() + "大于" + jsonElement.getAsJsonArray() + "的最大索引");
-                jsonElement = jsonElement.getAsJsonArray().get(element.getAsInt());
-            } else
-                throw new InterfaceException("index 不支持 除 string 和 int 以外的类型.....");
-        }
-        return jsonElement;
+//        Iterator<JsonElement> iterator = toElement(indexStr).getAsJsonArray().iterator();
+//        while (iterator.hasNext()){
+//            JsonElement element =  iterator.next();
+//            Object elementType = getJsonPrimitiveType(element.getAsJsonPrimitive());
+//
+//            if (elementType instanceof String) {
+//                if (!jsonElement.isJsonObject())
+//                    throw new InterfaceException(jsonElement + " 不是json对象, 索引 " + element.getAsString() + "取不到值...");
+//                jsonElement = jsonElement.getAsJsonObject().get(element.getAsString());
+//            } else if (elementType instanceof Number) {
+//
+//                if (!jsonElement.isJsonArray())
+//                    throw new InterfaceException(jsonElement + " 不是json数组, 索引 " + element.getAsInt() + "取不到值...");
+////                puts(jsonElement.getAsJsonArray().size());
+////                puts(element.getAsInt());
+//
+//                if (jsonElement.getAsJsonArray().size() - 1 < element.getAsInt())
+//                    throw new InterfaceException(element.getAsInt() + "大于" + jsonElement.getAsJsonArray() + "的最大索引");
+//                jsonElement = jsonElement.getAsJsonArray().get(element.getAsInt());
+//            } else
+//                throw new InterfaceException("index 不支持 除 string 和 int 以外的类型.....");
+//        }
+//        return jsonElement;
+        JsonPath jsonPath = new JsonPath(jsonElement.toString());
+        puts(indexStr);
+        return jsonPath.get(indexStr);
     }
 
 

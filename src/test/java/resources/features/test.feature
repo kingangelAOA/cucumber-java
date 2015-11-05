@@ -15,9 +15,9 @@ Feature: test
     Given 数据库中获取数据设置到全局变量中, sql select * from users where id = ${user_id} ,获取行数 0, 获取的参数 [password,permission]
     And 执行请求
     Then 最近一次请求响应状态是否是 200
-    Then 接口 test1 response的body中的 [] 的值是否包含这些字段 ["a", "c", "d", "e"]
+    Then 接口 test1 response的body中的  的值是否包含这些字段 ["a", "c", "d", "e"]
 
-    Given 从接口 test1 的response的body中获取值,值索引为 ["a"],字段名称为: id,设置到全局变量中
+    Given 从接口 test1 的response的body中获取值,值索引为 a,字段名称为: id,设置到全局变量中
     Given 查看全局变量
 
     Given 设置接口名称 test2
