@@ -1,9 +1,10 @@
-package junyan.cucumber.support;
+package junyan.cucumber.support.env;
 
 import com.google.gson.JsonObject;
 import io.appium.java_client.MultiTouchAction;
 import io.appium.java_client.NetworkConnectionSetting;
 import io.appium.java_client.TouchAction;
+import junyan.cucumber.support.exceptions.UiExceptions;
 import org.openqa.selenium.*;
 import org.openqa.selenium.html5.Location;
 import org.openqa.selenium.interactions.Keyboard;

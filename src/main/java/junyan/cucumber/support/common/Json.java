@@ -1,4 +1,4 @@
-package junyan.cucumber.support;
+package junyan.cucumber.support.common;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
@@ -6,6 +6,8 @@ import com.jayway.restassured.path.json.JsonPath;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
+import junyan.cucumber.support.common.Common;
+import junyan.cucumber.support.exceptions.InterfaceException;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -18,7 +20,7 @@ import java.util.regex.Pattern;
 /**
  * Created by kingangeltot on 15/9/30.
  */
-public class Json extends Common{
+public class Json extends Common {
     private Gson gson;
     public Json(){
         gson = new Gson();

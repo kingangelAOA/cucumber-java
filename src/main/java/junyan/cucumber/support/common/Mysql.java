@@ -1,9 +1,10 @@
-package junyan.cucumber.support;
+package junyan.cucumber.support.common;
 
 import com.esotericsoftware.yamlbeans.YamlException;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mysql.management.util.QueryUtil;
+import junyan.cucumber.support.exceptions.InterfaceException;
 
 import java.io.FileNotFoundException;
 import java.sql.*;

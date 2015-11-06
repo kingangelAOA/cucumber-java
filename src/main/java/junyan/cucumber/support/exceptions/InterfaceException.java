@@ -1,4 +1,4 @@
-package junyan.cucumber.support;
+package junyan.cucumber.support.exceptions;
 
 /**
  * Created by kingangeltot on 15/9/30.

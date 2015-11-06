@@ -1,17 +1,15 @@
 package junyan.cucumber.step_definitions;
 
 import com.google.gson.JsonObject;
-import cucumber.api.java.After;
 import cucumber.api.java8.En;
-import junyan.cucumber.support.AppiumEnv;
-import junyan.cucumber.support.UiExceptions;
+import junyan.cucumber.support.env.AppiumEnv;
+import junyan.cucumber.support.exceptions.UiExceptions;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.Assert;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

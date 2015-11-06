@@ -8,7 +8,7 @@ import java.io.File;
 /**
  * Created by kingangeltot on 15/11/4.
  */
-public class Test extends RestAssured{
+public class Main extends RestAssured{
     public static void puts(Object object){
         System.out.println(object);
     }

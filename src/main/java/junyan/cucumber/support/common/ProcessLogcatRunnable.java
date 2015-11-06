@@ -1,4 +1,4 @@
-package junyan.cucumber.support;
+package junyan.cucumber.support.common;
 
 import org.apache.log4j.Logger;
 

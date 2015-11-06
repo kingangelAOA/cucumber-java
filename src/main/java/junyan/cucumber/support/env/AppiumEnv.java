@@ -1,10 +1,12 @@
-package junyan.cucumber.support;
+package junyan.cucumber.support.env;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import cucumber.api.java.After;
-import cucumber.api.java8.En;
+import junyan.cucumber.support.common.Common;
+import junyan.cucumber.support.common.Json;
+import junyan.cucumber.support.common.ProcessLogcatRunnable;
+import junyan.cucumber.support.exceptions.UiExceptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.Assert;
@@ -17,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by kingangeltot on 15/10/10.
  */
-public class AppiumEnv extends Common{
+public class AppiumEnv extends Common {
     private String url;
     private String platform;
     private String browser;

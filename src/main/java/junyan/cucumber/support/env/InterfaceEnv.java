@@ -1,7 +1,8 @@
-package junyan.cucumber.support;
+package junyan.cucumber.support.env;
 
 import com.google.gson.*;
 import com.squareup.okhttp.Response;
+import junyan.cucumber.support.exceptions.InterfaceException;
 
 import java.io.IOException;
 
