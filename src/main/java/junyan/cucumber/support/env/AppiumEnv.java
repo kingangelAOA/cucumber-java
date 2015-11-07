@@ -3,9 +3,9 @@ package junyan.cucumber.support.env;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import junyan.cucumber.support.common.Common;
-import junyan.cucumber.support.common.Json;
-import junyan.cucumber.support.common.ProcessLogcatRunnable;
+import junyan.cucumber.support.util.Common;
+import junyan.cucumber.support.util.JsonUtil;
+import junyan.cucumber.support.util.ProcessLogcatRunnable;
 import junyan.cucumber.support.exceptions.UiExceptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -86,7 +86,7 @@ public class AppiumEnv extends Common {
         for (String file:list){
             allMap = toMap(allMap, toMap(file));
         }
-        return Json.toElement(new Gson().toJson(allMap));
+        return JsonUtil.toElement(new Gson().toJson(allMap));
     }
 
     public static JsonObject getElementsData() {

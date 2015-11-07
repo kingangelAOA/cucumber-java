@@ -1,4 +1,4 @@
-package junyan.cucumber.support.common;
+package junyan.cucumber.support.util;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
@@ -6,7 +6,6 @@ import com.jayway.restassured.path.json.JsonPath;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.RequestBody;
-import junyan.cucumber.support.common.Common;
 import junyan.cucumber.support.exceptions.InterfaceException;
 
 import java.io.*;
@@ -20,9 +19,9 @@ import java.util.regex.Pattern;
 /**
  * Created by kingangeltot on 15/9/30.
  */
-public class Json extends Common {
+public class JsonUtil extends Common {
     private Gson gson;
-    public Json(){
+    public JsonUtil(){
         gson = new Gson();
     }
 
@@ -119,29 +118,6 @@ public class Json extends Common {
         } else
             throw new InterfaceException("不支持此类型的body类型: " + contentType + "; 只支持 FORM, URL_ENCODE_FORM, JSON");
     }
-//
-//    public Map jsonToMap(JsonObject json) throws InterfaceException {
-//        Map map = new HashMap<String, Object>();
-//        Set<Map.Entry<String, JsonElement>> entrySet = json.entrySet();
-//        for (Iterator<Map.Entry<String, JsonElement>> iter = entrySet.iterator(); iter.hasNext(); ){
-//            Map.Entry<String, JsonElement> entry = iter.next();
-//            String key = entry.getKey();
-//            Object value = entry.getValue();
-//            puts(value.getClass());
-//            if(value instanceof JsonArray)
-//                map.put((String) key, toList((JsonArray) value));
-//            else if(value instanceof JsonObject)
-//                map.put((String) key, jsonToMap((JsonObject) value));
-//            else if (isNumeric(value.toString()))
-//                map.put((String) key, value);
-//            else if (value instanceof String)
-//                map.put((String) key, value);
-//            else
-//                throw new InterfaceException("不支持此类型");
-//        }
-//        return map;
-//    }
-
     /**
      * 判断此字符串是否是数据类型的字符串
      * @param str
@@ -263,29 +239,6 @@ public class Json extends Common {
      * @throws InterfaceException
      */
     public JsonElement getDataByIndex(String indexStr, JsonElement jsonElement) throws InterfaceException {
-//        Iterator<JsonElement> iterator = toElement(indexStr).getAsJsonArray().iterator();
-//        while (iterator.hasNext()){
-//            JsonElement element =  iterator.next();
-//            Object elementType = getJsonPrimitiveType(element.getAsJsonPrimitive());
-//
-//            if (elementType instanceof String) {
-//                if (!jsonElement.isJsonObject())
-//                    throw new InterfaceException(jsonElement + " 不是json对象, 索引 " + element.getAsString() + "取不到值...");
-//                jsonElement = jsonElement.getAsJsonObject().get(element.getAsString());
-//            } else if (elementType instanceof Number) {
-//
-//                if (!jsonElement.isJsonArray())
-//                    throw new InterfaceException(jsonElement + " 不是json数组, 索引 " + element.getAsInt() + "取不到值...");
-////                puts(jsonElement.getAsJsonArray().size());
-////                puts(element.getAsInt());
-//
-//                if (jsonElement.getAsJsonArray().size() - 1 < element.getAsInt())
-//                    throw new InterfaceException(element.getAsInt() + "大于" + jsonElement.getAsJsonArray() + "的最大索引");
-//                jsonElement = jsonElement.getAsJsonArray().get(element.getAsInt());
-//            } else
-//                throw new InterfaceException("index 不支持 除 string 和 int 以外的类型.....");
-//        }
-//        return jsonElement;
         JsonPath jsonPath = new JsonPath(jsonElement.toString());
         puts(indexStr);
         return jsonPath.get(indexStr);
@@ -297,11 +250,7 @@ public class Json extends Common {
      * @param target
      * @return
      */
-    public Boolean hasBrance(String target){
-        Pattern pattern = Pattern.compile("\"\\$\\{(.*?)\\}\"|(?<!\")\\$\\{(.*?)\\}(?!\")");
-        Matcher matcher = pattern.matcher(target);
-        return matcher.find();
-    }
+
 
     /**
      * 替换数据根据"${}"或者${}
@@ -318,28 +267,6 @@ public class Json extends Common {
      *    }
      * @throws InterfaceException
      */
-    public String regularBrace(String target, JsonElement sources) throws InterfaceException {
-        Pattern pattern = Pattern.compile("\"\\$\\{(.*?)\\}\"|(?<!\")\\$\\{(.*?)\\}(?!\")");
-        Matcher matcher = pattern.matcher(target);
-        String newTarget;
-        if (matcher.find()){
-            JsonObject jsonObject = sources.getAsJsonObject();
-            String matchers = matcher.group(1);
-            if (matchers == null)
-                matchers = matcher.group(2);
-            if (jsonObject.has(matchers)) {
-//                puts(matcher.group(1));
-                JsonElement jsonElement = jsonObject.get(matchers);
-                newTarget = target.replaceAll("\"\\$\\{"+matchers+"\\}\"|(?<!\")\\$\\{"+matchers+"\\}(?!\")", jsonElement.getAsString());
-                newTarget = regularBrace(newTarget, sources);
-                return newTarget;
-            }
-            else
-                throw new InterfaceException("字符串中有{}, 但是在map中没有找到大括号中对应的key...");
-        } else {
-            return target;
-        }
-    }
 
     /**
      *
@@ -438,7 +365,7 @@ public class Json extends Common {
      * @param newData
      * @return
      */
-    public JsonElement update(JsonObject target, JsonObject newData){
+    public static JsonElement update(JsonObject target, JsonObject newData){
         for (Map.Entry<String, JsonElement> map : newData.entrySet()) {
             target.add(map.getKey(), map.getValue());
         }
@@ -453,28 +380,4 @@ public class Json extends Common {
     public static JsonElement toElement(Reader reader){
         return new JsonParser().parse(reader);
     }
-
-//    public static void main(String[] args) throws IOException, InterfaceException, ClassNotFoundException, SQLException {
-//
-//        Json common = new Json();
-////        Map map = common.getYaml("/src/main/resources/config/connect.yaml");
-////        Gson gson = new Gson();
-////        String jsonStr = gson.toJson(map);
-////
-////        Object object = common.strToJson(jsonStr).getAsJsonObject().get("test").getAsJsonArray();
-////
-////        System.out.println(object.getClass().getSimpleName());
-////
-////
-////
-////        System.out.println(jsonStr);
-////
-////        System.out.println(common.strToJson(jsonStr).getAsJsonObject().get("test").isJsonArray());
-//        String target = "select * from users where id = ${user_id} and aaa = '${bbb}'";
-//        String interface_data = "{\"user_id\":1111, \"bbb\":\"cccccccccc\"}";
-//        Map sources = common.jsonToMap(interface_data);
-//        String str = common.regularBrace(target, sources);
-//        puts("**************");
-//        puts(str);
-//    }
 }

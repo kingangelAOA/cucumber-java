@@ -1,7 +1,10 @@
-package junyan.cucumber.support.common;
+package junyan.cucumber.support.util;
 
 import com.esotericsoftware.yamlbeans.YamlException;
 import com.esotericsoftware.yamlbeans.YamlReader;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import junyan.cucumber.support.exceptions.InterfaceException;
 import junyan.cucumber.support.exceptions.UiExceptions;
 import org.apache.commons.io.FileUtils;
 import org.openjdk.jmh.generators.core.MethodInfo;
@@ -11,10 +14,8 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.Augmenter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+
+import java.io.*;
 import java.lang.reflect.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -152,6 +153,59 @@ public class Common {
             list.add(parameterInfo.getType().getName());
         }
         return list;
+    }
+
+    public static Boolean hasBrance(String target){
+        Pattern pattern = Pattern.compile("\"\\$\\{(.*?)\\}\"|(?<!\")\\$\\{(.*?)\\}(?!\")");
+        Matcher matcher = pattern.matcher(target);
+        return matcher.find();
+    }
+
+    public static String regularBrace(String target, JsonElement sources) throws InterfaceException {
+        Pattern pattern = Pattern.compile("\"\\$\\{(.*?)\\}\"|(?<!\")\\$\\{(.*?)\\}(?!\")");
+        Matcher matcher = pattern.matcher(target);
+        String newTarget;
+        if (matcher.find()){
+            JsonObject jsonObject = sources.getAsJsonObject();
+            String matchers = matcher.group(1);
+            if (matchers == null)
+                matchers = matcher.group(2);
+            if (jsonObject.has(matchers)) {
+//                puts(matcher.group(1));
+                JsonElement jsonElement = jsonObject.get(matchers);
+                newTarget = target.replaceAll("\"\\$\\{"+matchers+"\\}\"|(?<!\")\\$\\{"+matchers+"\\}(?!\")", jsonElement.getAsString());
+                newTarget = regularBrace(newTarget, sources);
+                return newTarget;
+            }
+            else
+                throw new InterfaceException("字符串中有{}, 但是在map中没有找到大括号中对应的key...");
+        } else {
+            return target;
+        }
+    }
+
+    public static String readFile(String path) {
+        File file = new File(path);
+        BufferedReader reader = null;
+        String laststr = "";
+        try {
+            reader = new BufferedReader(new FileReader(file));
+            String tempString = null;
+            while ((tempString = reader.readLine()) != null) {
+                laststr = laststr + tempString;
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e1) {
+                }
+            }
+        }
+        return laststr;
     }
 
     /**
@@ -464,4 +518,6 @@ public class Common {
         File file  = ((TakesScreenshot)driver1).getScreenshotAs(OutputType.FILE);
         FileUtils.copyFile(file, new File(path));
     }
+
+
 }

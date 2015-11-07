@@ -1,223 +1,103 @@
 package junyan.cucumber.support.env;
 
 import com.google.gson.*;
+import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.Response;
 import junyan.cucumber.support.exceptions.InterfaceException;
+import junyan.cucumber.support.models.RequestData;
+import junyan.cucumber.support.util.HttpClientUtil;
+import junyan.cucumber.support.util.JsonUtil;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by kingangelTOT on 15/10/1.
  */
-public class InterfaceEnv extends Http {
+public class InterfaceEnv {
 
-//    private Http http;
-    private String url;
-    private String method;
-    private String contentType;
-    private JsonElement global;
-    private JsonElement requestHeaders;
-    private JsonElement requestBody;
-    private String interfaceName;
-    private JsonElement cache;
-    private Response response;
+    private String global;
+    private RequestData requestData;
 
-    public InterfaceEnv() throws IOException {
+    public InterfaceEnv(){
         System.setProperty("logPath", (System.getProperty("user.dir")+"/target/extended-cucumber-report/cucumber.log"));
-        this.global = new JsonParser().parse("{}");
-        this.cache = new JsonParser().parse("{}");
-        this.requestHeaders = new JsonParser().parse("{}");
-        this.requestBody = new JsonParser().parse("{}");
+        this.requestData = new RequestData();
+        this.global = "{}";
     }
-
 
     /**
      *执行http请求
-     *
      * @throws IOException
      * @throws InterfaceException
      */
-    public void executeHttp() throws IOException, InterfaceException {
-        Http http = new Http.Creater()
-                    .method(method, setBodyByType(toJson(requestBody), contentType))
-                    .url(url)
-                    .headers(toMap(requestHeaders))
-                    .create();
-        Response response = http.myExecute();
-        this.response = response;
-        JsonElement jsonElement = new JsonParser().parse("{}");
-        JsonObject interfaceCache = jsonElement.getAsJsonObject();
-        interfaceCache.add("responseHeader", toElement(toJson(toMap(response.headers().toMultimap()))));
-        interfaceCache.add("responseBody", toElement(response.body().string()));
-        interfaceCache.add("requestHeaders", requestHeaders);
-        interfaceCache.add("requestBody", requestBody);
-        interfaceCache.add("code", toElement(String.valueOf(response.code())));
-        cache.getAsJsonObject().add(interfaceName, interfaceCache);
+    public void beginHttp(){
+        Response response = getResponse();
+        JsonObject newGlobal = JsonUtil.toElement(global).getAsJsonObject();
+        JsonObject responseJson = new JsonObject();
+        try {
+            responseJson.add("body", JsonUtil.toElement(response.body().string()));
+            responseJson.add("headers", JsonUtil.toElement(getHeaders(response.headers())));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        newGlobal.add(getRequestData().getInterfaceName(), responseJson);
+        this.global = newGlobal.toString();
     }
 
-    /**
-     * 设置请求headers
-     * @param Headers
-     *
-     */
-    public void setRequestHeaders(JsonElement Headers) {
-        requestHeaders = update(requestHeaders.getAsJsonObject(), Headers.getAsJsonObject());
+    public String getHeaders(Headers headers){
+        Map map = toMap(headers.toMultimap());
+        if (map.get("Set-Cookie") instanceof List) {
+            Map cookies = getCookies(((List<String>)map.get("Set-Cookie")));
+            map.putAll(cookies);
+        }
+        return new GsonBuilder().create().toJson(map, map.getClass());
     }
 
-    /**
-     * 设置请求cookies
-     * @param cookies
-     * @throws InterfaceException
-     */
-    public void setCookies(String cookies) throws InterfaceException {
-        cookies = regularBrace(cookies, global.getAsJsonObject());
-        JsonObject cookiesOb =  new JsonParser().parse("{}").getAsJsonObject();
-        cookiesOb.add("Cookie", toJsonPrimitive(cookies));
-        requestHeaders = update(requestHeaders.getAsJsonObject(), cookiesOb);
+    public static Map toMap(Map<String, List<String>> map){
+        Map newMap = new HashMap<>();
+        for (String key : map.keySet()){
+            List<String> list = map.get(key);
+            if (list.size() == 1)
+                newMap.put(key, list.get(0));
+            else
+                newMap.put(key, list);
+        }
+        return newMap;
     }
 
-//    public void updateCookies(String list) throws InterfaceException {
-//        JsonObject headersOb = requestHeaders.getAsJsonObject();
-//        if (!headersOb.has("Cookie"))
-//            throw new InterfaceException("在更新cookies前,先设置cookies");
-//        JsonElement jsonElement = toElement(list);
-//        Iterator<JsonElement> iterator = jsonElement.getAsJsonArray().iterator();
-//        Map map = toMap(headersOb.get("Cookie").getAsString(), ";");
-//        while (iterator.hasNext()){
-//            JsonElement i =  iterator.next();
-//            if (!(i instanceof JsonPrimitive))
-//                throw new InterfaceException("list中的必须是字符串等,非对象集合");
-//            JsonPrimitive jsonPrimitive = i.getAsJsonPrimitive();
-//            String value;
-//            String key = jsonPrimitive.getAsString();
-//            if (jsonPrimitive.isString()){
-//                value = global.getAsJsonObject().get(key).getAsString();
-//            }else{
-//                throw new InterfaceException("list中的元素只支持string类型");
-//            }
-//            if (!global.getAsJsonObject().has(key))
-//                throw new InterfaceException("要获取的cookies不再全局变量中,请查看全局变量...");
-//            map.put(key, value);
-//        }
-//    }
-
-    /**
-     * 获取缓存数据
-     * @return 返回缓存数据
-     */
-    public JsonElement getCache(){
-        return cache;
+    public static Map<String, String> parseCookies(String cookie){
+        return JsonUtil.toMap(cookie, "; ");
     }
 
-    /**
-     * 更新全局变量
-     * @param newData
-     * @return 全局变量
-     */
-    public JsonElement updateGlobal(JsonObject newData){
-        this.global = update(global.getAsJsonObject(), newData);
-        return  global;
+    public static Map<String, String> getCookies(List<String> list){
+        Map<String, String> cookies = new HashMap<>();
+        for (String string:list){
+            cookies.putAll(parseCookies(string));
+        }
+        return cookies;
     }
 
-    /**
-     * 设置全局变量
-     * @param global
-     * @return 全局变量
-     */
-    public JsonElement setGlobal(String global){
-        this.global = toElement(global);
-        return this.global;
+    public void updateGlobal(String json){
+        JsonObject newGlobal = JsonUtil.toElement(global).getAsJsonObject();
+        JsonObject updateJson = JsonUtil.toElement(json).getAsJsonObject();
+        this.global = new Gson().toJson(JsonUtil.update(newGlobal, updateJson));
     }
 
-    /**
-     * 更新全局变量
-     * @param key
-     * @param value
-     * @return 全局变量
-     * @throws InterfaceException
-     */
-    public JsonElement updateGlobal(String key, Object value) throws InterfaceException {
-        global.getAsJsonObject().add(key,  getJsonPrimitiveType(value));
+    public Response getResponse(){
+        return HttpClientUtil.executeHttp(requestData);
+    }
+
+    public RequestData getRequestData(){
+        return requestData;
+    }
+
+    public String getGlobal() {
         return global;
     }
 
-    /**
-     *
-     * @param url
-     */
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    /**
-     *
-     * @param method
-     */
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public String getMethod(){
-        return this.method;
-    }
-
-    /**
-     * 设置请求数据类型
-     * @param contentType
-     */
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
-
-    public String getContentType(){
-        return contentType;
-    }
-
-    public void setGlobal(JsonElement global) {
+    public void setGlobal(String global) {
         this.global = global;
-    }
-
-    public JsonElement getGlobal() {
-        return global;
-    }
-
-    public JsonElement getRequestHeaders(){
-        return requestHeaders;
-    }
-
-//    public Map updateRequestHeaders(Map newHeaders){
-//        this.requestHeaders.putAll(newHeaders);
-//        return requestHeaders;
-//    }
-
-    public void setRequestBody(JsonElement requestBody) {
-        this.requestBody = requestBody;
-    }
-
-//    public void updateRequestBody(String key1, String key2) throws InterfaceException {
-//        if (!requestBody.getAsJsonObject().has(key2))
-//            throw new InterfaceException("requestBody中没有key: "+key2);
-//        requestBody.put(key2, global.get(key1));
-//
-//    }
-
-    public JsonElement getRequestBody(){
-        return requestBody;
-    }
-
-    public String getInterfaceName() {
-        return interfaceName;
-    }
-
-    public void setInterfaceName(String interfaceName) {
-        this.interfaceName = interfaceName;
-    }
-
-    public Response getResponse() {
-        return response;
     }
 }
