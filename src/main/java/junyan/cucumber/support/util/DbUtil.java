@@ -48,20 +48,13 @@ public class DbUtil extends JsonUtil {
      * @throws InterfaceException
      */
     public String getDataBySql(String sql, int index, String list) throws InterfaceException {
-        Iterator<JsonElement> iterator = toElement(list).getAsJsonArray().iterator();
         List queryForString = new QueryUtil(conn).executeQuery(sql);
         if (queryForString.size()-1 < index)
             throw new InterfaceException("所请求的index超出sql查询结果的条数...");
         JsonElement jsonElement = new JsonParser().parse("{}");
         Map map = (Map)queryForString.get(index);
-        while (iterator.hasNext()){
-            JsonElement element =  iterator.next();
-            Object elementType = getJsonPrimitiveType(element.getAsJsonPrimitive());
-            if (elementType instanceof String) {
-                jsonElement.getAsJsonObject().add(element.getAsString(), toJsonPrimitive(map.get(element.getAsString()).toString()));
-            } else {
-                throw new InterfaceException("sql字段索引只能是字符串.....");
-            }
+        for (String string:list.split(",")){
+            jsonElement.getAsJsonObject().add(string, toJsonPrimitive(map.get(string).toString()));
         }
         return new Gson().toJson(jsonElement);
     }

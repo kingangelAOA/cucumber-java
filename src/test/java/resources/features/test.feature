@@ -10,41 +10,40 @@ Feature: test
     """
     /Users/kingangelTOT/Application/git_work/cucumber-java/src/test/java/resources/interface_data/test_data.json
     """
-    Given 数据库中获取数据设置到全局变量中, sql select * from users where id = ${user_id} ,获取行数 0, 获取的参数 [password,permission]
+
     And 执行请求
+    Given 数据库中获取数据设置到全局变量中, sql select * from users where id = ${test1.requestBody.d} ,获取行数 0, 获取的参数 id,password,permission
     Then 最近一次请求响应状态是否是 200
     Given 查看全局变量
-    Then test1.body.g[0] 的值是否包含这些字段 cc,ff
+    Then test1.responseBody.g[0] 的值是否包含这些字段 cc,ff
+    Then 从全局变量中取出字段 test1.responseBody.g[0].cc 的值,是否等于 wwww
 
-#    Given 设置接口名称 test2
-#    And 设置请求url http://localhost:3000/test2
-#    And 设置method POST
-#    And 设置请求数据:
-#      """
-#      {
-#          "user_id": 111,
-#          "bbb": "${id}",
-#          "ccc": [
-#              {
-#                  "acd": "aaaa"
-#              }
-#          ],
-#          "dd": {
-#              "cc": [
-#                  "a",
-#                  "b"
-#              ]
-#          }
-#      }
-#      """
-#    Given 设置cookies aa=bb;cc=dd;adf_=adfasf
-#    And 设置headers {"Content-Length": 143}
-#    And 执行请求
-#
-#    Given 从接口 test2 的response的body中获取值,值索引为 ["bbb"],字段名称为: test2_id,设置到全局变量中
-#    Given 查看所有cache
-#    Given 查看全局变量
-#    Then 从全局变量中取出字段 test2_id 的值,是否等于 "b"
+    Given 设置接口名称 test2
+    And 设置请求url http://localhost:3000/test2
+    And 设置method POST
+    And 设置请求数据:
+      """
+      {
+          "user_id": 111,
+          "bbb": "${test1.responseBody.d}",
+          "ccc": [
+              {
+                  "acd": "aaaa"
+              }
+          ],
+          "dd": {
+              "cc": [
+                  "a",
+                  "b"
+              ]
+          }
+      }
+      """
+    And 设置headers {"content-type":"application/json"}
+    And 执行请求
+    Given 查看全局变量
+    Then 从全局变量中取出字段 test2.responseBody.ccc[0].acd 的值,是否等于 aaaa
+    Then 从全局变量中取出字段 test2.responseBody.bbb 的值,是否等于 1
 
   @android,@all
   Scenario: android

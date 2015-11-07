@@ -37,8 +37,9 @@ public class InterfaceEnv {
         JsonObject newGlobal = JsonUtil.toElement(global).getAsJsonObject();
         JsonObject responseJson = new JsonObject();
         try {
-            responseJson.add("body", JsonUtil.toElement(response.body().string()));
+            responseJson.add("responseBody", JsonUtil.toElement(response.body().string()));
             responseJson.add("headers", JsonUtil.toElement(getHeaders(response.headers())));
+            responseJson.add("requestBody", JsonUtil.toElement(requestData.getBody()));
         } catch (IOException e) {
             e.printStackTrace();
         }

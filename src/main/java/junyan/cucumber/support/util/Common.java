@@ -2,11 +2,12 @@ package junyan.cucumber.support.util;
 
 import com.esotericsoftware.yamlbeans.YamlException;
 import com.esotericsoftware.yamlbeans.YamlReader;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.jayway.jsonpath.JsonPath;
 import junyan.cucumber.support.exceptions.InterfaceException;
 import junyan.cucumber.support.exceptions.UiExceptions;
 import org.apache.commons.io.FileUtils;
+import org.omg.CORBA.BooleanHolder;
+import org.omg.CORBA.OBJ_ADAPTER;
 import org.openjdk.jmh.generators.core.MethodInfo;
 import org.openjdk.jmh.generators.core.ParameterInfo;
 import org.openjdk.jmh.generators.reflection.RFGeneratorSource;
@@ -161,27 +162,32 @@ public class Common {
         return matcher.find();
     }
 
-    public static String regularBrace(String target, JsonElement sources) throws InterfaceException {
+    public static String regularBrace(String target, String json) throws InterfaceException {
         Pattern pattern = Pattern.compile("\"\\$\\{(.*?)\\}\"|(?<!\")\\$\\{(.*?)\\}(?!\")");
         Matcher matcher = pattern.matcher(target);
         String newTarget;
         if (matcher.find()){
-            JsonObject jsonObject = sources.getAsJsonObject();
             String matchers = matcher.group(1);
             if (matchers == null)
                 matchers = matcher.group(2);
-            if (jsonObject.has(matchers)) {
-//                puts(matcher.group(1));
-                JsonElement jsonElement = jsonObject.get(matchers);
-                newTarget = target.replaceAll("\"\\$\\{"+matchers+"\\}\"|(?<!\")\\$\\{"+matchers+"\\}(?!\")", jsonElement.getAsString());
-                newTarget = regularBrace(newTarget, sources);
-                return newTarget;
-            }
-            else
-                throw new InterfaceException("字符串中有{}, 但是在map中没有找到大括号中对应的key...");
-        } else {
-            return target;
+            if (matchers == null)
+                throw new InterfaceException("匹配格式有误,\"${}\"或者${}");
+            String newWatchers = matchers.replace("[", "\\[");
+            newWatchers = newWatchers.replace("]", "\\]");
+            newTarget = target.replaceAll("\"\\$\\{"+newWatchers+"\\}\"|(?<!\")\\$\\{"+newWatchers+"\\}(?!\")", getResult(JsonPath.read(json, matchers)).toString());
+            newTarget = regularBrace(newTarget, json);
+            return newTarget;
         }
+        return target;
+    }
+
+    public static Object getResult(Object object){
+        if (object instanceof String)
+            return "\""+object+"\"";
+        if (object instanceof Number)
+            return String.valueOf(object);
+        else
+            return object;
     }
 
     public static String readFile(String path) {

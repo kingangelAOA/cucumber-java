@@ -35,7 +35,7 @@ public class InterfaceSteps extends InterfaceEnv implements En {
         And("^设置请求url (.*)$", (String url) -> {
             if (Common.hasBrance(url)){
                 try {
-                    url = Common.regularBrace(url, JsonUtil.toElement(getGlobal()));
+                    url = Common.regularBrace(url, getGlobal());
                     url = url.replace("\"", "");
                 } catch (InterfaceException e) {
                     Assert.assertTrue(false, e.getMessage());
@@ -54,8 +54,10 @@ public class InterfaceSteps extends InterfaceEnv implements En {
             try {
                 if (Common.verifyPath(testData))
                     testData = Common.readFile(testData);
-                if (Common.hasBrance(testData))
-                    getRequestData().setBody(Common.regularBrace(testData, JsonUtil.toElement(getGlobal())));
+                if (Common.hasBrance(testData)){
+                    testData = Common.regularBrace(testData, getGlobal());
+                    getRequestData().setBody(testData);
+                }
                 getRequestData().setBody(testData);
             } catch (InterfaceException e) {
                 Assert.assertTrue(false, e.getMessage());
@@ -90,7 +92,7 @@ public class InterfaceSteps extends InterfaceEnv implements En {
                     mysql = new DbUtil("debug");
                     String json;
                     if (Common.hasBrance(sql)){
-                        sql = Common.regularBrace(sql, JsonUtil.toElement(getGlobal()));
+                        sql = Common.regularBrace(sql, getGlobal());
                         sql = sql.replace("\"", "");
                         json = mysql.getDataBySql(sql, index, list);
                     } else {
@@ -107,14 +109,14 @@ public class InterfaceSteps extends InterfaceEnv implements En {
         });
 
         Then("^从全局变量中取出字段 (.*) 的值,是否等于 (.*)$", (String index, String expected) -> {
-            String actual = JsonPath.read(getGlobal(), index);
-            Assert.assertEquals(actual, expected, "全局变量中的" + index + ": " + actual + ", 不等于: " + expected);
+            Object actual = JsonPath.read(getGlobal(), index);
+            Assert.assertEquals(actual.toString(), expected, "全局变量中的" + index + ": " + actual + ", 不等于: " + expected);
         });
 
         Then("^比较两个全局变量中的字段 (.*) 是否等于字段 (.*)$", (String index1, String index2) -> {
-            String actual1 = JsonPath.read(getGlobal(), index1);
-            String actual2 = JsonPath.read(getGlobal(), index2);
-            Assert.assertEquals(actual1, actual2, "全局变量中的" + index1 + ": " + actual1 + ", 不等于" + index2 + ": " + actual2);
+            Object actual1 = JsonPath.read(getGlobal(), index1);
+            Object actual2 = JsonPath.read(getGlobal(), index2);
+            Assert.assertEquals(actual1.toString(), actual2.toString(), "全局变量中的" + index1 + ": " + actual1 + ", 不等于" + index2 + ": " + actual2);
         });
 
         Then("^最近一次请求响应状态是否是 (.*)$", (Integer status) -> {
