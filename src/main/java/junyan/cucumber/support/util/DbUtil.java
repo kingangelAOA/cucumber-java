@@ -58,16 +58,4 @@ public class DbUtil extends JsonUtil {
         }
         return new Gson().toJson(jsonElement);
     }
-
-//    public static void main(String[] args) throws ClassNotFoundException, FileNotFoundException, YamlException, SQLException, InterfaceException {
-//        DbUtil mysql = new DbUtil("debug");
-//        String target = "select * from users where id = {user_id} and status = '{bbb}'";
-//        String interface_data = "{\"user_id\":1, \"bbb\":\"life\"}";
-//        Map sources = mysql.jsonToMap(interface_data);
-//        String str = mysql.regularBrace(target, sources);
-//
-//        Map map = mysql.getDataBySql(str, 0, "[\"name\", \"platform\"]");
-//        JsonUtil util = new JsonUtil();
-//        puts(util.mapToJson(map));
-//    }
 }

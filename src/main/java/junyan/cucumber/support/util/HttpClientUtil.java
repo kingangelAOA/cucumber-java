@@ -14,16 +14,16 @@ import java.util.Map;
 public class HttpClientUtil {
 
     public static Response executeHttp(RequestData requestData){
-        Headers headers = getHesder(requestData.getHeaders());
+        Headers headers = getHeader(requestData.getHeaders());
         Request request = new Request.Builder()
                 .url(requestData.getUrl())
                 .method(requestData.getMethod(), RequestBody.create(MediaType.parse(headers.get("content-type")), requestData.getBody()))
-                .headers(getHesder(requestData.getHeaders()))
+                .headers(getHeader(requestData.getHeaders()))
                 .build();
         return myExecute(request);
     }
 
-    public static Headers getHesder(String json){
+    public static Headers getHeader(String json){
         return Headers.of(JsonUtil.toMap(JsonUtil.toElement(json)));
     }
 
@@ -38,6 +38,7 @@ public class HttpClientUtil {
         }
         return newMap;
     }
+
     /**
      * 执行http请求
      * @return

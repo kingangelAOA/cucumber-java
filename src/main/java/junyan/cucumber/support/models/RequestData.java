@@ -2,6 +2,7 @@ package junyan.cucumber.support.models;
 
 import com.google.gson.JsonElement;
 import com.squareup.okhttp.Response;
+import junyan.cucumber.support.util.Common;
 
 /**
  * Created by kingangelTOT on 15/11/7.

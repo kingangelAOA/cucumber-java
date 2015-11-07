@@ -157,13 +157,13 @@ public class Common {
     }
 
     public static Boolean hasBrance(String target){
-        Pattern pattern = Pattern.compile("\"\\$\\{(.*?)\\}\"|(?<!\")\\$\\{(.*?)\\}(?!\")");
+        Pattern pattern = Pattern.compile("\\$\\{(.*?)\\}");
         Matcher matcher = pattern.matcher(target);
         return matcher.find();
     }
 
     public static String regularBrace(String target, String json) throws InterfaceException {
-        Pattern pattern = Pattern.compile("\"\\$\\{(.*?)\\}\"|(?<!\")\\$\\{(.*?)\\}(?!\")");
+        Pattern pattern = Pattern.compile("\\$\\{(.*?)\\}");
         Matcher matcher = pattern.matcher(target);
         String newTarget;
         if (matcher.find()){
@@ -174,9 +174,9 @@ public class Common {
                 throw new InterfaceException("匹配格式有误,\"${}\"或者${}");
             String newWatchers = matchers.replace("[", "\\[");
             newWatchers = newWatchers.replace("]", "\\]");
-            newTarget = target.replaceAll("\"\\$\\{"+newWatchers+"\\}\"|(?<!\")\\$\\{"+newWatchers+"\\}(?!\")", getResult(JsonPath.read(json, matchers)).toString());
+            newTarget = target.replaceAll("\\$\\{"+newWatchers+"\\}", getResult(JsonPath.read(json, matchers)).toString());
             newTarget = regularBrace(newTarget, json);
-            return newTarget;
+            target = newTarget;
         }
         return target;
     }
@@ -188,6 +188,11 @@ public class Common {
             return String.valueOf(object);
         else
             return object;
+    }
+
+    public static String replace(String source, String oldRelax, String newRelax){
+        source = source.replace(oldRelax, newRelax);
+        return source;
     }
 
     public static String readFile(String path) {

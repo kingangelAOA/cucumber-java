@@ -9,6 +9,7 @@ import junyan.cucumber.support.util.DbUtil;
 import junyan.cucumber.support.util.JsonUtil;
 import junyan.cucumber.support.env.InterfaceEnv;
 import junyan.cucumber.support.exceptions.InterfaceException;
+import junyan.cucumber.support.util.VerifyUtil;
 import org.testng.Assert;
 
 import java.io.FileNotFoundException;
@@ -65,8 +66,9 @@ public class InterfaceSteps extends InterfaceEnv implements En {
             verifyList.add("requestBody");
         });
 
-        And("^设置headers (.*)$", (String headers) -> {
-            getRequestData().setHeaders(headers);
+        And("^设置headers:$", (String headers) -> {
+                headers = VerifyUtil.headers(headers, getGlobal());
+                getRequestData().setHeaders(headers);
         });
 
         Given("^设置全局变量 (.*)$", (String global) -> {

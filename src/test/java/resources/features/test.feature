@@ -3,8 +3,14 @@ Feature: test
   Scenario: test
     Given 设置全局变量 {"aaa":"bbbbb", "d":1, "user_id":1}
     Given 设置接口名称 test1
-    And 设置headers {"content-type":"application/json","Cookie":"aa=bb;cc=dd"}
-    And 设置请求url http://localhost:3000/test"${d}"
+    And 设置headers:
+    """
+      {
+        "content-type":"application/json",
+        "Cookie":"aa=bb;cc=${aaa}"
+      }
+    """
+    And 设置请求url http://localhost:3000/test${d}
     And 设置method POST
     And 设置请求数据:
     """
@@ -25,7 +31,7 @@ Feature: test
       """
       {
           "user_id": 111,
-          "bbb": "${test1.responseBody.d}",
+          "bbb": ${test1.responseBody.d},
           "ccc": [
               {
                   "acd": "aaaa"
@@ -39,7 +45,12 @@ Feature: test
           }
       }
       """
-    And 设置headers {"content-type":"application/json"}
+    And 设置headers:
+    """
+    {
+      "content-type":"application/json"
+    }
+    """
     And 执行请求
     Given 查看全局变量
     Then 从全局变量中取出字段 test2.responseBody.ccc[0].acd 的值,是否等于 aaaa
