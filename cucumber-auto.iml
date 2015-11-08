@@ -10,7 +10,6 @@
       <excludeFolder url="file://$MODULE_DIR$/src/test/java/resources/UI_data/android_elements" />
       <excludeFolder url="file://$MODULE_DIR$/src/test/java/resources/UI_data/eleme" />
       <excludeFolder url="file://$MODULE_DIR$/src/test/java/resources/UI_data/eleme/android/elements" />
-      <excludeFolder url="file://$MODULE_DIR$/src/test/java/resources/features/eleme" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />

@@ -3,9 +3,7 @@ package junyan.cucumber.support.env;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import junyan.cucumber.support.util.Common;
-import junyan.cucumber.support.util.JsonUtil;
-import junyan.cucumber.support.util.ProcessLogcatRunnable;
+import junyan.cucumber.support.util.*;
 import junyan.cucumber.support.exceptions.UiExceptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -103,6 +101,9 @@ public class AppiumEnv extends Common {
      */
     public void initData() throws UiExceptions {
         initCapabilities(platform);
+        if (System.getProperty("udid") == null)
+            throw new UiExceptions("maven 命令的时候指定手机的udid");
+        desiredCapabilities.setCapability("udid", System.getProperty("udid"));
         setDriverName(platform);
     }
 
@@ -137,7 +138,7 @@ public class AppiumEnv extends Common {
             Assert.assertTrue(false, uiExceptions.getMessage());
         }
         Object object;
-        object = instantiate(driverName, new Object[]{getUrl(url), desiredCapabilities});
+        object = Reflect.instantiate(driverName, new Object[]{getUrl(url), desiredCapabilities});
         setDriver((RemoteWebDriver)object);
         driver = object;
         return object;
@@ -153,7 +154,7 @@ public class AppiumEnv extends Common {
      * @return
      */
     public Object findElement(String how, String what){
-        return execMethod(getDriver(), how, toCollection(toList(what)));
+        return Reflect.execMethod(getDriver(), how, toCollection(toList(what)));
     }
 
     /**

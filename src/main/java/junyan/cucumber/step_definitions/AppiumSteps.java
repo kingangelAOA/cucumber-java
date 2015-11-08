@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import cucumber.api.java8.En;
 import junyan.cucumber.support.env.AppiumEnv;
 import junyan.cucumber.support.exceptions.UiExceptions;
+import junyan.cucumber.support.util.Reflect;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.Assert;
@@ -52,7 +53,7 @@ public class AppiumSteps extends AppiumEnv implements En{
         });
 
         Given("^打开应用 (.*) Activity (.*)$", (String app, String activity) -> {
-            execMethod(getDriver(), "startActivity", new Object[]{app, activity});
+            Reflect.execMethod(getDriver(), "startActivity", new Object[]{app, activity});
         });
 
         And("^跳转到网页address (.*)$", (String address) -> {
@@ -121,18 +122,18 @@ public class AppiumSteps extends AppiumEnv implements En{
         And("^点击元素 (.*)$", (String elementName) -> {
             if (!elementName.contains(elementName))
                 Assert.assertTrue(false, "元素: " + elementName + " 不存在");
-            execMethod(elements.get(elementName), "click", new Object[]{});
+            Reflect.execMethod(elements.get(elementName), "click", new Object[]{});
         });
 
         And("^点击返回键$", () -> {
-            execMethod(getDriver(), "sendKeyEvent", new Object[]{4});
+            Reflect.execMethod(getDriver(), "sendKeyEvent", new Object[]{4});
         });
 
         Given("^输入 (.*) 到元素 (.*) 中$", (String value, String elementName) -> {
             if (!elementName.contains(elementName))
                 Assert.assertTrue(false, "元素: "+elementName+" 不存在");
-            execMethod(elements.get(elementName), "click", new Object[]{});
-            execMethod(elements.get(elementName), "sendKeys", new Object[]{new CharSequence[]{value}});
+            Reflect.execMethod(elements.get(elementName), "click", new Object[]{});
+            Reflect.execMethod(elements.get(elementName), "sendKeys", new Object[]{new CharSequence[]{value}});
 
         });
 
@@ -140,12 +141,12 @@ public class AppiumSteps extends AppiumEnv implements En{
             if (!elementName.contains(elementName))
                 Assert.assertTrue(false, "元素: " + elementName + " 不存在");
 
-            String str = execMethod(elements.get(elementName), "getText", new Object[]{}).toString();
+            String str = Reflect.execMethod(elements.get(elementName), "getText", new Object[]{}).toString();
             Assert.assertEquals(str, target, "元素: " + elementName + " 的文本信息的只 " + str + " 不等于 " + target);
         });
 
         Given("^退出当前应用$", () -> {
-            execMethod(getDriver(), "quit", new Object[]{});
+            Reflect.execMethod(getDriver(), "quit", new Object[]{});
         });
 
         Given("^关闭log", () -> {

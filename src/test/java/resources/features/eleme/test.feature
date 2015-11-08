@@ -16,7 +16,6 @@ Feature: test
     """
     /Users/kingangelTOT/Application/git_work/cucumber-java/src/test/java/resources/interface_data/test_data.json
     """
-
     And 执行请求
     Given 数据库中获取数据设置到全局变量中, sql select * from users where id = ${test1.requestBody.d} ,获取行数 0, 获取的参数 id,password,permission
     Then 最近一次请求响应状态是否是 200
@@ -71,7 +70,7 @@ Feature: test
 #    And 设置platform android
 #    And 初始化driver
     And 打开应用 me.ele Activity .Launcher
-    Given 查询单个元素 我的, 查询方法 findElementByName, 查询条件 我的
+    Given 查询单个元素 , 查询方法 findElementByName, 查询条件 我的
     And 点击元素 我的
     Then 元素 我的 的文本信息是否等于 我的
 

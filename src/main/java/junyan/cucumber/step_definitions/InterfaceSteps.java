@@ -91,11 +91,11 @@ public class InterfaceSteps extends InterfaceEnv implements En {
             (String sql, Integer index, String list) -> {
                 try {
 //                    mysql = new DbUtil(System.getProperty("env"));
-                    mysql = new DbUtil("debug");
+                    puts("env: "+System.getProperty("env"));
+                    mysql = new DbUtil(System.getProperty("env"));
                     String json;
                     if (Common.hasBrance(sql)){
                         sql = Common.regularBrace(sql, getGlobal());
-                        sql = sql.replace("\"", "");
                         json = mysql.getDataBySql(sql, index, list);
                     } else {
                         json = mysql.getDataBySql(sql, index, list);
@@ -123,7 +123,6 @@ public class InterfaceSteps extends InterfaceEnv implements En {
 
         Then("^最近一次请求响应状态是否是 (.*)$", (Integer status) -> {
             Assert.assertEquals(getResponse().code(), (int)status, "接口: " + getRequestData().getInterfaceName() + " code是: " + getResponse().code());
-
         });
 
         Then("^(.*) 的值是否包含这些字段 (.*)$",

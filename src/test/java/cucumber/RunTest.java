@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 /**
  * Created by kingangeltot on 15/9/29.
  */
-@RunWith(Cucumber.class)
+@RunWith(ExtendedCucumber.class)
 @ExtendedCucumberOptions(
         jsonReport = "target/cucumber-report/cucumber-docstring.json",
         jsonUsageReport = "target/cucumber-report/cucumber-docstring-usage.json",
