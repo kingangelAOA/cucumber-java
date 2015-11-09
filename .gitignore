@@ -1,4 +1,3 @@
-/src/test/java/resources
 /src/test/java/resources/UI_data/android_elements/eleme
 target/
 pom.xml.tag
@@ -6,6 +5,9 @@ pom.xml.releaseBackup
 pom.xml.versionsBackup
 pom.xml.next
 release.properties
+/src/test/java/resources/features
+/src/test/java/resources/interface_data
+/src/test/java/resources/UI_data
 dependency-reduced-pom.xml
 buildNumber.properties
 .idea/
