@@ -22,9 +22,6 @@ import java.util.*;
  */
 public class InterfaceSteps extends InterfaceEnv implements En {
     private List<String> verifyList;
-    private final List<String> NO_BODY = new ArrayList<>(Arrays.asList("interfaceName", "url", "method"));
-    private final List<String> BODY = new ArrayList<>(Arrays.asList("interfaceName", "url", "method",
-            "contentType", "requestBody"));
     private DbUtil mysql;
     public InterfaceSteps() throws IOException {
         verifyList = new ArrayList<>();
@@ -36,7 +33,7 @@ public class InterfaceSteps extends InterfaceEnv implements En {
         And("^设置请求url (.*)$", (String url) -> {
             if (Common.hasBrance(url)){
                 try {
-                    url = Common.regularBrace(url, getGlobal());
+                    url = Common.regularBrace(url, InterfaceEnv.global);
                     url = url.replace("\"", "");
                 } catch (InterfaceException e) {
                     Assert.assertTrue(false, e.getMessage());
@@ -56,7 +53,7 @@ public class InterfaceSteps extends InterfaceEnv implements En {
                 if (Common.verifyPath(testData))
                     testData = Common.readFile(testData);
                 if (Common.hasBrance(testData)){
-                    testData = Common.regularBrace(testData, getGlobal());
+                    testData = Common.regularBrace(testData, InterfaceEnv.global);
                     getRequestData().setBody(testData);
                 }
                 getRequestData().setBody(testData);
@@ -67,35 +64,25 @@ public class InterfaceSteps extends InterfaceEnv implements En {
         });
 
         And("^设置headers:$", (String headers) -> {
-                headers = VerifyUtil.headers(headers, getGlobal());
+                headers = VerifyUtil.headers(headers, InterfaceEnv.global);
                 getRequestData().setHeaders(headers);
         });
 
         Given("^设置全局变量 (.*)$", (String global) -> {
-            setGlobal(global);
+            updateGlobal(global);
         });
 
         When("^执行请求$", () -> {
-            if (getRequestData().getMethod() == null)
-                Assert.assertTrue(false, "请先设置method...");
-            if (getRequestData().getMethod().equals("HEAD") || getRequestData().getMethod().equals("GET"))
-                if (!verifyList.containsAll(NO_BODY))
-                    Assert.assertTrue(false, "interfaceName, url, method 其中一项没有设置....");
-            else
-                if (!verifyList.containsAll(BODY))
-                    Assert.assertTrue(false, "interfaceName, url, method, contentType, requestBody 其中一项没有设置....");
             beginHttp();
         });
 
         Given("^数据库中获取数据设置到全局变量中, sql (.*),获取行数 (.*), 获取的参数 (.*)$",
             (String sql, Integer index, String list) -> {
                 try {
-//                    mysql = new DbUtil(System.getProperty("env"));
-                    puts("env: "+System.getProperty("env"));
                     mysql = new DbUtil(System.getProperty("env"));
                     String json;
                     if (Common.hasBrance(sql)){
-                        sql = Common.regularBrace(sql, getGlobal());
+                        sql = Common.regularBrace(sql, InterfaceEnv.global);
                         json = mysql.getDataBySql(sql, index, list);
                     } else {
                         json = mysql.getDataBySql(sql, index, list);
@@ -107,17 +94,17 @@ public class InterfaceSteps extends InterfaceEnv implements En {
             });
 
         Given("^查看全局变量$", () -> {
-            puts(getGlobal());
+            puts(InterfaceEnv.global);
         });
 
         Then("^从全局变量中取出字段 (.*) 的值,是否等于 (.*)$", (String index, String expected) -> {
-            Object actual = JsonPath.read(getGlobal(), index);
+            Object actual = JsonPath.read(InterfaceEnv.global, index);
             Assert.assertEquals(actual.toString(), expected, "全局变量中的" + index + ": " + actual + ", 不等于: " + expected);
         });
 
         Then("^比较两个全局变量中的字段 (.*) 是否等于字段 (.*)$", (String index1, String index2) -> {
-            Object actual1 = JsonPath.read(getGlobal(), index1);
-            Object actual2 = JsonPath.read(getGlobal(), index2);
+            Object actual1 = JsonPath.read(InterfaceEnv.global, index1);
+            Object actual2 = JsonPath.read(InterfaceEnv.global, index2);
             Assert.assertEquals(actual1.toString(), actual2.toString(), "全局变量中的" + index1 + ": " + actual1 + ", 不等于" + index2 + ": " + actual2);
         });
 
@@ -128,7 +115,7 @@ public class InterfaceSteps extends InterfaceEnv implements En {
         Then("^(.*) 的值是否包含这些字段 (.*)$",
         (String index, String list) -> {
             for (String str:list.split(",")){
-                JsonPath.read(getGlobal(), index.trim() + "." + str.trim());
+                JsonPath.read(InterfaceEnv.global, index.trim() + "." + str.trim());
             }
         });
 

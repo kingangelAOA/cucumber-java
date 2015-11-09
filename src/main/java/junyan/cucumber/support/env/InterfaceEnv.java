@@ -2,11 +2,14 @@ package junyan.cucumber.support.env;
 
 import com.google.gson.*;
 import com.squareup.okhttp.Headers;
+import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.Response;
 import junyan.cucumber.support.exceptions.InterfaceException;
 import junyan.cucumber.support.models.RequestData;
+import junyan.cucumber.support.util.Common;
 import junyan.cucumber.support.util.HttpClientUtil;
 import junyan.cucumber.support.util.JsonUtil;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -18,13 +21,11 @@ import java.util.Map;
  */
 public class InterfaceEnv {
 
-    private String global;
+    public static String global = "{}";
     private RequestData requestData;
-
     public InterfaceEnv(){
         System.setProperty("logPath", (System.getProperty("user.dir")+"/target/extended-cucumber-report/cucumber.log"));
         this.requestData = new RequestData();
-        this.global = "{}";
     }
 
     /**
@@ -36,22 +37,39 @@ public class InterfaceEnv {
         Response response = getResponse();
         JsonObject newGlobal = JsonUtil.toElement(global).getAsJsonObject();
         JsonObject responseJson = new JsonObject();
-        try {
-            responseJson.add("responseBody", JsonUtil.toElement(response.body().string()));
+//        try {
+            responseJson.add("responseBody", JsonUtil.toElement(getResponseBody(response)));
             responseJson.add("headers", JsonUtil.toElement(getHeaders(response.headers())));
             responseJson.add("requestBody", JsonUtil.toElement(requestData.getBody()));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        newGlobal.add(getRequestData().getInterfaceName(), responseJson);
+        this.global = newGlobal.toString();
+    }
+
+    public String getResponseBody(Response response){
+        String body = "";
+        MediaType type = response.body().contentType();
+        try {
+            if (type.toString().equals("application/json"))
+                body = response.body().string();
+            else
+                body = "{}";
         } catch (IOException e) {
             e.printStackTrace();
         }
-        newGlobal.add(getRequestData().getInterfaceName(), responseJson);
-        this.global = newGlobal.toString();
+        return body;
     }
 
     public String getHeaders(Headers headers){
         Map map = toMap(headers.toMultimap());
         if (map.get("Set-Cookie") instanceof List) {
-            Map cookies = getCookies(((List<String>)map.get("Set-Cookie")));
-            map.putAll(cookies);
+            Map<String, String> cookies = getCookies(((List<String>)map.get("Set-Cookie")));
+            Map<String, Map<String, String>> cookie = new HashMap<>();
+            cookie.put("Cookie", cookies);
+            map.putAll(cookie);
+            map.remove("Set-Cookie");
         }
         return new GsonBuilder().create().toJson(map, map.getClass());
     }
@@ -83,7 +101,7 @@ public class InterfaceEnv {
     public void updateGlobal(String json){
         JsonObject newGlobal = JsonUtil.toElement(global).getAsJsonObject();
         JsonObject updateJson = JsonUtil.toElement(json).getAsJsonObject();
-        this.global = new Gson().toJson(JsonUtil.update(newGlobal, updateJson));
+        global = new Gson().toJson(JsonUtil.update(newGlobal, updateJson));
     }
 
     public Response getResponse(){
@@ -94,11 +112,4 @@ public class InterfaceEnv {
         return requestData;
     }
 
-    public String getGlobal() {
-        return global;
-    }
-
-    public void setGlobal(String global) {
-        this.global = global;
-    }
 }

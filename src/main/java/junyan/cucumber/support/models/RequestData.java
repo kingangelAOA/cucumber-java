@@ -8,11 +8,11 @@ import junyan.cucumber.support.util.Common;
  * Created by kingangelTOT on 15/11/7.
  */
 public class RequestData {
-    private String url;
-    private String method;
-    private String headers;
-    private String body;
-    private String interfaceName;
+    private String url = "";
+    private String method ="" ;
+    private String headers = "{}";
+    private String body = "{}";
+    private String interfaceName = "";
 
     public String getUrl() {
         return url;

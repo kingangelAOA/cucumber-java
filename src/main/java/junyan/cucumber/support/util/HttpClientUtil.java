@@ -15,12 +15,22 @@ public class HttpClientUtil {
 
     public static Response executeHttp(RequestData requestData){
         Headers headers = getHeader(requestData.getHeaders());
+        String method = requestData.getMethod();
         Request request = new Request.Builder()
                 .url(requestData.getUrl())
-                .method(requestData.getMethod(), RequestBody.create(MediaType.parse(headers.get("content-type")), requestData.getBody()))
+                .method(method, getRequestBody(method, headers, requestData))
                 .headers(getHeader(requestData.getHeaders()))
                 .build();
         return myExecute(request);
+    }
+
+    public static RequestBody getRequestBody(String method, Headers headers, RequestData requestData){
+        if (method.equals("GET") || method.equals("HEAD"))
+            return null;
+        else
+            if (requestData.getBody() == null)
+                requestData.setBody("{}");
+        return RequestBody.create(MediaType.parse(headers.get("content-type")), requestData.getBody());
     }
 
     public static Headers getHeader(String json){
