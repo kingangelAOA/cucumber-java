@@ -4,8 +4,8 @@ pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
 pom.xml.next
+/src/test/java/resources/features/eleme/api
 release.properties
-/src/test/java/resources/features
 /src/test/java/resources/interface_data
 /src/test/java/resources/UI_data
 dependency-reduced-pom.xml

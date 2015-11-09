@@ -25,9 +25,9 @@ import org.junit.runner.RunWith;
         plugin = { "html:target/cucumber-docstring-html-report",
         "json:target/cucumber-report/cucumber-docstring.json", "pretty:target/cucumber-report/cucumber-docstring-pretty.txt",
         "usage:target/cucumber-report/cucumber-docstring-usage.json", "junit:target/cucumber-report/cucumber-docstring-results.xml" },
-        features = { "src/test/java/resources/features/eleme/api/dev/Account" },
-        tags = {"@dev"},
-        glue = { "junyan.cucumber" }
+        features = {""},
+        tags = {""},
+        glue = {"junyan.cucumber"}
 )
 
 public class RunTest {
