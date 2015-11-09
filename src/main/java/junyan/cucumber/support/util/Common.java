@@ -167,8 +167,6 @@ public class Common {
         if (matcher.find()){
             String matchers = matcher.group(1);
             if (matchers == null)
-                matchers = matcher.group(2);
-            if (matchers == null)
                 throw new InterfaceException("匹配格式有误,\"${}\"或者${}");
             String newWatchers = matchers.replace("[", "\\[");
             newWatchers = newWatchers.replace("]", "\\]");

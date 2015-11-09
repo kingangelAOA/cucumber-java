@@ -143,9 +143,6 @@ public class AppiumEnv extends Common {
         driver = object;
         return object;
     }
-    public void testControl(){
-
-    }
 
     /**
      * 查询元素

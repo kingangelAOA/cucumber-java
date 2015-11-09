@@ -56,6 +56,11 @@ public class DbUtil extends JsonUtil {
         for (String string:list.split(",")){
             jsonElement.getAsJsonObject().add(string, toJsonPrimitive(map.get(string).toString()));
         }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return new Gson().toJson(jsonElement);
     }
 }
