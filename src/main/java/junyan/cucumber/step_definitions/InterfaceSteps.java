@@ -79,7 +79,8 @@ public class InterfaceSteps extends InterfaceEnv implements En {
         Given("^数据库中获取数据设置到全局变量中, sql (.*),获取行数 (.*), 获取的参数 (.*)$",
             (String sql, Integer index, String list) -> {
                 try {
-                    mysql = new DbUtil(System.getProperty("env"));
+//                    mysql = new DbUtil(System.getProperty("env"));
+                    mysql = new DbUtil("debug");
                     String json;
                     if (Common.hasBrance(sql)){
                         sql = Common.regularBrace(sql, InterfaceEnv.global);

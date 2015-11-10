@@ -1,7 +1,7 @@
 Feature: test
   @interface
   Scenario: test
-    Given 设置全局变量 {"aaa":"bbbbb", "d":1, "user_id":1}
+    Given 设置全局变量 {"aaa": "bbbbb", "d":1, "user_id":1}
     Given 设置接口名称 test1
     And 设置headers:
     """
@@ -14,7 +14,7 @@ Feature: test
     And 设置method POST
     And 设置请求数据:
     """
-    /Users/kingangelTOT/Application/git_work/cucumber-java/src/test/java/resources/interface_data/test_data.json
+    /Users/kingangelTOT/Applications/git_work/cucumber-java/src/test/java/resources/interface_data/test_data.json
     """
     And 执行请求
     Given 数据库中获取数据设置到全局变量中, sql select * from users where id = ${test1.requestBody.d} ,获取行数 0, 获取的参数 id,password,permission

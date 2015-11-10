@@ -37,13 +37,9 @@ public class InterfaceEnv {
         Response response = getResponse();
         JsonObject newGlobal = JsonUtil.toElement(global).getAsJsonObject();
         JsonObject responseJson = new JsonObject();
-//        try {
-            responseJson.add("responseBody", JsonUtil.toElement(getResponseBody(response)));
-            responseJson.add("headers", JsonUtil.toElement(getHeaders(response.headers())));
-            responseJson.add("requestBody", JsonUtil.toElement(requestData.getBody()));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        responseJson.add("responseBody", JsonUtil.toElement(getResponseBody(response)));
+        responseJson.add("headers", JsonUtil.toElement(getHeaders(response.headers())));
+        responseJson.add("requestBody", JsonUtil.toElement(requestData.getBody()));
         newGlobal.add(getRequestData().getInterfaceName(), responseJson);
         this.global = newGlobal.toString();
     }
@@ -52,7 +48,7 @@ public class InterfaceEnv {
         String body = "";
         MediaType type = response.body().contentType();
         try {
-            if (type.toString().equals("application/json"))
+            if (type.subtype().equals("json"))
                 body = response.body().string();
             else
                 body = "{}";
