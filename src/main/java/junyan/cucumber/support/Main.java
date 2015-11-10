@@ -2,6 +2,7 @@ package junyan.cucumber.support;
 
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.path.json.JsonPath;
+import junyan.cucumber.support.util.RedisClient;
 
 import java.io.File;
 
@@ -23,8 +24,7 @@ public class Main extends RestAssured{
 //        JsonPath jsonPath = new JsonPath(new File(System.getProperty("user.dir")+"/src/test/java/resources/interface_data/test_data.json"));
 //        puts(jsonPath.get());
 //        puts(jsonPath.get("g[0].cc"));
-
-        JsonPath jsonPath = new JsonPath("{\"message\":\"hello world\"}");
-        puts(jsonPath.get("aa"));
+        RedisClient redisClient = new RedisClient();
+        redisClient.setup();
     }
 }

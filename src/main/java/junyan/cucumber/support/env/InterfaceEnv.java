@@ -7,6 +7,7 @@ import com.squareup.okhttp.Response;
 import junyan.cucumber.support.exceptions.InterfaceException;
 import junyan.cucumber.support.models.RequestData;
 import junyan.cucumber.support.util.Common;
+import junyan.cucumber.support.util.Config;
 import junyan.cucumber.support.util.HttpClientUtil;
 import junyan.cucumber.support.util.JsonUtil;
 import org.apache.log4j.Logger;
@@ -24,7 +25,7 @@ public class InterfaceEnv {
     public static String global = "{}";
     private RequestData requestData;
     public InterfaceEnv(){
-        System.setProperty("logPath", (System.getProperty("user.dir")+"/target/extended-cucumber-report/cucumber.log"));
+        System.setProperty("logPath", Config.API_LOG_PATH);
         this.requestData = new RequestData();
     }
 
@@ -37,15 +38,16 @@ public class InterfaceEnv {
         Response response = getResponse();
         JsonObject newGlobal = JsonUtil.toElement(global).getAsJsonObject();
         JsonObject responseJson = new JsonObject();
-        responseJson.add("responseBody", JsonUtil.toElement(getResponseBody(response)));
-        responseJson.add("headers", JsonUtil.toElement(getHeaders(response.headers())));
-        responseJson.add("requestBody", JsonUtil.toElement(requestData.getBody()));
+        responseJson.add("response", getResponse(response));
+        responseJson.add("request", getRequest());
         newGlobal.add(getRequestData().getInterfaceName(), responseJson);
         this.global = newGlobal.toString();
     }
 
-    public String getResponseBody(Response response){
+    public JsonElement getResponse(Response response){
         String body = "";
+        JsonObject responseOb = new JsonObject();
+        responseOb.add("headers", JsonUtil.toElement(getHeaders(response.headers())));
         MediaType type = response.body().contentType();
         try {
             if (type.subtype().equals("json"))
@@ -55,7 +57,15 @@ public class InterfaceEnv {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return body;
+        responseOb.add("body", JsonUtil.toElement(body));
+        return responseOb;
+    }
+
+    public JsonElement getRequest(){
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.add("body", JsonUtil.toElement(requestData.getBody()));
+        jsonObject.add("headers", JsonUtil.toElement(requestData.getHeaders()));
+        return jsonObject;
     }
 
     public String getHeaders(Headers headers){

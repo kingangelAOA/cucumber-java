@@ -1,0 +1,54 @@
+# Description: Which automation engine to use;
+# value:Appium (default) or Selendroid
+automationName: 
+
+# Description: Which mobile OS platform to use;
+# value:iOS, Android, or FirefoxOS
+platformName: android
+
+# Mobile OS version; value: e.g., 7.1, 4.4
+platformVersion: 
+
+# Description: The kind of mobile device or emulator to use; 
+# value: iPhone Simulator, iPad Simulator,iPhone Retina 4-inch, Android Emulator, 
+# Galaxy S4, etc…. On iOS, this should be one of the valid devices returned by 
+# instruments with instruments -s devices. On Android this capability is currently ignored.
+deviceName: M8st
+
+# Description: The absolute local path or remote http URL to an .ipa or .apk file, or a .zip 
+# containing one of these. Appium will attempt to install this app binary on the appropriate 
+# device first. Note that this capability is not required for Android if you specify appPackage 
+# and appActivity capabilities (see below). Incompatible with browserName.
+# value: /abs/path/to/my.apk or http://myapp.com/app.ipa
+app: 
+
+# Description: Name of mobile web browser to automate. Should be an empty string if automating an app instead.
+# value: ‘Safari’ for iOS and ‘Chrome’, ‘Chromium’, or ‘Browser’ for Android
+browserName:
+
+# Description: How long (in seconds) Appium will wait for a new command from the client before 
+# assuming the client quit and ending the session
+# value: e.g. 60
+newCommandTimeout: 
+
+# Description: Whether to have Appium install and launch the app automatically. Default true
+# value: true, false
+autoLaunch: 
+
+# Description: Unique device identifier of the connected physical device
+# value: e.g. 1ae203187fc012g
+udid: b8e2d18
+
+# Description: Move directly into Webview context. Default false
+# value: true, false
+autoWebview: true
+
+# Description: Don’t reset app state before this session. Default false
+# value: true, false
+noReset: 
+
+# Description: (iOS) Delete the entire simulator folder. (Android) Reset app state by uninstalling
+# app instead of clearing app data. On Android, this will also remove the app after the session is 
+# complete. Default false
+# value: true, false
+fullReset:

@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 /**
  * Created by kingangeltot on 15/9/29.
  */
-@RunWith(ExtendedCucumber.class)
+@RunWith(Cucumber.class)
 @ExtendedCucumberOptions(
         jsonReport = "target/cucumber-report/cucumber-docstring.json",
         jsonUsageReport = "target/cucumber-report/cucumber-docstring-usage.json",
@@ -26,7 +26,7 @@ import org.junit.runner.RunWith;
         "json:target/cucumber-report/cucumber-docstring.json", "pretty:target/cucumber-report/cucumber-docstring-pretty.txt",
         "usage:target/cucumber-report/cucumber-docstring-usage.json", "junit:target/cucumber-report/cucumber-docstring-results.xml" },
         features = {"src/test/java/resources/features"},
-        tags = {"@interface"},
+        tags = {"@dev"},
         glue = {"junyan.cucumber"}
 )
 
