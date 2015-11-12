@@ -71,7 +71,7 @@ public class AppiumEnv extends Common {
     }
 
     public static JsonElement getElements() throws UiExceptions {
-        String project = runConf.get("project").toString();
+        String project = System.getProperty("project");
         List<String> list = new ArrayList<>();
         Map<String, Object> allMap = new HashMap<>();
         puts(System.getProperty("user.dir")+"/src/test/java/resources/UI_data/"+project+"/"+desiredCapabilities.getCapability("platformName"));
