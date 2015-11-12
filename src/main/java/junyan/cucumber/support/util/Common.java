@@ -41,12 +41,12 @@ public class Common {
         Object object;
         Map map = null;
         try {
-            reader = new YamlReader(new FileReader(System.getProperty("user.dir") + yamlPath));
+            reader = new YamlReader(new FileReader(yamlPath));
             object = reader.read();
             map = (Map)object;
-        } catch (FileNotFoundException e) {
+        }catch (YamlException e) {
             e.printStackTrace();
-        } catch (YamlException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         return map;

@@ -25,7 +25,7 @@ import org.junit.runner.RunWith;
         plugin = { "html:target/cucumber-docstring-html-report",
         "json:target/cucumber-report/cucumber-docstring.json", "pretty:target/cucumber-report/cucumber-docstring-pretty.txt",
         "usage:target/cucumber-report/cucumber-docstring-usage.json", "junit:target/cucumber-report/cucumber-docstring-results.xml" },
-        features = {"src/features"},
+        features = {"/Users/kingangeltot/features"},
         tags = {"@account"},
         glue = {"junyan.cucumber"}
 )

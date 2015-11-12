@@ -22,7 +22,8 @@ public class DbUtil extends JsonUtil {
     }
 
     public void initDB(String env){
-        Map<String, Map<String, String>> map = Common.toMapByYaml("/src/main/java/config/db.yaml");
+        puts(getClass().getResource("db.yaml"));
+        Map<String, Map<String, String>> map = Common.toMapByYaml("run.yaml");
         Map<String, String> connectConf = map.get(env);
         String userName = connectConf.get("username");
         String password = connectConf.get("password");

@@ -33,7 +33,6 @@ public class AppiumEnv extends Common {
     private final String ANDROID_DRIVER = "io.appium.java_client.android.AndroidDriver";
     private final String IOS_DRIVER = "io.appium.java_client.ios.IOSDriver";
     private final String WEB_DRIVER = "org.openqa.selenium.remote.RemoteWebDriver";
-    private static final Map runConf = toMapByYaml("/src/main/java/config/run.yaml");
 
     protected final String[] FIND_ELEMENT_METHOD = {
             "getNamedTextField",
@@ -68,11 +67,7 @@ public class AppiumEnv extends Common {
     };
 
     public AppiumEnv(){
-        createDirectory(System.getProperty("user.dir")+"/target/"+getRunConf().get("project"));
-    }
-
-    public Map getRunConf(){
-        return runConf;
+//        createDirectory(System.getProperty("user.dir")+"/target/"+getRunConf().get("project"));
     }
 
     public static JsonElement getElements() throws UiExceptions {

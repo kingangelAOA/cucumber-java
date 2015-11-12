@@ -1,0 +1,27 @@
+mysql:
+
+  test:
+    host:
+    username:
+    password:
+    database:
+    port:
+
+  alpha:
+    host:
+    username:
+    password:
+    database:
+    port: 3306
+
+  debug:
+    host: 127.0.0.1
+    username: root
+    password: king258angel@
+    database: ui_auto_web
+    port: 3306
+
+redis:
+  test:
+    host:
+

@@ -12,7 +12,7 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .idea/
 /cucumber-auto.iml
-/src/main/java/config/db.yaml
-/src/main/java/config/test.yaml
-/src/main/java/config/run.yaml
+/db.yaml
+/test.yaml
+/run.yaml
 cucumber-html-reports/
