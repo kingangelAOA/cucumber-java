@@ -1,0 +1,67 @@
+定位地点:
+  method: findElementByXPath
+  value: //android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.view.View[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.TextView[1]
+搜索框:
+  method: findElementByXPath
+  value: //android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.support.v4.view.ViewPager[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.RelativeLayout[1]/android.view.View[1]/android.widget.LinearLayout[1]/android.widget.LinearLayout[1]
+广告位:
+  method: findElementByXPath
+  value: //android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.support.v4.view.ViewPager[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.RelativeLayout[1]/android.view.View[1]/android.support.v7.widget.RecyclerView[1]/android.widget.LinearLayout[1]/android.widget.RelativeLayout[1]
+品牌馆:
+  method: findElementByName
+  value: 品牌馆
+预定早餐:
+  method: findElementByName
+  value: 预定早餐
+新店特惠:
+  method: findElementByName
+  value: 新店特惠
+限时抢购:
+  method: findElementByName
+  value: 限时抢购
+下午茶:
+  method: findElementByName
+  value: 下午茶
+水果:
+  method: findElementByName
+  value: 水果
+鲜花蛋糕:
+  method: findElementByName
+  value: 鲜花蛋糕
+便利店:
+  method: findElementByName
+  value: 便利店
+分类:
+  method: findElementByName
+  value: 分类
+小吃零食:
+  method: findElementByName
+  value: 小吃零食
+果蔬生鲜:
+  method: findElementByName
+  value: 果蔬生鲜
+鲜花蛋糕:
+  method: findElementByName
+  value: 鲜花蛋糕
+商超类:
+  method: findElementByName
+  value: 商超类
+排序:
+  method: findElementByName
+  value: 排序
+筛选:
+  method: findElementByName
+  value: 筛选
+第一家餐厅:
+  method: findElementByXPath
+  value: //android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.support.v4.view.ViewPager[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.RelativeLayout[1]/android.view.View[1]/android.support.v7.widget.RecyclerView[1]/android.widget.FrameLayout[2]
+我的:
+  method: findElementByName
+  value: 我的
+发现:
+  method: findElementByName
+  value: 发现
+订单:
+  method: findElementByName
+  value: 订单
+

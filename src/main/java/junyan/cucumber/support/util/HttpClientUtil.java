@@ -1,5 +1,6 @@
 package junyan.cucumber.support.util;
 
+import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.*;
 import junyan.cucumber.support.models.RequestData;
 
@@ -15,7 +16,8 @@ import java.util.concurrent.TimeUnit;
 public class HttpClientUtil {
 
     public static Response executeHttp(RequestData requestData){
-        setRequestLog(requestData);
+        Config.getLogger().info("**********************interface begin*********************\n");
+
         Headers headers = getHeader(requestData.getHeaders());
         String method = requestData.getMethod();
         Request request = new Request.Builder()
@@ -24,7 +26,7 @@ public class HttpClientUtil {
                 .headers(getHeader(requestData.getHeaders()))
                 .build();
         Response response = myExecute(request);
-        setResponseLog(response);
+        Config.getLogger().info("**********************interface end*********************\n\n");
         return response;
     }
 
@@ -60,7 +62,7 @@ public class HttpClientUtil {
      */
     public static Response myExecute(Request request){
         OkHttpClient client = new OkHttpClient();
-        client.setConnectTimeout(20000, TimeUnit.MICROSECONDS);
+//        client.setConnectTimeout(20000, TimeUnit.MICROSECONDS);
         try {
             return client.newCall(request).execute();
         } catch (IOException e) {
@@ -69,23 +71,28 @@ public class HttpClientUtil {
         return null;
     }
 
-    private static void setRequestLog(RequestData requestData){
-        Config.getLogger().info("*****interfaceName: "+requestData.getInterfaceName()+" ************");
-        Config.getLogger().info("*****url: "+requestData.getUrl()+" ************");
-        Config.getLogger().info("*****headers: "+requestData.getHeaders()+" ************");
-        Config.getLogger().info("*****method: "+requestData.getMethod()+" ************");
-        Config.getLogger().info("*****body: "+requestData.getBody()+" ************");
+    public static String getHeaders(Headers headers){
+        Map map = toMap(headers.toMultimap());
+        if (map.get("Set-Cookie") instanceof List) {
+            Map<String, String> cookies = getCookies(((List<String>)map.get("Set-Cookie")));
+            Map<String, Map<String, String>> cookie = new HashMap<>();
+            cookie.put("Cookie", cookies);
+            map.putAll(cookie);
+            map.remove("Set-Cookie");
+        }
+        return new GsonBuilder().create().toJson(map, map.getClass());
     }
 
-    private static void setResponseLog(Response response){
-        if (response.code() == 200) {
-            Config.getLogger().info("********headers: " + response.headers().toString() + " ********");
-            try {
-                Config.getLogger().info("********body: " + response.body().string() + " ********");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }else
-            Config.getLogger().error("********code: "+String.valueOf(response.code())+" ********");
+    public static Map<String, String> getCookies(List<String> list){
+        Map<String, String> cookies = new HashMap<>();
+        for (String string:list){
+            cookies.putAll(parseCookies(string));
+        }
+        return cookies;
     }
+
+    public static Map<String, String> parseCookies(String cookie){
+        return JsonUtil.toMap(cookie, "; ");
+    }
+
 }

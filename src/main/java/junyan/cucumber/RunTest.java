@@ -1,4 +1,4 @@
-package cucumber;
+package junyan.cucumber;
 
 
 import com.github.mkolisnyk.cucumber.runner.ExtendedCucumber;
@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 /**
  * Created by kingangeltot on 15/9/29.
  */
-@RunWith(Cucumber.class)
+@RunWith(ExtendedCucumber.class)
 @ExtendedCucumberOptions(
         jsonReport = "target/cucumber-report/cucumber-docstring.json",
         jsonUsageReport = "target/cucumber-report/cucumber-docstring-usage.json",
@@ -25,8 +25,8 @@ import org.junit.runner.RunWith;
         plugin = { "html:target/cucumber-docstring-html-report",
         "json:target/cucumber-report/cucumber-docstring.json", "pretty:target/cucumber-report/cucumber-docstring-pretty.txt",
         "usage:target/cucumber-report/cucumber-docstring-usage.json", "junit:target/cucumber-report/cucumber-docstring-results.xml" },
-        features = {"src/test/java/resources/features"},
-        tags = {"@dev"},
+        features = {"src/features"},
+        tags = {"@account"},
         glue = {"junyan.cucumber"}
 )
 

@@ -150,7 +150,7 @@ public class AppiumSteps extends AppiumEnv implements En{
         });
 
         Given("^关闭log", () -> {
-            getThread().stop();
+//            getThread().stop();
         });
     }
 }

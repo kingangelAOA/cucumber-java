@@ -42,12 +42,13 @@ public class InterfaceEnv {
         responseJson.add("request", getRequest());
         newGlobal.add(getRequestData().getInterfaceName(), responseJson);
         this.global = newGlobal.toString();
+        Config.getLogger().info("全局变量: "+global);
     }
 
     public JsonElement getResponse(Response response){
         String body = "";
         JsonObject responseOb = new JsonObject();
-        responseOb.add("headers", JsonUtil.toElement(getHeaders(response.headers())));
+        responseOb.add("headers", JsonUtil.toElement(HttpClientUtil.getHeaders(response.headers())));
         MediaType type = response.body().contentType();
         try {
             if (type.subtype().equals("json"))
@@ -58,6 +59,8 @@ public class InterfaceEnv {
             e.printStackTrace();
         }
         responseOb.add("body", JsonUtil.toElement(body));
+        responseOb.add("code", JsonUtil.toElement(String.valueOf(response.code())));
+        setResponseLog(responseOb);
         return responseOb;
     }
 
@@ -66,18 +69,6 @@ public class InterfaceEnv {
         jsonObject.add("body", JsonUtil.toElement(requestData.getBody()));
         jsonObject.add("headers", JsonUtil.toElement(requestData.getHeaders()));
         return jsonObject;
-    }
-
-    public String getHeaders(Headers headers){
-        Map map = toMap(headers.toMultimap());
-        if (map.get("Set-Cookie") instanceof List) {
-            Map<String, String> cookies = getCookies(((List<String>)map.get("Set-Cookie")));
-            Map<String, Map<String, String>> cookie = new HashMap<>();
-            cookie.put("Cookie", cookies);
-            map.putAll(cookie);
-            map.remove("Set-Cookie");
-        }
-        return new GsonBuilder().create().toJson(map, map.getClass());
     }
 
     public static Map toMap(Map<String, List<String>> map){
@@ -92,17 +83,24 @@ public class InterfaceEnv {
         return newMap;
     }
 
-    public static Map<String, String> parseCookies(String cookie){
-        return JsonUtil.toMap(cookie, "; ");
+    private void setResponseLog(JsonObject response){
+        Config.getLogger().info("**************response begin****************");
+        if (response.get("code").getAsString().equals("200")) {
+            Config.getLogger().info("headers: " + response.get("headers"));
+            Config.getLogger().info("body: " + response.get("body"));
+        }else{
+            Config.getLogger().error("*******************error**********************");
+            Config.getLogger().error("interfaceName: "+requestData.getInterfaceName());
+            Config.getLogger().error("url: "+requestData.getUrl());
+            Config.getLogger().error("headers: "+HttpClientUtil.getHeader(requestData.getHeaders()));
+            Config.getLogger().error("method: "+requestData.getMethod());
+            Config.getLogger().error("request_body: "+requestData.getBody());
+            Config.getLogger().error("code: "+ response.get("code"));
+            Config.getLogger().error("*******************error**********************\n");
+        }
+        Config.getLogger().info("**************response end****************\n");
     }
 
-    public static Map<String, String> getCookies(List<String> list){
-        Map<String, String> cookies = new HashMap<>();
-        for (String string:list){
-            cookies.putAll(parseCookies(string));
-        }
-        return cookies;
-    }
 
     public void updateGlobal(String json){
         JsonObject newGlobal = JsonUtil.toElement(global).getAsJsonObject();
@@ -111,11 +109,22 @@ public class InterfaceEnv {
     }
 
     public Response getResponse(){
+        setRequestLog();
         return HttpClientUtil.executeHttp(requestData);
     }
 
     public RequestData getRequestData(){
         return requestData;
+    }
+
+    private void setRequestLog(){
+        Config.getLogger().info("**************request begin****************");
+        Config.getLogger().info("interfaceName: "+requestData.getInterfaceName());
+        Config.getLogger().info("url: "+requestData.getUrl());
+        Config.getLogger().info("headers: "+HttpClientUtil.getHeader(requestData.getHeaders()));
+        Config.getLogger().info("method: "+requestData.getMethod());
+        Config.getLogger().info("body: "+requestData.getBody());
+        Config.getLogger().info("**************request end****************\n");
     }
 
 }

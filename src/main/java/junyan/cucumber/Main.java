@@ -1,4 +1,4 @@
-package junyan.cucumber.support;
+package junyan.cucumber;
 
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.path.json.JsonPath;

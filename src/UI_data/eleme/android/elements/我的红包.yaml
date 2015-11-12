@@ -1,0 +1,12 @@
+红包兑换红包:
+  method: findElementByName
+  value: 兑换红包
+红包说明:
+  method: findElementByXPath
+  value: //android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.webkit.WebView[1]/android.webkit.WebView[1]/android.view.View[3]
+历史红包:
+  method: findElementByName
+  value: 历史红包
+红包推荐有奖:
+  method: findElementByXPath
+  value: //android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.widget.LinearLayout[1]/android.widget.FrameLayout[1]/android.webkit.WebView[1]/android.webkit.WebView[1]/android.view.View[6]

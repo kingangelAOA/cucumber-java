@@ -8,9 +8,9 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/src/test/java/resources/UI_data/android_elements" />
-      <excludeFolder url="file://$MODULE_DIR$/src/test/java/resources/UI_data/eleme" />
-      <excludeFolder url="file://$MODULE_DIR$/src/test/java/resources/UI_data/eleme/android" />
-      <excludeFolder url="file://$MODULE_DIR$/src/test/java/resources/UI_data/eleme/android/elements" />
+      <excludeFolder url="file://$MODULE_DIR$/src/UI_data/eleme" />
+      <excludeFolder url="file://$MODULE_DIR$/src/UI_data/eleme/android" />
+      <excludeFolder url="file://$MODULE_DIR$/src/UI_data/eleme/android/elements" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
@@ -88,7 +88,6 @@
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.4.3" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.3.1" level="project" />
     <orderEntry type="library" name="Maven: com.esotericsoftware.yamlbeans:yamlbeans:1.09" level="project" />
-    <orderEntry type="library" name="Maven: info.cukes:cucumber-java8:1.2.4" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-mxj:5.0.12" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-mxj-db-files:5.0.12" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:5.1.17" level="project" />
@@ -145,6 +144,7 @@
     <orderEntry type="library" name="Maven: org.apache.ant:ant-launcher:1.7.0" level="project" />
     <orderEntry type="library" name="Maven: com.beust:jcommander:1.48" level="project" />
     <orderEntry type="library" name="Maven: org.yaml:snakeyaml:1.15" level="project" />
+    <orderEntry type="library" name="Maven: info.cukes:cucumber-java8:1.2.4" level="project" />
     <orderEntry type="library" name="Maven: org.openjdk.jmh:jmh-generator-reflection:1.11.1" level="project" />
     <orderEntry type="library" name="Maven: org.openjdk.jmh:jmh-core:1.11.1" level="project" />
     <orderEntry type="library" name="Maven: net.sf.jopt-simple:jopt-simple:4.6" level="project" />
