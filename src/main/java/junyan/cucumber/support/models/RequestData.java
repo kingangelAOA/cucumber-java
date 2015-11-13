@@ -11,7 +11,7 @@ public class RequestData {
     private String url = "";
     private String method ="" ;
     private String headers = "{}";
-    private String body = "{}";
+    private String body = "";
     private String interfaceName = "";
 
     public String getUrl() {

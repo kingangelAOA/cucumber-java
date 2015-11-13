@@ -17,6 +17,9 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
+import static com.jayway.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+import static org.hamcrest.Matchers.equalTo;
+
 /**
  * Created by kingangeltot on 15/9/30.
  */
@@ -110,20 +113,40 @@ public class InterfaceSteps extends InterfaceEnv implements En {
         });
 
         Then("^最近一次请求响应状态是否是 (.*)$", (Integer status) -> {
-            Assert.assertEquals(getResponse().code(), (int)status, "接口: " + getRequestData().getInterfaceName() + " code是: " + getResponse().code());
+//            Assert.assertEquals(getResponse().code(), (int)status, "接口: " + getRequestData().getInterfaceName() + " code是: " + getResponse().code());
+            getResponse().then().statusCode(status);
         });
 
-        Then("^(.*) 的值是否包含这些字段 (.*)$",
-        (String index, String list) -> {
-            for (String str:list.split(",")){
-                JsonPath.read(InterfaceEnv.global, index.trim() + "." + str.trim());
-            }
+        Then("^jsonSchema验证response (.*)$",
+                (String classPath) -> {
+            getResponse().then().body(matchesJsonSchemaInClasspath(classPath));
         });
 
-        Then("^test1 (.*), asdfasdf$", (Map jsonOb) -> {
-            puts(jsonOb.getClass());
-            puts(jsonOb);
+        Then("^responseBody中的 (.*) 是否等于 (.*)$",
+        (String jsonPath, String content) -> {
+            getResponse().then().body(jsonPath, equalTo(content));
         });
+
+        Then("^responseBody中header中的Content-Type是否等于 (.*)$",
+                (String contentType) -> {
+            getResponse().then().header("Content-Type", contentType);
+        });
+
+        Then("^responseBody中header中的 (.*) 是否等于 (.*)$",
+                (String key, String contentType) -> {
+            getResponse().then().header(key, contentType);
+        });
+
+        Then("^responseBody中的Cookie是否包含 (.*)$",
+                (String cookieKey) -> {
+            getResponse().then().cookie(cookieKey);
+        });
+
+        Then("^responseBody中Cookie的 (.*) 是否等于 (.*)$",
+                (String key, String value) -> {
+            getResponse().then().cookie(key, value);
+        });
+
     }
     public static void puts(Object object){
         System.out.println(object);

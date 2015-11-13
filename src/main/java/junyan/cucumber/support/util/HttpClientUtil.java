@@ -33,9 +33,6 @@ public class HttpClientUtil {
     public static RequestBody getRequestBody(String method, Headers headers, RequestData requestData){
         if (method.equals("GET") || method.equals("HEAD"))
             return null;
-        else
-            if (requestData.getBody() == null)
-                requestData.setBody("{}");
         return RequestBody.create(MediaType.parse(headers.get("content-type")), requestData.getBody());
     }
 

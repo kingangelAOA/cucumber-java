@@ -1,16 +1,13 @@
 package junyan.cucumber.support.env;
 
 import com.google.gson.*;
-import com.squareup.okhttp.Headers;
+import com.jayway.restassured.response.Header;
+import com.jayway.restassured.response.Headers;
+import com.jayway.restassured.response.Response;
 import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.Response;
 import junyan.cucumber.support.exceptions.InterfaceException;
 import junyan.cucumber.support.models.RequestData;
-import junyan.cucumber.support.util.Common;
-import junyan.cucumber.support.util.Config;
-import junyan.cucumber.support.util.HttpClientUtil;
-import junyan.cucumber.support.util.JsonUtil;
-import org.apache.log4j.Logger;
+import junyan.cucumber.support.util.*;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -24,6 +21,8 @@ public class InterfaceEnv {
 
     public static String global = "{}";
     private RequestData requestData;
+    private Response response;
+
     public InterfaceEnv(){
         System.setProperty("logPath", Config.API_LOG_PATH);
         this.requestData = new RequestData();
@@ -35,31 +34,27 @@ public class InterfaceEnv {
      * @throws InterfaceException
      */
     public void beginHttp(){
-        Response response = getResponse();
+        Response response = request();
         JsonObject newGlobal = JsonUtil.toElement(global).getAsJsonObject();
         JsonObject responseJson = new JsonObject();
-        responseJson.add("response", getResponse(response));
+        responseJson.add("response", getResponseJson(response));
         responseJson.add("request", getRequest());
         newGlobal.add(getRequestData().getInterfaceName(), responseJson);
         this.global = newGlobal.toString();
         Config.getLogger().info("全局变量: "+global);
+        this.response = response;
     }
 
-    public JsonElement getResponse(Response response){
-        String body = "";
+    public JsonElement getResponseJson(Response response){
+        String body;
         JsonObject responseOb = new JsonObject();
-        responseOb.add("headers", JsonUtil.toElement(HttpClientUtil.getHeaders(response.headers())));
-        MediaType type = response.body().contentType();
-        try {
-            if (type.subtype().equals("json"))
-                body = response.body().string();
-            else
-                body = "{}";
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        responseOb.add("headers", JsonUtil.toElement(RestAssuredClient.getHeaders(response.headers())));
+        if (response.contentType().equals("application/json"))
+            body = response.body().asString();
+        else
+            body = "{}";
         responseOb.add("body", JsonUtil.toElement(body));
-        responseOb.add("code", JsonUtil.toElement(String.valueOf(response.code())));
+        responseOb.add("code", JsonUtil.toElement(String.valueOf(response.statusCode())));
         setResponseLog(responseOb);
         return responseOb;
     }
@@ -81,6 +76,15 @@ public class InterfaceEnv {
                 newMap.put(key, list);
         }
         return newMap;
+    }
+
+    public JsonElement toJson(Headers headers){
+        JsonObject jsonObject = new JsonObject();
+        List<Header> headerList = headers.asList();
+        for (Header header : headerList){
+            jsonObject.add(header.getName(), JsonUtil.toElement(header.getValue()));
+        }
+        return jsonObject;
     }
 
     private void setResponseLog(JsonObject response){
@@ -108,9 +112,9 @@ public class InterfaceEnv {
         global = new Gson().toJson(JsonUtil.update(newGlobal, updateJson));
     }
 
-    public Response getResponse(){
+    public Response request(){
         setRequestLog();
-        return HttpClientUtil.executeHttp(requestData);
+        return RestAssuredClient.executeHttp(requestData);
     }
 
     public RequestData getRequestData(){
@@ -127,4 +131,7 @@ public class InterfaceEnv {
         Config.getLogger().info("**************request end****************\n");
     }
 
+    public Response getResponse() {
+        return response;
+    }
 }

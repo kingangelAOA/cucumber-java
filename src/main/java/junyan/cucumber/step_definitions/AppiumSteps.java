@@ -84,7 +84,7 @@ public class AppiumSteps extends AppiumEnv implements En{
         });
 
         Given("^启动log", () -> {
-            String directory = System.getProperty("user.dir")+"/target/"+getRunConf().get("project")+"/log";
+            String directory = System.getProperty("user.dir")+"/target/"+System.getProperty("project")+"/log";
             createDirectory(directory);
             String file = directory+"/"+getTime()+".log";
             runLogCat(file);
@@ -95,13 +95,13 @@ public class AppiumSteps extends AppiumEnv implements En{
         });
 
         Given("^设置场景名称 (.*)$", (String name) -> {
-            deleteDir(new File(System.getProperty("user.dir")+"/target/"+getRunConf().get("project")+"/pictures/"+getScenario()));
+            deleteDir(new File(System.getProperty("user.dir")+"/target/"+System.getProperty("project")+"/pictures/"+getScenario()));
             setScenario(name);
         });
 
         Given("^截图", () -> {
             try {
-                screenshot((WebDriver)getDriver(), System.getProperty("user.dir")+"/target/"+getRunConf().get("project")+"/pictures/"+getScenario()+"/"+getTime()+".jpg");
+                screenshot((WebDriver)getDriver(), System.getProperty("user.dir")+"/target/"+System.getProperty("project")+"/pictures/"+getScenario()+"/"+getTime()+".jpg");
             } catch (IOException e) {
                 e.printStackTrace();
             }
