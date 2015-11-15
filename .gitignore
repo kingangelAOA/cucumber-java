@@ -14,6 +14,7 @@ buildNumber.properties
 .idea/
 /cucumber-auto.iml
 /db.yaml
+/cucumber-reports
 /test.yaml
 /run.yaml
 cucumber-html-reports/

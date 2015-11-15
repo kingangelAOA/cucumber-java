@@ -1,6 +1,7 @@
 package junyan.cucumber;
 
 import cucumber.api.cli.Main;
+import junyan.cucumber.support.util.CucumberReportMonitor;
 
 /**
  * Created by kingangeltot on 15/11/4.
@@ -10,23 +11,21 @@ public class RunCucumber{
         System.out.println(object);
     }
     public static void main(String[] args){
-//        try {
-//            Class.forName("junyan.cucumber.RunCucumber");
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-//        System.out.println(loader.getResource("junyan/cucumber/step_definitions"));
-//        puts(System.getProperty("user.dir")+"/src/features");
-        String[] params = {"-p","pretty", "-g", "junyan/cucumber/step_definitions", "/Users/kingangelTOT/Downloads/features", "-t", "@interface"};
-        run(params);
+        String[] params = {"-p","json:cucumber-reports/cucumber.json", "-g", "junyan/cucumber/step_definitions",
+                "/Users/kingangelTOT/Downloads/features", "-t", "@interface"};
+        String[] help = {"-p","pretty","-g", "junyan/cucumber/step_definitions", "--help"};
+        byte status = create(params);
+        CucumberReportMonitor.create(new String[]{"-f", "cucumber-reports", "-o", "cucumber-reports", "-n"});
+        System.exit(status);
     }
 
-    public static void run(String[] args){
+    public static byte create(String[] args){
+        byte status = 1;
         try {
-            Main.main(args);
+            status = Main.run(args, Thread.currentThread().getContextClassLoader());
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
+        return status;
     }
 }
