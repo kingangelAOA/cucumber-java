@@ -75,7 +75,7 @@ public class RestAssuredClient extends RestAssured{
                 Map<String, String> cookie = parseCookies(header.getValue());
                 cookies.putAll(cookie);
             }
-            jsonObject.add(header.getName(), new JsonParser().(header.getValue()));
+            jsonObject.add(header.getName(), new Gson().toJsonTree(header.getValue()));
         }
         jsonObject.add("Cookie", JsonUtil.toElement(new Gson().toJson(cookies, cookies.getClass())));
         return new Gson().toJson(jsonObject);

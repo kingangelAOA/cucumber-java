@@ -9,6 +9,7 @@ release.properties
 /src/test/java/resources/interface_data
 /src/test/java/resources/UI_data
 dependency-reduced-pom.xml
+/features
 buildNumber.properties
 .idea/
 /cucumber-auto.iml

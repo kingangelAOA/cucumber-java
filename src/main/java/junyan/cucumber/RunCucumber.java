@@ -18,7 +18,7 @@ public class RunCucumber{
 //        ClassLoader loader = Thread.currentThread().getContextClassLoader();
 //        System.out.println(loader.getResource("junyan/cucumber/step_definitions"));
 //        puts(System.getProperty("user.dir")+"/src/features");
-        String[] params = {"-p","pretty", "-g", "junyan/cucumber/step_definitions", "/Users/kingangeltot/Applications/features", "-t", "@account"};
+        String[] params = {"-p","pretty", "-g", "junyan/cucumber/step_definitions", "/Users/kingangelTOT/Downloads/features", "-t", "@interface"};
         run(params);
     }
 

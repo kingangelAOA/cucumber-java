@@ -49,7 +49,8 @@ public class InterfaceEnv {
         String body;
         JsonObject responseOb = new JsonObject();
         responseOb.add("headers", JsonUtil.toElement(RestAssuredClient.getHeaders(response.headers())));
-        if (response.contentType().equals("application/json"))
+        String contentType = response.getContentType();
+        if (contentType.contains("application/json"))
             body = response.body().asString();
         else
             body = "{}";
