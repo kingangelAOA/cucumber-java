@@ -27,7 +27,6 @@ public class InterfaceSteps extends InterfaceEnv implements En {
         verifyList = new ArrayList<>();
         Given("^设置接口名称 (.*)$", (String name) -> {
             getRequestData().setInterfaceName(name);
-            verifyList.add("interfaceName");
         });
 
         And("^设置请求url (.*)$", (String url) -> {
@@ -40,12 +39,10 @@ public class InterfaceSteps extends InterfaceEnv implements En {
                 }
             }
             getRequestData().setUrl(url);
-            verifyList.add("url");
         });
 
         And("^设置method (.*)$", (String method) -> {
             getRequestData().setMethod(method);
-            verifyList.add("method");
         });
 
         Given("^设置DB:$", (String json) -> {
@@ -53,20 +50,8 @@ public class InterfaceSteps extends InterfaceEnv implements En {
         });
 
         And("^设置请求数据:$", (String testData) -> {
-            try {
-                if (Common.verifyPath(testData))
-                    testData = Common.readFile(testData);
-                if (Common.hasBrance(testData)){
-                    testData = Common.regularBrace(testData, InterfaceEnv.global);
-                    getRequestData().setBody(testData);
-                }
-                if (testData.isEmpty())
-                    Assert.assertEquals(false, "未加载到请求数据");
-                getRequestData().setBody(testData);
-            } catch (InterfaceException e) {
-                Assert.assertTrue(false, e.getMessage());
-            }
-            verifyList.add("requestBody");
+            testData = VerifyUtil.pathOrText(testData);
+            getRequestData().setBody(testData);
         });
 
         And("^设置headers:$", (String headers) -> {
@@ -78,6 +63,10 @@ public class InterfaceSteps extends InterfaceEnv implements En {
             updateGlobal(global);
         });
 
+        Given("^查看全局变量$", () -> {
+            Config.getLogger().info("全局变量:\n"+jsonPrettyPrint(global));
+        });
+
         When("^执行请求$", () -> {
             beginHttp();
         });
@@ -85,8 +74,7 @@ public class InterfaceSteps extends InterfaceEnv implements En {
         Given("^数据库中获取数据设置到全局变量中, sql (.*),获取行数 (.*), 获取的参数 (.*)$",
             (String sql, Integer index, String list) -> {
             try {
-//                    mysql = new DbUtil(System.getProperty("env"));
-                mysql = new DbUtil("debug");
+                mysql = new DbUtil(Config.env);
                 String json;
                 if (Common.hasBrance(sql)){
                     sql = Common.regularBrace(sql, InterfaceEnv.global);
@@ -117,37 +105,40 @@ public class InterfaceSteps extends InterfaceEnv implements En {
             getResponse().then().statusCode(status);
         });
 
-        Then("^jsonSchema验证response (.*)$",
-                (String classPath) -> {
-            getResponse().then().body(matchesJsonSchemaInClasspath(classPath));
+        Then("^jsonSchema验证response:$",
+                (String testData) -> {
+            testData = VerifyUtil.pathOrText(testData);
+            getResponse().then().body(matchesJsonSchemaInClasspath(testData));
+
         });
 
-        Then("^responseBody中的 (.*) 是否等于 (.*)$",
+        Then("^当前responseBody中的 (.*) 是否等于 (.*)$",
         (String jsonPath, String content) -> {
             getResponse().then().body(jsonPath, equalTo(content));
         });
 
-        Then("^responseBody中header中的Content-Type是否等于 (.*)$",
+        Then("^当前responseBody中header的Content-Type是否等于 (.*)$",
                 (String contentType) -> {
             getResponse().then().header("Content-Type", contentType);
         });
 
-        Then("^responseBody中header中的 (.*) 是否等于 (.*)$",
+        Then("^当前responseBody中header的 (.*) 是否等于 (.*)$",
                 (String key, String contentType) -> {
             getResponse().then().header(key, contentType);
         });
 
-        Then("^responseBody中的Cookie是否包含 (.*)$",
+        Then("^当前responseBody中的Cookie是否包含 (.*)$",
                 (String cookieKey) -> {
             getResponse().then().cookie(cookieKey);
         });
 
-        Then("^responseBody中Cookie的 (.*) 是否等于 (.*)$",
+        Then("^当前responseBody中Cookie的 (.*) 是否等于 (.*)$",
                 (String key, String value) -> {
             getResponse().then().cookie(key, value);
         });
 
     }
+
     public static void puts(Object object){
         System.out.println(object);
     }

@@ -40,7 +40,6 @@ public class InterfaceEnv {
         responseJson.add("request", getRequest());
         newGlobal.add(getRequestData().getInterfaceName(), responseJson);
         this.global = newGlobal.toString();
-        Config.getLogger().info("全局变量: "+global);
         this.response = response;
     }
 
@@ -90,15 +89,15 @@ public class InterfaceEnv {
     private void setResponseLog(JsonObject response){
         Config.getLogger().info("**************response begin****************");
         if (response.get("code").getAsString().equals("200")) {
-            Config.getLogger().info("headers: " + response.get("headers"));
-            Config.getLogger().info("body: " + response.get("body"));
+            Config.getLogger().info("headers:\n" + jsonPrettyPrint(response.get("headers")));
+            Config.getLogger().info("body:\n" + jsonPrettyPrint(response.get("body")));
         }else{
             Config.getLogger().error("*******************error**********************");
             Config.getLogger().error("interfaceName: "+requestData.getInterfaceName());
             Config.getLogger().error("url: "+requestData.getUrl());
-            Config.getLogger().error("headers: "+HttpClientUtil.getHeader(requestData.getHeaders()));
+            Config.getLogger().error("headers:\n"+jsonPrettyPrint(RestAssuredClientUtil.getHeaders(RestAssuredClientUtil.getHeaderList(requestData.getHeaders()))));
             Config.getLogger().error("method: "+requestData.getMethod());
-            Config.getLogger().error("request_body: "+requestData.getBody());
+            Config.getLogger().error("request_body:\n"+jsonPrettyPrint(requestData.getBody()));
             Config.getLogger().error("code: "+ response.get("code"));
             Config.getLogger().error("*******************error**********************\n");
         }
@@ -125,13 +124,21 @@ public class InterfaceEnv {
         Config.getLogger().info("**************request begin****************");
         Config.getLogger().info("interfaceName: "+requestData.getInterfaceName());
         Config.getLogger().info("url: "+requestData.getUrl());
-        Config.getLogger().info("headers: "+HttpClientUtil.getHeader(requestData.getHeaders()));
+        Config.getLogger().info("headers:\n"+jsonPrettyPrint(RestAssuredClientUtil.getHeaders(RestAssuredClientUtil.getHeaderList(requestData.getHeaders()))));
         Config.getLogger().info("method: "+requestData.getMethod());
-        Config.getLogger().info("body: "+requestData.getBody());
+        Config.getLogger().info("body:\n"+jsonPrettyPrint(requestData.getBody()));
         Config.getLogger().info("**************request end****************\n");
     }
 
     public Response getResponse() {
         return response;
+    }
+
+    public static String jsonPrettyPrint(Object object){
+        if (object instanceof String)
+            object = new JsonParser().parse(object.toString());
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String json = gson.toJson(object);
+        return json;
     }
 }

@@ -22,12 +22,13 @@ public class DbUtil extends JsonUtil {
     }
 
     public void initDB(String env){
-        String userName = Config.DBCONFIG.get("username");
-        String password = Config.DBCONFIG.get("password");
+        Map<String, String> db = (Map<String, String>) Config.DBCONFIG.get(env);
+        String userName = db.get("username");
+        String password = db.get("password");
         try {
             Class.forName(DRIVER);
-            String dbName = Config.DBCONFIG.get("database");
-            String url = "jdbc:mysql://"+Config.DBCONFIG.get("host")+":" + Config.DBCONFIG.get("port") + "/" + dbName
+            String dbName = db.get("database");
+            String url = "jdbc:mysql://"+db.get("host")+":" + db.get("port") + "/" + dbName
                     + "?" + "createDatabaseIfNotExist=true";
             conn = DriverManager.getConnection(url, userName, password);
         } catch (ClassNotFoundException e) {

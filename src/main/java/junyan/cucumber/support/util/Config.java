@@ -12,7 +12,9 @@ public class Config {
     public static final String API_LOG_PATH = "/target/api";
     public static final String UI_LOG_PATH = "/target/ui";
     public static final String LOG_CAT_PATH = "/target/logcat";
-    public static Map<String,String> DBCONFIG;
+    public static Map<String, ?> DBCONFIG;
+    public static final String[] PARAMS = {"-e"};
+    public static String env;
 
     public static Logger getLogger() {
         Logger logger = Logger.getLogger(Config.class);
@@ -22,4 +24,6 @@ public class Config {
     public static void DBinit(String json){
         DBCONFIG = JsonUtil.toMap(JsonUtil.toElement(json));
     }
+
+
 }

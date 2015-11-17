@@ -1,4 +1,4 @@
-package junyan.cucumber.support.util;
+package junyan.cucumber.support.args;
 
 import com.beust.jcommander.Parameter;
 

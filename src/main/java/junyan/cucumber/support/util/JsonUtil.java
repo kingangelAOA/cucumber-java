@@ -173,7 +173,7 @@ public class JsonUtil extends Common {
      * @return
      */
     public static Map<String, String> toMap(JsonElement jsonElement){
-        Type type = new TypeToken<Map<String, String>>(){}.getType();
+        Type type = new TypeToken<Map<String, ?>>(){}.getType();
         return new Gson().fromJson(jsonElement, type);
     }
 

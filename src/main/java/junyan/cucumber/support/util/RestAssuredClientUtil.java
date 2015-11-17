@@ -10,6 +10,7 @@ import junyan.cucumber.support.exceptions.InterfaceException;
 import junyan.cucumber.support.models.RequestData;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by kingangeltot on 15/11/13.
@@ -29,10 +30,7 @@ public class RestAssuredClientUtil extends RestAssured{
     public static List<Header> getHeaderList(String headers){
         JsonObject jsonObject = new JsonParser().parse(headers).getAsJsonObject();
         Set<Map.Entry<String, JsonElement>> setHeaders =  jsonObject.entrySet();
-        List<Header> headerList = new ArrayList<>();
-        for (Map.Entry<String, JsonElement> entry:setHeaders) {
-            headerList.add(new Header(entry.getKey(), entry.getValue().getAsString()));
-        }
+        List<Header> headerList = setHeaders.stream().map(entry -> new Header(entry.getKey(), entry.getValue().getAsString())).collect(Collectors.toList());
         return headerList;
     }
 
