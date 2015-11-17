@@ -14,7 +14,7 @@ import java.util.*;
 /**
  * Created by kingangeltot on 15/11/13.
  */
-public class RestAssuredClient extends RestAssured{
+public class RestAssuredClientUtil extends RestAssured{
 
     public static RequestSpecification getRequestSpecification(String body, Headers headers, String method){
         if (method.equals("GET") || method.equals("HEAD"))

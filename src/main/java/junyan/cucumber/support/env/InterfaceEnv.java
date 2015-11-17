@@ -4,7 +4,6 @@ import com.google.gson.*;
 import com.jayway.restassured.response.Header;
 import com.jayway.restassured.response.Headers;
 import com.jayway.restassured.response.Response;
-import com.squareup.okhttp.MediaType;
 import junyan.cucumber.support.exceptions.InterfaceException;
 import junyan.cucumber.support.models.RequestData;
 import junyan.cucumber.support.util.*;
@@ -48,7 +47,7 @@ public class InterfaceEnv {
     public JsonElement getResponseJson(Response response){
         String body;
         JsonObject responseOb = new JsonObject();
-        responseOb.add("headers", JsonUtil.toElement(RestAssuredClient.getHeaders(response.headers())));
+        responseOb.add("headers", JsonUtil.toElement(RestAssuredClientUtil.getHeaders(response.headers())));
         String contentType = response.getContentType();
         if (contentType.contains("application/json"))
             body = response.body().asString();
@@ -115,7 +114,7 @@ public class InterfaceEnv {
 
     public Response request(){
         setRequestLog();
-        return RestAssuredClient.executeHttp(requestData);
+        return RestAssuredClientUtil.executeHttp(requestData);
     }
 
     public RequestData getRequestData(){

@@ -197,7 +197,7 @@ public class Common {
         String laststr = "";
         try {
             reader = new BufferedReader(new FileReader(file));
-            String tempString = null;
+            String tempString;
             while ((tempString = reader.readLine()) != null) {
                 laststr = laststr + tempString;
             }

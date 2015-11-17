@@ -4,12 +4,9 @@ package junyan.cucumber.step_definitions;
 import com.esotericsoftware.yamlbeans.YamlException;
 import com.jayway.jsonpath.JsonPath;
 import cucumber.api.java8.En;
-import junyan.cucumber.support.util.Common;
-import junyan.cucumber.support.util.DbUtil;
-import junyan.cucumber.support.util.JsonUtil;
+import junyan.cucumber.support.util.*;
 import junyan.cucumber.support.env.InterfaceEnv;
 import junyan.cucumber.support.exceptions.InterfaceException;
-import junyan.cucumber.support.util.VerifyUtil;
 import org.testng.Assert;
 
 import java.io.FileNotFoundException;
@@ -51,6 +48,10 @@ public class InterfaceSteps extends InterfaceEnv implements En {
             verifyList.add("method");
         });
 
+        Given("^设置DB:$", (String json) -> {
+            Config.DBinit(json);
+        });
+
         And("^设置请求数据:$", (String testData) -> {
             try {
                 if (Common.verifyPath(testData))
@@ -59,6 +60,8 @@ public class InterfaceSteps extends InterfaceEnv implements En {
                     testData = Common.regularBrace(testData, InterfaceEnv.global);
                     getRequestData().setBody(testData);
                 }
+                if (testData.isEmpty())
+                    Assert.assertEquals(false, "未加载到请求数据");
                 getRequestData().setBody(testData);
             } catch (InterfaceException e) {
                 Assert.assertTrue(false, e.getMessage());
@@ -81,25 +84,22 @@ public class InterfaceSteps extends InterfaceEnv implements En {
 
         Given("^数据库中获取数据设置到全局变量中, sql (.*),获取行数 (.*), 获取的参数 (.*)$",
             (String sql, Integer index, String list) -> {
-                try {
+            try {
 //                    mysql = new DbUtil(System.getProperty("env"));
-                    mysql = new DbUtil("debug");
-                    String json;
-                    if (Common.hasBrance(sql)){
-                        sql = Common.regularBrace(sql, InterfaceEnv.global);
-                        json = mysql.getDataBySql(sql, index, list);
-                    } else {
-                        json = mysql.getDataBySql(sql, index, list);
-                    }
-                    updateGlobal(json);
-                } catch (InterfaceException e) {
-                    Assert.assertTrue(false, e.getMessage());
+                mysql = new DbUtil("debug");
+                String json;
+                if (Common.hasBrance(sql)){
+                    sql = Common.regularBrace(sql, InterfaceEnv.global);
+                    json = mysql.getDataBySql(sql, index, list);
+                } else {
+                    json = mysql.getDataBySql(sql, index, list);
                 }
-            });
-
-        Given("^查看全局变量$", () -> {
-            puts(InterfaceEnv.global);
+                updateGlobal(json);
+            } catch (InterfaceException e) {
+                Assert.assertTrue(false, e.getMessage());
+            }
         });
+
 
         Then("^从全局变量中取出字段 (.*) 的值,是否等于 (.*)$", (String index, String expected) -> {
             Object actual = JsonPath.read(InterfaceEnv.global, index);
