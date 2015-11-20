@@ -135,7 +135,7 @@ public class AppiumEnv extends Common {
         Object object;
         object = Reflect.instantiate(driverName, new Object[]{getUrl(url), desiredCapabilities});
         setDriver((RemoteWebDriver)object);
-        driver = object;
+        this.driver = object;
         return object;
     }
 

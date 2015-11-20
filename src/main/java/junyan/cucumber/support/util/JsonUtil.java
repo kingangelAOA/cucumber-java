@@ -20,10 +20,6 @@ import java.util.regex.Pattern;
  * Created by kingangeltot on 15/9/30.
  */
 public class JsonUtil extends Common {
-    private Gson gson;
-    public JsonUtil(){
-        gson = new Gson();
-    }
 
     /**
      * map转换成string,用spacer来分隔
@@ -133,15 +129,6 @@ public class JsonUtil extends Common {
     }
 
     /**
-     * map转 json字符串
-     * @param map
-     * @return
-     */
-    public String toJson(Map map){
-        return gson.toJson(map);
-    }
-
-    /**
      * response的headers转map
      * @param map
      * @return
@@ -158,14 +145,6 @@ public class JsonUtil extends Common {
         return newMap;
     }
 
-    /**
-     * jsonElement 对象转json字符串
-     * @param jsonElement
-     * @return
-     */
-    public String toJson(JsonElement jsonElement){
-        return gson.toJson(jsonElement);
-    }
 
     /**
      * JsonElement对象转map对象
@@ -337,7 +316,7 @@ public class JsonUtil extends Common {
      * @param string
      * @return
      */
-    public JsonPrimitive toJsonPrimitive(String string) {
+    public static JsonPrimitive toJsonPrimitive(String string) {
         return new JsonPrimitive(string);
     }
 
@@ -346,7 +325,7 @@ public class JsonUtil extends Common {
      * @param number
      * @return
      */
-    public JsonPrimitive toJsonPrimitive(Number number) {
+    public static JsonPrimitive toJsonPrimitive(Number number) {
         return new JsonPrimitive(number);
     }
 
@@ -355,7 +334,7 @@ public class JsonUtil extends Common {
      * @param hehe
      * @return
      */
-    public JsonPrimitive toJsonPrimitive(Boolean hehe) {
+    public static JsonPrimitive toJsonPrimitive(Boolean hehe) {
         return new JsonPrimitive(hehe);
     }
 

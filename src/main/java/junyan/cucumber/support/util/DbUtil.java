@@ -7,7 +7,6 @@ import com.mysql.management.util.QueryUtil;
 import junyan.cucumber.support.exceptions.InterfaceException;
 
 import java.sql.*;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 

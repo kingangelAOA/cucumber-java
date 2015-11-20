@@ -3,6 +3,8 @@ package junyan.cucumber.step_definitions;
 
 import com.esotericsoftware.yamlbeans.YamlException;
 import com.jayway.jsonpath.JsonPath;
+import cucumber.api.java.Before;
+import cucumber.api.java.de.Aber;
 import cucumber.api.java8.En;
 import junyan.cucumber.support.util.*;
 import junyan.cucumber.support.env.InterfaceEnv;
@@ -136,6 +138,11 @@ public class InterfaceSteps extends InterfaceEnv implements En {
                 (String key, String value) -> {
             getResponse().then().cookie(key, value);
         });
+
+    }
+
+    @Before()
+    public void test(){
 
     }
 
