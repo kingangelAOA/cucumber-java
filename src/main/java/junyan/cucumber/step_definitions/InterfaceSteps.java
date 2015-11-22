@@ -1,19 +1,17 @@
 package junyan.cucumber.step_definitions;
 
 
-import com.esotericsoftware.yamlbeans.YamlException;
 import com.jayway.jsonpath.JsonPath;
 import cucumber.api.java.Before;
-import cucumber.api.java.de.Aber;
 import cucumber.api.java8.En;
+import junyan.cucumber.support.script.Python;
+import junyan.cucumber.support.script.Script;
 import junyan.cucumber.support.util.*;
 import junyan.cucumber.support.env.InterfaceEnv;
 import junyan.cucumber.support.exceptions.InterfaceException;
 import org.testng.Assert;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.*;
 
 import static com.jayway.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
@@ -57,8 +55,17 @@ public class InterfaceSteps extends InterfaceEnv implements En {
         });
 
         And("^设置headers:$", (String headers) -> {
-                headers = VerifyUtil.headers(headers, InterfaceEnv.global);
-                getRequestData().setHeaders(headers);
+            headers = VerifyUtil.headers(headers, InterfaceEnv.global);
+            getRequestData().setHeaders(headers);
+        });
+
+        Given("^初始化脚本package (.*)$", (List<String> paths) -> {
+            Python.setPaths(paths);
+        });
+
+        And("^执行脚本,路径 (.*) 方法 (.*) 参数 (.*)$",
+        (String path, String method, String args) -> {
+            Script.evalScript(path, method, args);
         });
 
         Given("^设置全局变量 (.*)$", (String global) -> {

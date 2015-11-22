@@ -126,6 +126,7 @@ public class InterfaceEnv {
         Config.getLogger().info("url: "+requestData.getUrl());
         Config.getLogger().info("headers:\n"+jsonPrettyPrint(RestAssuredClientUtil.getHeaders(RestAssuredClientUtil.getHeaderList(requestData.getHeaders()))));
         Config.getLogger().info("method: "+requestData.getMethod());
+        System.out.println(requestData.getBody());
         Config.getLogger().info("body:\n"+jsonPrettyPrint(requestData.getBody()));
         Config.getLogger().info("**************request end****************\n");
     }

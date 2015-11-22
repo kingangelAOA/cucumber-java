@@ -5,6 +5,7 @@ import com.esotericsoftware.yamlbeans.YamlReader;
 import com.jayway.jsonpath.JsonPath;
 import junyan.cucumber.support.exceptions.InterfaceException;
 import junyan.cucumber.support.exceptions.UiExceptions;
+import org.apache.commons.beanutils.converters.BooleanArrayConverter;
 import org.apache.commons.io.FileUtils;
 import org.openjdk.jmh.generators.core.MethodInfo;
 import org.openjdk.jmh.generators.core.ParameterInfo;
@@ -167,7 +168,7 @@ public class Common {
         if (matcher.find()){
             String matchers = matcher.group(1);
             if (matchers == null)
-                throw new InterfaceException("匹配格式有误,\"${}\"或者${}");
+                throw new InterfaceException("匹配格式有误,${}");
             String newWatchers = matchers.replace("[", "\\[");
             newWatchers = newWatchers.replace("]", "\\]");
             newTarget = target.replaceAll("\\$\\{"+newWatchers+"\\}", getResult(JsonPath.read(json, matchers)).toString());
@@ -348,6 +349,12 @@ public class Common {
         map = (Map)object;
 
         return map;
+    }
+
+    public static Boolean isJsonPath(String str){
+        if (str.contains("."))
+            return true;
+        return false;
     }
 
     public void screenshot(WebDriver driver, String path) throws IOException {
