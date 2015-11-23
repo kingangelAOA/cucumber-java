@@ -21,7 +21,7 @@ public class RunCucumber{
     private static final String[] BASE_PARAMS = {"-p","json:cucumber-reports/cucumber.json", "-g", "junyan/cucumber/step_definitions"};
     public static void main(String[] args){
 //        String[] help = {"-p","pretty","-g", "junyan/cucumber/step_definitions", "--help"};
-        String[] test = {"/Users/kingangelTOT/Application/git_work/cucumber-java/example", "-t", "@interface,@script", "-e", "debug"};
+        String[] test = {"/Users/kingangeltot/Applications/git_work/cucumber-java/example", "-t", "@script", "-e", "debug"};
         List<String[]> result = getParams(addParams(test));
         initSystem(result.get(1));
         byte status = create(result.get(0));
