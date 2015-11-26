@@ -12,21 +12,25 @@ Feature: test
     """
     And 设置请求url http://localhost:3000/test${d}
     And 设置method POST
+#    And 设置请求数据:
+#    """
+#      {
+#        "aa":1,
+#        "bb":"cc",
+#        "dd":[
+#          {
+#            "ee":true,
+#            "ff":1.234556
+#          },
+#          {
+#            "gg":${abc.yy},
+#            "hh":"<[/Users/kingangelTOT/Application/git_work/python_lib/Lib/common/test1.py]-[test]-[${www[0].ff}]>"
+#          }
+#        ]
+#      }
+#    """
     And 设置请求数据:
-    """
-      {
-        "aa":1,
-        "bb":"cc",
-        "dd":[
-          {
-            "ee":true,
-            "ff":1.234556
-          },
-          {
-            "gg":${abc.yy},
-            "hh":"<[/Users/kingangelTOT/Application/git_work/python_lib/Lib/common/test1.py]-[test]-[${www[0].ff}]>"
-          }
-        ]
-      }
-    """
+      """
+      <[/Users/kingangelTOT/Application/git_work/python_lib/Lib/common/test1.py]-[test]-[${www[0].ff}, 233]>
+      """
     And 执行请求

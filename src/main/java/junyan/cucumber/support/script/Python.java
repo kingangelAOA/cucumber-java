@@ -18,11 +18,13 @@ public class Python {
     PythonInterpreter interpreter = null;
     private static List<String> paths;
 
-    public Python() {
+    public Python() throws Exception {
         PythonInterpreter.initialize(System.getProperties(),
                 System.getProperties(), new String[0]);
         this.interpreter = new PythonInterpreter();
         PySystemState sys = Py.getSystemState();
+        if (paths.size() == 0)
+            throw new Exception("没有设置python脚本目录或者第三方包路径");
         for (String str:paths)
             sys.path.append(new PyString(str));
     }
