@@ -68,7 +68,7 @@ public class RestAssuredClientUtil extends RestAssured{
     public static String getHeaders(Headers headers){
         JsonObject jsonObject = new JsonObject();
         Map<String, String> cookies = new HashMap<>();
-        for (Header header:headers.asList()){
+        for (Header header:headers){
             if (header.getName().equals("Set-Cookie")){
                 Map<String, String> cookie = parseCookies(header.getValue());
                 cookies.putAll(cookie);
