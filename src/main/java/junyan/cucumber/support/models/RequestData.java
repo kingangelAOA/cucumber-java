@@ -13,7 +13,7 @@ public class RequestData {
     private String hostAbbreviation = "";
     private String method ="" ;
     private String headers = "{}";
-    private String body = "";
+    private String body = null;
     private String interfaceName = "";
 
     public String getMethod() {

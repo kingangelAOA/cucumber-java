@@ -29,20 +29,19 @@ public class Script {
         return script;
     }
 
-    public static String evalScript(String path, String method, String args){
-        String result = "";
+    public static PyObject evalScript(String path, String method, String args){
+        PyObject pyObject = null;
         try {
             if (path.contains(".py")){
                 Python python = new Python();
-                PyObject pyObject = python.evalFunction(path, method, args);
-                result = pyObject.asString();
+                pyObject = python.evalFunction(path, method, args);
             }else if (path.contains(".rb")){
             } else
                 throw new Exception("不支持除python和ruby的脚本......");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return result;
+        return pyObject;
     }
 
     public static Boolean hasScript(String script){

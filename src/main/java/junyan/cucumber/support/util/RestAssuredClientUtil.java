@@ -17,9 +17,7 @@ import java.util.stream.Collectors;
  */
 public class RestAssuredClientUtil extends RestAssured{
 
-    public static RequestSpecification getRequestSpecification(String body, Headers headers, String method){
-        if (method.equals("GET") || method.equals("HEAD"))
-            return given().headers(headers);
+    public static RequestSpecification getRequestSpecification(String body, Headers headers){
         return given().headers(headers).body(body);
     }
 
@@ -55,8 +53,9 @@ public class RestAssuredClientUtil extends RestAssured{
     public static Response executeHttp(RequestData requestData){
         Response response = null;
         try {
-            response = request(getRequestSpecification(requestData.getBody(), getHeaders(getHeaderList(requestData.getHeaders())),
-                    requestData.getMethod()), requestData.getMethod(), requestData.getUrl());
+            response = request(getRequestSpecification(requestData.getBody(),
+                    getHeaders(getHeaderList(requestData.getHeaders()))),
+                    requestData.getMethod(), requestData.getUrl());
         } catch (InterfaceException e) {
             e.printStackTrace();
         }

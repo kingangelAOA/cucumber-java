@@ -21,8 +21,7 @@ public class Config {
     public static String GLOBAL = "{}";
 
     public static Logger getLogger() {
-        Logger logger = Logger.getLogger(Config.class);
-        return logger;
+        return Logger.getLogger(Config.class);
     }
 
     public static void DBinit(String json){

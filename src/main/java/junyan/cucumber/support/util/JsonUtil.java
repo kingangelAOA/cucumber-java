@@ -48,11 +48,24 @@ public class JsonUtil extends Common {
         return new Gson().fromJson(jsonElement, type);
     }
 
+    public static JsonElement tojson(String form){
+        return toElement(tojson(toMap(form, "&")));
+    }
+
+    public static String tojson(Map map){
+        Gson gson = new GsonBuilder().create();
+        return gson.toJson(map);
+    }
+
     /**
      * json字符串转JsonElement对象
      */
     public static JsonElement toElement(String json){
-        return new JsonParser().parse(json);
+        try {
+            return new JsonParser().parse(json);
+        }catch (JsonSyntaxException e){
+            return null;
+        }
     }
 
     /**

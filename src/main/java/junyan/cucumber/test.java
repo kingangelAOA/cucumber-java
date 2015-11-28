@@ -1,5 +1,7 @@
 package junyan.cucumber;
 
+import junyan.cucumber.support.util.Common;
+import org.omg.CORBA.COMM_FAILURE;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
@@ -15,14 +17,7 @@ import java.util.Map;
 public class Test {
 
     public static void main(String[] args) throws FileNotFoundException {
-        LinkedList list = new LinkedList();
-        list.add("A");
-        list.add("B");
-        list.add("C");
-        list.add("D");
-        list.removeFirst();
-        list.removeFirst();
-        System.out.println(list);
+        puts(Common.isForm("aa=bb&cc=dd"));
     }
 
 

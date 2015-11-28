@@ -1,5 +1,6 @@
 package junyan.cucumber.support.util;
 
+import com.google.gson.JsonElement;
 import com.jayway.jsonpath.JsonPath;
 import junyan.cucumber.support.exceptions.InterfaceException;
 import junyan.cucumber.support.exceptions.UiExceptions;
@@ -42,6 +43,12 @@ public class Common {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         return sdf.format(date);
+    }
+
+    public static Boolean isForm(String target){
+        Pattern pattern = Pattern.compile("(.*)=(.*)&*?");
+        Matcher matcher = pattern.matcher(target);
+        return matcher.find();
     }
 
     public static boolean deleteDir(File dir) {

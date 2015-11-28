@@ -16,8 +16,8 @@ public class RunCucumber{
     private static final String[] BASE_PARAMS = {"-p","json:cucumber-reports/cucumber.json", "-g", "junyan/cucumber/step_definitions"};
     public static void main(String[] args){
 //        String[] help = {"-p","pretty","-g", "junyan/cucumber/step_definitions", "--help" ,"-e" ,"alpha"};
-        String[] test = {"/Users/kingangelTOT/Application/git_work/cucumber-java/example", "-t",
-                "@script,@interface", "-e", "alpha", "-ep", "/Users/kingangelTOT/Application/git_work/cucumber-java/example/env.yml"};
+        String[] test = {"/Users/kingangelTOT/Application/git_work/cucumber-java/example", "-e", "alpha", "-ep", "/Users/kingangelTOT/Application/git_work/cucumber-java/example/env.yml", "-t",
+                "@script,@interface"};
         List<String[]> result = getParams(addParams(test));
         initSystem(result.get(1));
         byte status = create(result.get(0));
@@ -38,7 +38,7 @@ public class RunCucumber{
         argsList.addAll(Arrays.asList(args));
         List<String> paramsList = new ArrayList<>();
         for (int i = 0; i < argsList.size(); i++){
-            if (Arrays.asList(Config.PARAMS).contains(args[i])){
+            if (Arrays.asList(Config.PARAMS).contains(argsList.get(i))){
                 paramsList.add(argsList.get(i));
                 paramsList.add(argsList.get(i+1));
                 argsList.remove(i);

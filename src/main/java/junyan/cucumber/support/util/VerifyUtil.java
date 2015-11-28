@@ -40,9 +40,10 @@ public class VerifyUtil {
                 data = Common.regularBrace(data, Config.GLOBAL);
             if (Script.hasScript(data))
                 data = Script.evalScript(data);
+            if (Common.isForm(data))
+                data = data.replace("\"", "");
             if (data != null && data.isEmpty())
                 return null;
-
         } catch (InterfaceException e) {
             Assert.assertTrue(false, e.getMessage());
         }

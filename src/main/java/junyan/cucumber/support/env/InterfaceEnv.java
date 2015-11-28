@@ -48,8 +48,15 @@ public class InterfaceEnv {
     }
 
     public JsonElement getRequest(){
+        String requestBody = requestData.getBody();
         JsonObject jsonObject = new JsonObject();
-        jsonObject.add("body", JsonUtil.toElement(requestData.getBody()));
+        JsonElement body = JsonUtil.toElement(requestBody);
+        if (body == null)
+            if (Common.isForm(requestBody))
+                body = JsonUtil.tojson(requestBody);
+            else
+                body = null;
+        jsonObject.add("body", body);
         jsonObject.add("headers", JsonUtil.toElement(requestData.getHeaders()));
         return jsonObject;
     }
@@ -103,15 +110,14 @@ public class InterfaceEnv {
     }
 
     public static String jsonPrettyPrint(Object object){
+        JsonElement result = null;
         if (object == null)
             return null;
         if (object instanceof String)
-            object = new JsonParser().parse(object.toString());
-        try {
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            return gson.toJson(object);
-        } catch (Exception e){
+            result = JsonUtil.toElement(object.toString());
+        if (result == null)
             return object.toString();
-        }
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        return gson.toJson(object);
     }
 }
