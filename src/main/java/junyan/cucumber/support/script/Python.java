@@ -1,12 +1,10 @@
 package junyan.cucumber.support.script;
 
-import junyan.cucumber.support.env.InterfaceEnv;
 import junyan.cucumber.support.exceptions.InterfaceException;
 import junyan.cucumber.support.util.Common;
+import junyan.cucumber.support.env.Config;
 import org.python.core.*;
 import org.python.util.PythonInterpreter;
-import org.testng.Assert;
-
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +14,7 @@ import java.util.Map;
 public class Python {
 
     PythonInterpreter interpreter = null;
-    private static List<String> paths;
+    private static List<String> paths = Config.getPyPackage();
 
     public Python() throws Exception {
         PythonInterpreter.initialize(System.getProperties(),
@@ -27,10 +25,6 @@ public class Python {
             throw new Exception("没有设置python脚本目录或者第三方包路径");
         for (String str:paths)
             sys.path.append(new PyString(str));
-    }
-
-    public static void setPaths(List<String> paths) {
-        Python.paths = paths;
     }
 
     public void execfile( final String fileName ) {
@@ -44,9 +38,9 @@ public class Python {
 
     public PyObject evalFunction(String path, String method, String args){
         try {
-            args = Common.regularBrace(args, InterfaceEnv.global);
+            args = Common.regularBrace(args, Config.GLOBAL);
         } catch (InterfaceException e) {
-            Assert.assertEquals(false, e.getMessage());
+            return null;
         }
         execfile(path);
         return evalFunction(method, args);
@@ -55,9 +49,5 @@ public class Python {
     public PyObject evalFunction(String script) throws Exception {
         Map<String, String> scripData = Script.parseScript(script);
         return evalFunction(scripData.get("path"), scripData.get("method"), scripData.get("args"));
-    }
-
-    public void puts(Object object){
-        System.out.println(object);
     }
 }

@@ -102,8 +102,8 @@ public class CucumberReportMonitor {
 
         System.out.println("Found json reports: " + jsonFiles.length);
         String reportPath = reportFolder.getAbsolutePath();
-        for (int i = 0; i < jsonFiles.length; i++) {
-            String reportJson = reportPath + "/" + jsonFiles[i];
+        for (String jsonFile : jsonFiles) {
+            String reportJson = reportPath + "/" + jsonFile;
             System.out.println(reportJson);
             reports.add(reportJson);
         }

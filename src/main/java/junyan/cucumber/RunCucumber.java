@@ -2,17 +2,12 @@ package junyan.cucumber;
 
 import com.beust.jcommander.JCommander;
 import cucumber.api.cli.Main;
-import cucumber.api.testng.AbstractTestNGCucumberTests;
-import junyan.cucumber.support.util.Config;
+import junyan.cucumber.support.env.Config;
+import junyan.cucumber.support.util.Common;
 import junyan.cucumber.support.util.CucumberReportMonitor;
 import junyan.cucumber.support.args.InterfaceParams;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Created by kingangeltot on 15/11/4.
@@ -20,8 +15,9 @@ import java.util.Properties;
 public class RunCucumber{
     private static final String[] BASE_PARAMS = {"-p","json:cucumber-reports/cucumber.json", "-g", "junyan/cucumber/step_definitions"};
     public static void main(String[] args){
-//        String[] help = {"-p","pretty","-g", "junyan/cucumber/step_definitions", "--help"};
-        String[] test = {"/Users/kingangelTOT/Application/git_work/cucumber-java/example", "-t", "@script,@interface", "-e", "debug"};
+//        String[] help = {"-p","pretty","-g", "junyan/cucumber/step_definitions", "--help" ,"-e" ,"alpha"};
+        String[] test = {"/Users/kingangelTOT/Application/git_work/cucumber-java/example", "-t",
+                "@script,@interface", "-e", "alpha", "-ep", "/Users/kingangelTOT/Application/git_work/cucumber-java/example/env.yml"};
         List<String[]> result = getParams(addParams(test));
         initSystem(result.get(1));
         byte status = create(result.get(0));
@@ -29,11 +25,12 @@ public class RunCucumber{
         System.exit(status);
     }
 
-    public static void initSystem(String[] args){
+    public static void initSystem(String[] args) {
         InterfaceParams params = new InterfaceParams();
         JCommander cmd = new JCommander(params);
         cmd.parse(args);
-        Config.env = params.getEnv();
+        Config.ENV = params.getEnv();
+        Config.ENV_VALUE = Common.toMapByYaml(params.getEnvPath());
     }
 
     public static List<String[]> getParams(String[] args){
@@ -46,6 +43,7 @@ public class RunCucumber{
                 paramsList.add(argsList.get(i+1));
                 argsList.remove(i);
                 argsList.remove(i);
+                i--;
             }
         }
         List<String[]> result = new ArrayList<>();

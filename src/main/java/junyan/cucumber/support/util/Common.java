@@ -1,22 +1,16 @@
 package junyan.cucumber.support.util;
 
-import com.esotericsoftware.yamlbeans.YamlException;
-import com.esotericsoftware.yamlbeans.YamlReader;
 import com.jayway.jsonpath.JsonPath;
 import junyan.cucumber.support.exceptions.InterfaceException;
 import junyan.cucumber.support.exceptions.UiExceptions;
-import org.apache.commons.beanutils.converters.BooleanArrayConverter;
 import org.apache.commons.io.FileUtils;
-import org.openjdk.jmh.generators.core.MethodInfo;
-import org.openjdk.jmh.generators.core.ParameterInfo;
-import org.openjdk.jmh.generators.reflection.RFGeneratorSource;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.Augmenter;
+import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
-import java.lang.reflect.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -32,41 +26,16 @@ public class Common {
 
     /**
      * 读取yaml文件
-     * @param yamlPath
-     * @return
-     * @throws FileNotFoundException
-     * @throws YamlException
      */
     public static Map toMapByYaml(String yamlPath){
-        YamlReader reader;
-        Object object;
-        Map map = null;
+        InputStream input = null;
         try {
-            reader = new YamlReader(new FileReader(yamlPath));
-            object = reader.read();
-            map = (Map)object;
-        }catch (YamlException e) {
-            e.printStackTrace();
+            input = new FileInputStream(new File(yamlPath));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        return map;
-    }
-
-    public static Map toMap(String yamlPath){
-        YamlReader reader;
-        Object object;
-        Map map = null;
-        try {
-            reader = new YamlReader(new FileReader(yamlPath));
-            object = reader.read();
-            map = (Map)object;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (YamlException e) {
-            e.printStackTrace();
-        }
-        return map;
+        Yaml yaml = new Yaml();
+        return  (Map) yaml.load(input);
     }
 
     public String getTime(){
@@ -79,8 +48,8 @@ public class Common {
         if (dir.exists()) {
             if (dir.isDirectory()) {
                 String[] children = dir.list();
-                for (int i = 0; i < children.length; i++) {
-                    boolean success = deleteDir(new File(dir, children[i]));
+                for (String aChildren : children) {
+                    boolean success = deleteDir(new File(dir, aChildren));
                     if (!success) {
                         return false;
                     }
@@ -94,7 +63,7 @@ public class Common {
     public static List<String> getFiles(String filePath, List<String> fileList) {
         File root = new File(filePath);
         File[] files = root.listFiles();
-        for (File file:files){
+        for (File file: files != null ? files : new File[0]){
             if (file.isDirectory())
                 getFiles(file.getAbsolutePath(), fileList);
             else
@@ -104,55 +73,18 @@ public class Common {
         return fileList;
     }
 
-
-    public String getClassName(Object object){
-        return object.getClass().getSimpleName();
-    }
-
     public static void puts(Object object){
         System.out.println(object);
     }
 
     /**
      * 验证此字符串是否是文件路径
-     * @param path
-     * @return
      */
     public static Boolean verifyPath(String path){
         String pattern = "(^//.|^/|^[a-zA-Z])?:?/.+(/$)?";
         Pattern p = Pattern.compile(pattern);
         Matcher m = p.matcher(path);
         return m.matches();
-    }
-
-    public static List<MethodInfo> getMethodInfo(Collection<MethodInfo> collection){
-        List<MethodInfo> list = new ArrayList<>();
-        Iterator<MethodInfo> iterator = collection.iterator();
-        while (iterator.hasNext()){
-            MethodInfo methodInfo = iterator.next();
-            list.add(methodInfo);
-        }
-        return list;
-    }
-
-    public static List<ParameterInfo> getParameterInfo(Collection<ParameterInfo> collection){
-        List<ParameterInfo> list = new ArrayList<>();
-        Iterator<ParameterInfo> iterator = collection.iterator();
-        while (iterator.hasNext()){
-            ParameterInfo parameterInfo = iterator.next();
-            list.add(parameterInfo);
-        }
-        return list;
-    }
-
-    public static List<String> getParameterName(Collection<ParameterInfo> collection){
-        List<String> list = new ArrayList<>();
-        Iterator<org.openjdk.jmh.generators.core.ParameterInfo> iterator = collection.iterator();
-        while (iterator.hasNext()){
-            ParameterInfo parameterInfo = iterator.next();
-            list.add(parameterInfo.getType().getName());
-        }
-        return list;
     }
 
     public static Boolean hasBrance(String target){
@@ -210,6 +142,7 @@ public class Common {
                 try {
                     reader.close();
                 } catch (IOException e1) {
+                    return null;
                 }
             }
         }
@@ -218,8 +151,6 @@ public class Common {
 
     /**
      * list 转换成 数组
-     * @param list
-     * @return
      */
     public static Object[] toCollection(List<Object> list){
         Object[] objects = new Object[list.size()];
@@ -241,48 +172,16 @@ public class Common {
             file .mkdir();
     }
 
-    public void createFile(String path){
-        File file=new File(path);
-        if(!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-
-
-    private static Class<?>[] toClass(Object[] args){
-        Object[] convertedArgs = new Object[args.length];
-        Class<?>[] paramsClass = new Class[args.length];
-        for (int i = 0; i < convertedArgs.length; i++) {
-            paramsClass[i] = args[i].getClass();
-        }
-        return paramsClass;
-    }
-
     public static List<Object> toList(Object[] objects){
         List<Object> list = new ArrayList<>();
-        for (int i = 0; i < objects.length; i++){
-            list.add(objects[i]);
-        }
+        Collections.addAll(list, objects);
         return list;
     }
 
     public static LinkedList<Object> toLinkedList(Object[] objects){
         LinkedList<Object> linkList = new LinkedList<>();
-        for (int i = 0; i < objects.length; i++){
-            linkList.add(objects[i]);
-        }
+        Collections.addAll(linkList, objects);
         return linkList;
-    }
-
-    public static void run(String classPath) throws ClassNotFoundException {
-        RFGeneratorSource frc = new RFGeneratorSource();
-        Collection<MethodInfo> constructorCollection = frc.resolveClass(Class.forName("classPath")).getConstructors();
-
     }
 
     public static Map<String, Object> deleteNull(Map<String, Object> map){
@@ -307,22 +206,7 @@ public class Common {
     }
 
     public static List<String> hasSame(Set<String> oneSet, Set<String> twoSet){
-        List<String> same = twoSet.stream().filter(key -> oneSet.contains(key)).collect(Collectors.toList());
-        return same;
-    }
-
-    public static <AnyType extends Comparable<? super AnyType>> int binarySearch(AnyType [] a, AnyType x){
-        int low = 0, high = a.length - 1;
-        while (low <= high){
-            int mid = (low + high) / 2;
-            if (a[mid].compareTo(x) < 0)
-                low = mid + 1;
-            else if (a[mid].compareTo(x) > 0)
-                high = mid - 1;
-            else
-                return mid;
-        }
-        return -1;
+        return twoSet.stream().filter(oneSet::contains).collect(Collectors.toList());
     }
 
     public static URL getUrl(String url){
@@ -333,28 +217,6 @@ public class Common {
             e.printStackTrace();
         }
         return newUrl;
-    }
-
-    public static Class<?> getClassType(String string) throws ClassNotFoundException {
-        return Class.forName(string);
-    }
-
-    public Map getKeyWordMap(String yamlPath) throws YamlException, FileNotFoundException {
-        YamlReader reader;
-        Object object;
-        Map map = null;
-
-        reader = new YamlReader(new FileReader(System.getProperty("user.dir") + yamlPath));
-        object = reader.read();
-        map = (Map)object;
-
-        return map;
-    }
-
-    public static Boolean isJsonPath(String str){
-        if (str.contains("."))
-            return true;
-        return false;
     }
 
     public void screenshot(WebDriver driver, String path) throws IOException {

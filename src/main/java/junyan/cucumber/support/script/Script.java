@@ -1,6 +1,5 @@
 package junyan.cucumber.support.script;
 
-import com.jayway.jsonpath.JsonPath;
 import org.python.core.PyObject;
 
 import java.util.HashMap;
@@ -18,10 +17,9 @@ public class Script {
             Map<String, String> scriptData = parseScript(script);
             if (scriptData.get("path").contains(".py")){
                 Python python = new Python();
-                PyObject pyObject = python.evalFunction(script);
-                String retsult = pyObject.asString();
+                String result = python.evalFunction(script).asString();
                 script = script.replaceAll("\\<\\["+scriptData.get("path")+"\\]-\\["+scriptData.get("method")+"\\]-\\["+scriptData.get("args")+"\\]\\>"
-                        , retsult);
+                        , result);
             }else if (scriptData.get("path").contains(".rb")){
             } else
                 throw new Exception("不支持除python和ruby的脚本......");

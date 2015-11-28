@@ -13,9 +13,6 @@ import java.util.List;
 public class Reflect {
     /**
      * 根据类路径获取生成该类的对象
-     * @param className
-     * @param objects
-     * @return
      */
     public static Object instantiate(String className, Object[] objects) {
         Object object = null;
@@ -24,13 +21,7 @@ public class Reflect {
             Constructor<?> constructor = getRightConstructor(classType, objects);
 //            puts(constructor);
             object = constructor.newInstance(objects);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return object;
@@ -38,9 +29,6 @@ public class Reflect {
 
     /**
      * 根据入参获取构造函数
-     * @param classType
-     * @param objects
-     * @return
      */
     private static Constructor getRightConstructor(Class<?> classType, Object[] objects){
         Constructor reConstructor = null;
@@ -82,10 +70,6 @@ public class Reflect {
 
     /**
      * 根据对象动态调用该对象的方法
-     * @param Object
-     * @param method
-     * @param args
-     * @return
      */
     public static Object execMethod(Object Object, String method, Object[] args){
         Class<?> clazz = Object.getClass();
@@ -94,11 +78,8 @@ public class Reflect {
         try {
 
             getMethod = selectMethod(clazz, method, args);
-//            puts(getMethod);
             object = getMethod.invoke(Object, args);
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return object;
@@ -106,10 +87,6 @@ public class Reflect {
 
     /**
      * 动态获取method对象
-     * @param clazz
-     * @param name
-     * @param args
-     * @return
      */
     private static Method selectMethod(Class<?> clazz, String name, Object[] args){
         Method method = null;

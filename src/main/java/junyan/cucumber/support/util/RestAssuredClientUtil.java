@@ -30,8 +30,7 @@ public class RestAssuredClientUtil extends RestAssured{
     public static List<Header> getHeaderList(String headers){
         JsonObject jsonObject = new JsonParser().parse(headers).getAsJsonObject();
         Set<Map.Entry<String, JsonElement>> setHeaders =  jsonObject.entrySet();
-        List<Header> headerList = setHeaders.stream().map(entry -> new Header(entry.getKey(), entry.getValue().getAsString())).collect(Collectors.toList());
-        return headerList;
+        return setHeaders.stream().map(entry -> new Header(entry.getKey(), entry.getValue().getAsString())).collect(Collectors.toList());
     }
 
     public static Response request(RequestSpecification requestSpecification, String method, String uri) throws InterfaceException {
@@ -77,26 +76,6 @@ public class RestAssuredClientUtil extends RestAssured{
         }
         jsonObject.add("Cookie", JsonUtil.toElement(new Gson().toJson(cookies, cookies.getClass())));
         return new Gson().toJson(jsonObject);
-    }
-
-    public static Map<String, String> getCookies(List<String> list){
-        Map<String, String> cookies = new HashMap<>();
-        for (String string:list){
-            cookies.putAll(parseCookies(string));
-        }
-        return cookies;
-    }
-
-    public static Map toMap(Map<String, List<String>> map){
-        Map newMap = new HashMap<>();
-        for (String key : map.keySet()){
-            List<String> list = map.get(key);
-            if (list.size() == 1)
-                newMap.put(key, list.get(0));
-            else
-                newMap.put(key, list);
-        }
-        return newMap;
     }
 
     public static Map<String, String> parseCookies(String cookie){

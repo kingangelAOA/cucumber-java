@@ -2,13 +2,13 @@ package junyan.cucumber.support.util;
 
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.*;
+import junyan.cucumber.support.env.Config;
 import junyan.cucumber.support.models.RequestData;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by kingangeltot on 15/11/6.

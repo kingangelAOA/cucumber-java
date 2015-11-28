@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.mysql.management.util.QueryUtil;
+import junyan.cucumber.support.env.Config;
 import junyan.cucumber.support.exceptions.InterfaceException;
 
 import java.sql.*;
@@ -16,12 +17,12 @@ import java.util.Map;
 public class DbUtil extends JsonUtil {
     private static final String DRIVER = "com.mysql.jdbc.Driver";
     private Connection conn;
-    public DbUtil(String env){
-        initDB(env);
+    public DbUtil(){
+        initDB();
     }
 
-    public void initDB(String env){
-        Map<String, String> db = (Map<String, String>) Config.DBCONFIG.get(env);
+    public void initDB(){
+        Map<String, String> db = Config.getDbCinfig();
         String userName = db.get("username");
         String password = db.get("password");
         try {
@@ -30,17 +31,13 @@ public class DbUtil extends JsonUtil {
             String url = "jdbc:mysql://"+db.get("host")+":" + db.get("port") + "/" + dbName
                     + "?" + "createDatabaseIfNotExist=true";
             conn = DriverManager.getConnection(url, userName, password);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
     }
 
     /**
      * 根据sql语句获取数据
-     * @param sql
-     * @param index sql结果的行数数组索引下标
      * @param list 要去哦获取的字段数组 example:[name, age]
      * @return {"name":"hehe","age":18}
      * @throws InterfaceException

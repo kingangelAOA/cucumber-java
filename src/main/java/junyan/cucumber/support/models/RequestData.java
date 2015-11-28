@@ -2,25 +2,19 @@ package junyan.cucumber.support.models;
 
 import com.google.gson.JsonElement;
 import com.squareup.okhttp.Response;
+import junyan.cucumber.support.env.Config;
 import junyan.cucumber.support.util.Common;
 
 /**
  * Created by kingangelTOT on 15/11/7.
  */
 public class RequestData {
-    private String url = "";
+    private String path = "";
+    private String hostAbbreviation = "";
     private String method ="" ;
     private String headers = "{}";
     private String body = "";
     private String interfaceName = "";
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
 
     public String getMethod() {
         return method;
@@ -52,5 +46,21 @@ public class RequestData {
 
     public void setInterfaceName(String interfaceName) {
         this.interfaceName = interfaceName;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getUrl() {
+        return Config.getHostConfig().get(hostAbbreviation) + path;
+    }
+
+    public void setHostAbbreviation(String hostAbbreviation) {
+        this.hostAbbreviation = hostAbbreviation;
     }
 }

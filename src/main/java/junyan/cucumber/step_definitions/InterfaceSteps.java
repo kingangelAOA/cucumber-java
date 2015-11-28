@@ -4,7 +4,8 @@ package junyan.cucumber.step_definitions;
 import com.jayway.jsonpath.JsonPath;
 import cucumber.api.java.Before;
 import cucumber.api.java8.En;
-import junyan.cucumber.support.script.Python;
+import cucumber.api.java8.StepdefBody;
+import junyan.cucumber.support.env.Config;
 import junyan.cucumber.support.script.Script;
 import junyan.cucumber.support.util.*;
 import junyan.cucumber.support.env.InterfaceEnv;
@@ -12,7 +13,6 @@ import junyan.cucumber.support.exceptions.InterfaceException;
 import org.testng.Assert;
 
 import java.io.IOException;
-import java.util.*;
 
 import static com.jayway.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.equalTo;
@@ -20,34 +20,33 @@ import static org.hamcrest.Matchers.equalTo;
 /**
  * Created by kingangeltot on 15/9/30.
  */
-public class InterfaceSteps extends InterfaceEnv implements En {
-    private List<String> verifyList;
-    private DbUtil mysql;
+public class InterfaceSteps extends InterfaceEnv implements En{
     public InterfaceSteps() throws IOException {
-        verifyList = new ArrayList<>();
+        Given("^设置域名简称 (.*)$", (String abbreviation) -> {
+            getRequestData().setHostAbbreviation(abbreviation);
+        });
+
         Given("^设置接口名称 (.*)$", (String name) -> {
             getRequestData().setInterfaceName(name);
         });
 
-        And("^设置请求url (.*)$", (String url) -> {
-            if (Common.hasBrance(url)){
+        And("^设置path (.*)$", (String path) -> {
+            if (Common.hasBrance(path)){
                 try {
-                    url = Common.regularBrace(url, InterfaceEnv.global);
-                    url = url.replace("\"", "");
+                    path = Common.regularBrace(path, Config.GLOBAL);
+                    path = path.replace("\"", "");
                 } catch (InterfaceException e) {
                     Assert.assertTrue(false, e.getMessage());
                 }
             }
-            getRequestData().setUrl(url);
+            getRequestData().setPath(path);
         });
 
         And("^设置method (.*)$", (String method) -> {
             getRequestData().setMethod(method);
         });
 
-        Given("^设置DB:$", (String json) -> {
-            Config.DBinit(json);
-        });
+        Given("^设置DB:$", Config::DBinit);
 
         And("^设置请求数据:$", (String testData) -> {
             testData = VerifyUtil.pathOrText(testData);
@@ -55,41 +54,31 @@ public class InterfaceSteps extends InterfaceEnv implements En {
         });
 
         And("^设置headers:$", (String headers) -> {
-            headers = VerifyUtil.headers(headers, InterfaceEnv.global);
+            headers = VerifyUtil.headers(headers, Config.GLOBAL);
             getRequestData().setHeaders(headers);
         });
 
-        Given("^初始化脚本package (.*)$", (List<String> paths) -> {
-            Python.setPaths(paths);
-        });
-
         And("^执行脚本,路径 (.*) 方法 (.*) 参数 (.*)$",
-        (String path, String method, String args) -> {
-            Script.evalScript(path, method, args);
-        });
+                (StepdefBody.A3<String, String, String>) Script::evalScript);
 
-        Given("^设置全局变量 (.*)$", (String global) -> {
-            updateGlobal(global);
-        });
+        Given("^设置全局变量 (.*)$", this::updateGlobal);
 
         Given("^查看全局变量$", () -> {
-            Config.getLogger().info("全局变量:\n"+jsonPrettyPrint(global));
+            Config.getLogger().info("全局变量:\n"+jsonPrettyPrint(Config.GLOBAL));
         });
 
-        When("^执行请求$", () -> {
-            beginHttp();
-        });
+        When("^执行请求$", this::beginHttp);
 
         Given("^数据库中获取数据设置到全局变量中, sql (.*),获取行数 (.*), 获取的参数 (.*)$",
             (String sql, Integer index, String list) -> {
             try {
-                mysql = new DbUtil(Config.env);
+                Config.MYSQL = new DbUtil();
                 String json;
                 if (Common.hasBrance(sql)){
-                    sql = Common.regularBrace(sql, InterfaceEnv.global);
-                    json = mysql.getDataBySql(sql, index, list);
+                    sql = Common.regularBrace(sql, Config.GLOBAL);
+                    json = Config.MYSQL.getDataBySql(sql, index, list);
                 } else {
-                    json = mysql.getDataBySql(sql, index, list);
+                    json = Config.MYSQL.getDataBySql(sql, index, list);
                 }
                 updateGlobal(json);
             } catch (InterfaceException e) {
@@ -99,13 +88,13 @@ public class InterfaceSteps extends InterfaceEnv implements En {
 
 
         Then("^从全局变量中取出字段 (.*) 的值,是否等于 (.*)$", (String index, String expected) -> {
-            Object actual = JsonPath.read(InterfaceEnv.global, index);
+            Object actual = JsonPath.read(Config.GLOBAL, index);
             Assert.assertEquals(actual.toString(), expected, "全局变量中的" + index + ": " + actual + ", 不等于: " + expected);
         });
 
         Then("^比较两个全局变量中的字段 (.*) 是否等于字段 (.*)$", (String index1, String index2) -> {
-            Object actual1 = JsonPath.read(InterfaceEnv.global, index1);
-            Object actual2 = JsonPath.read(InterfaceEnv.global, index2);
+            Object actual1 = JsonPath.read(Config.GLOBAL, index1);
+            Object actual2 = JsonPath.read(Config.GLOBAL, index2);
             Assert.assertEquals(actual1.toString(), actual2.toString(), "全局变量中的" + index1 + ": " + actual1 + ", 不等于" + index2 + ": " + actual2);
         });
 
@@ -153,7 +142,7 @@ public class InterfaceSteps extends InterfaceEnv implements En {
 
     }
 
-    public static void puts(Object object){
-        System.out.println(object);
-    }
+//    public static void puts(Object object){
+//        System.out.println(object);
+//    }
 }

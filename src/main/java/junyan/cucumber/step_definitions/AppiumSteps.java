@@ -86,8 +86,7 @@ public class AppiumSteps extends AppiumEnv implements En{
         Given("^启动log", () -> {
             String directory = System.getProperty("user.dir")+"/target/"+System.getProperty("project")+"/log";
             createDirectory(directory);
-            String file = directory+"/"+getTime()+".log";
-            runLogCat(file);
+            runLogCat();
         });
 
         Given("^查看缓存的元素$", () -> {

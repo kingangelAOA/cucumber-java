@@ -10,7 +10,8 @@ Feature: test
         "Cookie":"aa=bb;cc=${aaa}"
       }
     """
-    And 设置请求url http://localhost:3000/test${d}
+    And 设置域名简称 restapi
+    And 设置path /test${d}
     And 设置method POST
 #    And 设置请求数据:
 #    """

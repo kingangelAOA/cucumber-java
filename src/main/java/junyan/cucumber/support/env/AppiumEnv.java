@@ -77,7 +77,7 @@ public class AppiumEnv extends Common {
         puts(System.getProperty("user.dir")+"/src/test/java/resources/UI_data/"+project+"/"+desiredCapabilities.getCapability("platformName"));
         list = getFiles(System.getProperty("user.dir")+"/src/test/java/resources/UI_data/" + project+"/"+desiredCapabilities.getCapability("platformName"), list);
         for (String file:list){
-            allMap = toMap(allMap, toMap(file));
+            allMap = toMap(allMap, toMapByYaml(file));
         }
         return JsonUtil.toElement(new Gson().toJson(allMap));
     }
@@ -102,7 +102,7 @@ public class AppiumEnv extends Common {
         setDriverName(platform);
     }
 
-    public void runLogCat(String filePath){
+    public void runLogCat(){
         String startDir = System.getProperty("user.dir"); // start in current dir (change if needed)
         ProcessBuilder pb = new ProcessBuilder("adb","logcat");
         pb.directory(new File(startDir));  // start directory
@@ -112,7 +112,7 @@ public class AppiumEnv extends Common {
         try {
             p = pb.start();
             // start a new thread to handle the stream input
-            thread = new Thread(new ProcessLogcatRunnable(p, filePath));
+            thread = new Thread(new ProcessLogcatRunnable(p));
             thread.start();
         } catch (IOException e) {
             e.printStackTrace();

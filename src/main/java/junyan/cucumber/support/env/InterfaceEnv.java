@@ -1,24 +1,15 @@
 package junyan.cucumber.support.env;
 
 import com.google.gson.*;
-import com.jayway.restassured.response.Header;
-import com.jayway.restassured.response.Headers;
 import com.jayway.restassured.response.Response;
-import junyan.cucumber.support.exceptions.InterfaceException;
 import junyan.cucumber.support.models.RequestData;
 import junyan.cucumber.support.util.*;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by kingangelTOT on 15/10/1.
  */
 public class InterfaceEnv {
-
-    public static String global = "{}";
     private RequestData requestData;
     private Response response;
 
@@ -29,17 +20,15 @@ public class InterfaceEnv {
 
     /**
      *执行http请求
-     * @throws IOException
-     * @throws InterfaceException
      */
     public void beginHttp(){
         Response response = request();
-        JsonObject newGlobal = JsonUtil.toElement(global).getAsJsonObject();
+        JsonObject newGlobal = JsonUtil.toElement(Config.GLOBAL).getAsJsonObject();
         JsonObject responseJson = new JsonObject();
         responseJson.add("response", getResponseJson(response));
         responseJson.add("request", getRequest());
         newGlobal.add(getRequestData().getInterfaceName(), responseJson);
-        this.global = newGlobal.toString();
+        Config.GLOBAL = newGlobal.toString();
         this.response = response;
     }
 
@@ -65,27 +54,6 @@ public class InterfaceEnv {
         return jsonObject;
     }
 
-    public static Map toMap(Map<String, List<String>> map){
-        Map newMap = new HashMap<>();
-        for (String key : map.keySet()){
-            List<String> list = map.get(key);
-            if (list.size() == 1)
-                newMap.put(key, list.get(0));
-            else
-                newMap.put(key, list);
-        }
-        return newMap;
-    }
-
-    public JsonElement toJson(Headers headers){
-        JsonObject jsonObject = new JsonObject();
-        List<Header> headerList = headers.asList();
-        for (Header header : headerList){
-            jsonObject.add(header.getName(), JsonUtil.toElement(header.getValue()));
-        }
-        return jsonObject;
-    }
-
     private void setResponseLog(JsonObject response){
         Config.getLogger().info("**************response begin****************");
         if (response.get("code").getAsString().equals("200")) {
@@ -106,9 +74,9 @@ public class InterfaceEnv {
 
 
     public void updateGlobal(String json){
-        JsonObject newGlobal = JsonUtil.toElement(global).getAsJsonObject();
+        JsonObject newGlobal = JsonUtil.toElement(Config.GLOBAL).getAsJsonObject();
         JsonObject updateJson = JsonUtil.toElement(json).getAsJsonObject();
-        global = new Gson().toJson(JsonUtil.update(newGlobal, updateJson));
+        Config.GLOBAL = new Gson().toJson(JsonUtil.update(newGlobal, updateJson));
     }
 
     public Response request(){
@@ -126,7 +94,6 @@ public class InterfaceEnv {
         Config.getLogger().info("url: "+requestData.getUrl());
         Config.getLogger().info("headers:\n"+jsonPrettyPrint(RestAssuredClientUtil.getHeaders(RestAssuredClientUtil.getHeaderList(requestData.getHeaders()))));
         Config.getLogger().info("method: "+requestData.getMethod());
-        System.out.println(requestData.getBody());
         Config.getLogger().info("body:\n"+jsonPrettyPrint(requestData.getBody()));
         Config.getLogger().info("**************request end****************\n");
     }
@@ -136,10 +103,15 @@ public class InterfaceEnv {
     }
 
     public static String jsonPrettyPrint(Object object){
+        if (object == null)
+            return null;
         if (object instanceof String)
             object = new JsonParser().parse(object.toString());
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String json = gson.toJson(object);
-        return json;
+        try {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            return gson.toJson(object);
+        } catch (Exception e){
+            return object.toString();
+        }
     }
 }
