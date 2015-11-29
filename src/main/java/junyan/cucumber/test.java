@@ -4,10 +4,7 @@ import junyan.cucumber.support.util.Common;
 import org.omg.CORBA.COMM_FAILURE;
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -16,9 +13,14 @@ import java.util.Map;
  */
 public class Test {
 
-    public static void main(String[] args) throws FileNotFoundException {
-        puts(Common.isForm("aa=bb&cc=dd"));
+    public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
+        String str = "{\"username\": \"root\", \"name\": \"\\u989c\\u519b\", \"permission\": \"root\", \"created_at\": null, \"updated_at\": null, \"id\": 1, \"password\": \"111111\", \"email\": \"adfsadf\"}";
+        puts(Common.decodeUnicode(str));
     }
+
+
+
+
 
 
     public static void puts(Object object){

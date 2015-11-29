@@ -6,7 +6,7 @@ Feature: test
     And 设置headers:
     """
       {
-        "content-type":"application/x-www-form-urlencoded",
+        "content-type":"application/json",
         "Cookie":"aa=bb;cc=${aaa}"
       }
     """
@@ -32,7 +32,7 @@ Feature: test
 #    """
 #    And 设置请求数据:
       """
-      aa=${abc.yy}&cc=dd
+      <[/Users/kingangelTOT/Application/git_work/python_lib/Lib/common/mysql.py]-[mysql_test]-[${www[0].ff}, 888888]>
       """
     And 执行请求
 

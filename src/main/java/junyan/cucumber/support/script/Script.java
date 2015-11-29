@@ -1,5 +1,6 @@
 package junyan.cucumber.support.script;
 
+import junyan.cucumber.support.util.Common;
 import org.python.core.PyObject;
 
 import java.util.HashMap;
@@ -18,6 +19,7 @@ public class Script {
             if (scriptData.get("path").contains(".py")){
                 Python python = new Python();
                 String result = python.evalFunction(script).asString();
+                result = Common.decodeUnicode(result);
                 script = script.replaceAll("\\<\\["+scriptData.get("path")+"\\]-\\["+scriptData.get("method")+"\\]-\\["+scriptData.get("args")+"\\]\\>"
                         , result);
             }else if (scriptData.get("path").contains(".rb")){
