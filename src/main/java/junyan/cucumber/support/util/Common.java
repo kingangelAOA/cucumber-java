@@ -241,7 +241,7 @@ public class Common {
     public void createDirectory(String path){
         File file =new File(path);
         if  (!file .exists() && !file .isDirectory())
-            file .mkdir();
+            file.mkdir();
     }
 
     public static List<Object> toList(Object[] objects){

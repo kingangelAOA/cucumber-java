@@ -57,7 +57,8 @@ public class InterfaceSteps extends InterfaceEnv implements En{
             getRequestData().setHeaders(headers);
         });
 
-        And("^执行脚本,路径 (.*) 方法 (.*) 参数 (.*)$", (String path, String method, String args) -> {
+        And("^执行脚本,作用 (.*) 路径 (.*) 方法 (.*) 参数 (.*)$",
+            (String content,String path, String method, String args) -> {
             try {
                 PyObject pyObject = Script.evalScript(path, method, args);
                 if (pyObject instanceof PyBaseExceptionDerived || pyObject instanceof PyBaseException){
@@ -67,6 +68,12 @@ public class InterfaceSteps extends InterfaceEnv implements En{
             }catch (Exception e) {
                 e.printStackTrace();
             }
+        });
+
+        And("^脚本更新全局变量 路径 (.*) 方法 (.*) 参数 (.*)$",
+        (String content,String path, String method, String args) -> {
+            String string = Script.evalScript(path, method, args).asString();
+            updateGlobal(string);
         });
 
         Given("^设置全局变量 (.*)$", this::updateGlobal);
