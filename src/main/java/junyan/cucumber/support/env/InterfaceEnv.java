@@ -64,13 +64,13 @@ public class InterfaceEnv {
     private void setResponseLog(JsonObject response){
         Config.getLogger().info("**************response begin****************");
         if (response.get("code").getAsString().equals("200")) {
-            Config.getLogger().info("headers:\n" + jsonPrettyPrint(response.get("headers")));
-            Config.getLogger().info("body:\n" + jsonPrettyPrint(response.get("body")));
+            Config.getLogger().info("headers:\n" + jsonPrettyPrint(response.get("headers").toString()));
+            Config.getLogger().info("body:\n" + jsonPrettyPrint(response.get("body").toString()));
         }else{
             Config.getLogger().error("*******************error**********************");
             Config.getLogger().error("interfaceName: "+requestData.getInterfaceName());
             Config.getLogger().error("url: "+requestData.getUrl());
-            Config.getLogger().error("headers:\n"+jsonPrettyPrint(RestAssuredClientUtil.getHeaders(RestAssuredClientUtil.getHeaderList(requestData.getHeaders()))));
+            Config.getLogger().error("headers:\n"+jsonPrettyPrint(RestAssuredClientUtil.getHeaders(RestAssuredClientUtil.getHeaderList(requestData.getHeaders())).toString()));
             Config.getLogger().error("method: "+requestData.getMethod());
             Config.getLogger().error("request_body:\n"+jsonPrettyPrint(requestData.getBody()));
             Config.getLogger().error("code: "+ response.get("code"));
@@ -83,7 +83,7 @@ public class InterfaceEnv {
     public void updateGlobal(String json){
         JsonObject newGlobal = JsonUtil.toElement(Config.GLOBAL).getAsJsonObject();
         JsonObject updateJson = JsonUtil.toElement(json).getAsJsonObject();
-        Config.GLOBAL = new Gson().toJson(JsonUtil.update(newGlobal, updateJson));
+        Config.GLOBAL = JsonUtil.update(newGlobal, updateJson).toString();
     }
 
     public Response request(){
@@ -99,7 +99,7 @@ public class InterfaceEnv {
         Config.getLogger().info("**************request begin****************");
         Config.getLogger().info("interfaceName: "+requestData.getInterfaceName());
         Config.getLogger().info("url: "+requestData.getUrl());
-        Config.getLogger().info("headers:\n"+jsonPrettyPrint(RestAssuredClientUtil.getHeaders(RestAssuredClientUtil.getHeaderList(requestData.getHeaders()))));
+        Config.getLogger().info("headers:\n"+jsonPrettyPrint(RestAssuredClientUtil.getHeaders(RestAssuredClientUtil.getHeaderList(requestData.getHeaders())).toString()));
         Config.getLogger().info("method: "+requestData.getMethod());
         Config.getLogger().info("body:\n"+jsonPrettyPrint(requestData.getBody()));
         Config.getLogger().info("**************request end****************\n");
@@ -109,15 +109,10 @@ public class InterfaceEnv {
         return response;
     }
 
-    public static String jsonPrettyPrint(Object object){
-        JsonElement result = null;
-        if (object == null)
+    public static String jsonPrettyPrint(String json){
+        if (json == null)
             return null;
-        if (object instanceof String)
-            result = JsonUtil.toElement(object.toString());
-        if (result == null)
-            return object.toString();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(object);
+        return gson.toJson(json);
     }
 }

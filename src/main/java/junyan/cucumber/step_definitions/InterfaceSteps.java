@@ -71,7 +71,7 @@ public class InterfaceSteps extends InterfaceEnv implements En{
         });
 
         And("^脚本更新全局变量 路径 (.*) 方法 (.*) 参数 (.*)$",
-        (String content,String path, String method, String args) -> {
+        (String path, String method, String args) -> {
             String string = Script.evalScript(path, method, args).asString();
             updateGlobal(string);
         });
@@ -79,7 +79,7 @@ public class InterfaceSteps extends InterfaceEnv implements En{
         Given("^设置全局变量 (.*)$", this::updateGlobal);
 
         Given("^查看全局变量$", () -> {
-            Config.getLogger().info("全局变量:\n"+jsonPrettyPrint(Config.GLOBAL));
+            Config.getLogger().info("全局变量:\n"+Config.GLOBAL);
         });
 
         When("^执行请求$", this::beginHttp);

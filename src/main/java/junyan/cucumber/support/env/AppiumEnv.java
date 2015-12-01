@@ -74,7 +74,6 @@ public class AppiumEnv extends Common {
         String project = System.getProperty("project");
         List<String> list = new ArrayList<>();
         Map<String, Object> allMap = new HashMap<>();
-        puts(System.getProperty("user.dir")+"/src/test/java/resources/UI_data/"+project+"/"+desiredCapabilities.getCapability("platformName"));
         list = getFiles(System.getProperty("user.dir")+"/src/test/java/resources/UI_data/" + project+"/"+desiredCapabilities.getCapability("platformName"), list);
         for (String file:list){
             allMap = toMap(allMap, toMapByYaml(file));
@@ -135,7 +134,7 @@ public class AppiumEnv extends Common {
         Object object;
         object = Reflect.instantiate(driverName, new Object[]{getUrl(url), desiredCapabilities});
         setDriver((RemoteWebDriver)object);
-        this.driver = object;
+        driver = object;
         return object;
     }
 
