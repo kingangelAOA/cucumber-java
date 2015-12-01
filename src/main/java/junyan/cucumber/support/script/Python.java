@@ -34,8 +34,8 @@ public class Python {
 
     public PyObject evalFunction(String functionName, String args ) {
         if (args.equals("null"))
-            return this.interpreter.eval(functionName + "()");
-        return this.interpreter.eval(functionName + "(" + args + ")");
+            return this.interpreter.eval(functionName + "("+"'"+Config.ENV+"'"+")");
+        return this.interpreter.eval(functionName + "(" + "'"+Config.ENV+"'," + args + ")");
     }
 
     public PyObject evalFunction(String path, String method, String args){
