@@ -84,22 +84,22 @@ public class InterfaceSteps extends InterfaceEnv implements En{
 
         When("^执行请求$", this::beginHttp);
 
-        Given("^数据库中获取数据设置到全局变量中, sql (.*),获取行数 (.*), 获取的参数 (.*)$",
-            (String sql, Integer index, String list) -> {
-            try {
-                Config.MYSQL = new DbUtil();
-                String json;
-                if (Common.hasBrance(sql)){
-                    sql = Common.regularBrace(sql, Config.GLOBAL);
-                    json = Config.MYSQL.getDataBySql(sql, index, list);
-                } else {
-                    json = Config.MYSQL.getDataBySql(sql, index, list);
-                }
-                updateGlobal(json);
-            } catch (InterfaceException e) {
-                Assert.assertTrue(false, e.getMessage());
-            }
-        });
+//        Given("^数据库中获取数据设置到全局变量中, sql (.*),获取行数 (.*), 获取的参数 (.*)$",
+//            (String sql, Integer index, String list) -> {
+//            try {
+//                Config.MYSQL = new DbUtil();
+//                String json;
+//                if (Common.hasBrance(sql)){
+//                    sql = Common.regularBrace(sql, Config.GLOBAL);
+//                    json = Config.MYSQL.getDataBySql(sql, index, list);
+//                } else {
+//                    json = Config.MYSQL.getDataBySql(sql, index, list);
+//                }
+//                updateGlobal(json);
+//            } catch (InterfaceException e) {
+//                Assert.assertTrue(false, e.getMessage());
+//            }
+//        });
 
 
         Then("^从全局变量中取出字段 (.*) 的值,是否等于 (.*)$", (String index, String expected) -> {
