@@ -87,7 +87,7 @@ public class Common {
     /**
      * 验证此字符串是否是文件路径
      */
-    public static Boolean verifyPath(String path){
+    public static Boolean isPath(String path){
         String pattern = "(^//.|^/|^[a-zA-Z])?:?/.+(/$)?";
         Pattern p = Pattern.compile(pattern);
         Matcher m = p.matcher(path);
@@ -236,6 +236,12 @@ public class Common {
         List<Object> list = new ArrayList<>();
         list.add(object);
         return list;
+    }
+
+    public static List<String> toList(String[] strings){
+        List<String> argsList = new ArrayList<>();
+        argsList.addAll(Arrays.asList(strings));
+        return argsList;
     }
 
     public void createDirectory(String path){

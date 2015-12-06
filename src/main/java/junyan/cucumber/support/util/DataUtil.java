@@ -11,7 +11,7 @@ import org.testng.Assert;
 /**
  * Created by kingangelTOT on 15/11/8.
  */
-public class VerifyUtil {
+public class DataUtil {
     public static String cookies(String cookies){
         cookies = Common.replace(cookies, "\"","");
         return cookies;
@@ -34,8 +34,10 @@ public class VerifyUtil {
 
     public static String pathOrText(String data){
         try {
-            if (Common.verifyPath(data))
+            if (Common.isPath(data)){
+                data = Config.getRootPath()+data;
                 data = Common.readFile(data);
+            }
             if (Common.hasBrance(data))
                 data = Common.regularBrace(data, Config.GLOBAL);
             if (Script.hasScript(data))

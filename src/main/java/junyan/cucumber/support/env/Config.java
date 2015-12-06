@@ -19,6 +19,7 @@ public class Config {
     public static Map ENV_VALUE;
     public static DbUtil MYSQL;
     public static String GLOBAL = "{}";
+    public static String ROOT_PATH;
 
     public static Logger getLogger() {
         return Logger.getLogger(Config.class);
@@ -40,5 +41,9 @@ public class Config {
 
     public static List<String> getPyPackage(){
         return (List<String>)ENV_VALUE.get("pythonPackage");
+    }
+
+    public static String getRootPath(){
+        return ENV_VALUE.get("rootPath").toString();
     }
 }

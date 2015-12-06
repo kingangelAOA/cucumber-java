@@ -49,11 +49,11 @@ public class InterfaceSteps extends InterfaceEnv implements En{
         Given("^设置DB:$", Config::DBinit);
 
         And("^设置请求数据:$", (String testData) -> {
-            getRequestData().setBody(VerifyUtil.pathOrText(testData));
+            getRequestData().setBody(DataUtil.pathOrText(testData));
         });
 
         And("^设置headers:$", (String headers) -> {
-            headers = VerifyUtil.headers(headers, Config.GLOBAL);
+            headers = DataUtil.headers(headers, Config.GLOBAL);
             getRequestData().setHeaders(headers);
         });
 
@@ -72,6 +72,7 @@ public class InterfaceSteps extends InterfaceEnv implements En{
 
         And("^脚本更新全局变量 路径 (.*) 方法 (.*) 参数 (.*)$",
         (String path, String method, String args) -> {
+            path = Config.getRootPath()+path;
             String string = Script.evalScript(path, method, args).asString();
             updateGlobal(string);
         });
@@ -119,7 +120,7 @@ public class InterfaceSteps extends InterfaceEnv implements En{
 
         Then("^jsonSchema验证response:$",
                 (String testData) -> {
-            testData = VerifyUtil.pathOrText(testData);
+            testData = DataUtil.pathOrText(testData);
             getResponse().then().body(matchesJsonSchemaInClasspath(testData));
 
         });
