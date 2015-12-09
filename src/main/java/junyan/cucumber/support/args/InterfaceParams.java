@@ -11,13 +11,27 @@ public class InterfaceParams {
     private String env;
 
     @Parameter(names = "-ep", required = true, description = "设置测试环境")
-    private String envPath;
+    private String projectName;
+
+    @Parameter(names = "-rp", required = true, description = "根目录")
+    private String rooPath;
+
+    @Parameter(names = "-m", required = true, description = "项目模块")
+    private String module;
 
     public String getEnv() {
         return env;
     }
 
-    public String getEnvPath() {
-        return envPath;
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public String getRooPath() {
+        return rooPath;
+    }
+
+    public String getModule() {
+        return module;
     }
 }

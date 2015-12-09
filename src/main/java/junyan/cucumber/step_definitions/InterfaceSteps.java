@@ -72,7 +72,7 @@ public class InterfaceSteps extends InterfaceEnv implements En{
 
         And("^脚本更新全局变量 路径 (.*) 方法 (.*) 参数 (.*)$",
         (String path, String method, String args) -> {
-            path = Config.getRootPath()+path;
+            path = Config.PROJECT+"/python"+path;
             String string = Script.evalScript(path, method, args).asString();
             updateGlobal(string);
         });

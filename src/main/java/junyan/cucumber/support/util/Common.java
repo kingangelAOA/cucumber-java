@@ -303,5 +303,7 @@ public class Common {
         FileUtils.copyFile(file, new File(path));
     }
 
-
+    public static String[] toArray(String str, String flag){
+        return str.split(flag);
+    }
 }

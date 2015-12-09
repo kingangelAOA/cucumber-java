@@ -6,6 +6,7 @@ import junyan.cucumber.support.env.Config;
 import junyan.cucumber.support.util.Common;
 import junyan.cucumber.support.util.CucumberReportMonitor;
 import junyan.cucumber.support.args.InterfaceParams;
+import junyan.cucumber.support.util.JsonUtil;
 
 import java.util.*;
 
@@ -20,15 +21,18 @@ public class RunCucumber{
                 "@script"};
         List<String[]> result = getParams(addParams(test));
         initSystem(result.get(1));
-        byte status = create(addRootPath(result.get(0)));
+        byte status = create(getCucumberParams(result.get(0)));
         CucumberReportMonitor.create(new String[]{"-f", "cucumber-reports", "-o", "cucumber-reports", "-n"});
         System.exit(status);
     }
 
-    private static String[] addRootPath(String[] args){
-        for (int i = 0; i < args.length; i++){
-            if (Common.isPath(args[i]))
-                args[i] = Config.getRootPath()+args[i];
+    private static String[] getCucumberParams(String[] args){
+        String[] results = new String[args.length+1];
+        for (int i = 0; i < results.length; i++){
+            if (i <= args.length)
+                results[i] = args[i];
+            else
+                results[i] = Config.RUN_PATH;
         }
         return args;
     }
@@ -38,7 +42,18 @@ public class RunCucumber{
         JCommander cmd = new JCommander(params);
         cmd.parse(args);
         Config.ENV = params.getEnv();
-        Config.ENV_VALUE = Common.toMapByYaml(params.getEnvPath());
+        Config.ROOT_PATH = params.getRooPath();
+        Config.PROJECT =  Config.ROOT_PATH+"/"+params.getProjectName();
+        Config.MODULE = params.getModule();
+        Config.ENV_VALUE = JsonUtil.tojson(Common.toMapByYaml(Config.PROJECT+"/config/env.yml"));
+        runPath();
+    }
+
+    private static void runPath(){
+        if (Config.MODULE.equals("all"))
+            Config.RUN_PATH = Config.PROJECT;
+        else
+            Config.RUN_PATH = Config.PROJECT+"/"+Config.MODULE;
     }
 
     private static List<String[]> getParams(String[] args){

@@ -2,6 +2,7 @@ Feature: 绑定设备(推送相关)
 
     Scenario: 正常数据
         Given 设置接口名称 bind_device
+        And 脚本更新全局变量 路径 <string> 方法 <string> 参数 <string>
         And 设置域名简称 restapi
         And 设置path /v1/bind_device
         And 设置method POST

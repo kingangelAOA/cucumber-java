@@ -35,7 +35,7 @@ public class DataUtil {
     public static String pathOrText(String data){
         try {
             if (Common.isPath(data)){
-                data = Config.getRootPath()+data;
+//                data = Config.getRootPath()+data;
                 data = Common.readFile(data);
             }
             if (Common.hasBrance(data))

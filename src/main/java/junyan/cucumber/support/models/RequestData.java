@@ -1,6 +1,7 @@
 package junyan.cucumber.support.models;
 
 import com.google.gson.JsonElement;
+import com.jayway.jsonpath.JsonPath;
 import com.squareup.okhttp.Response;
 import junyan.cucumber.support.env.Config;
 import junyan.cucumber.support.util.Common;
@@ -57,7 +58,7 @@ public class RequestData {
     }
 
     public String getUrl() {
-        return Config.getHostConfig().get(hostAbbreviation) + path;
+        return JsonPath.read(Config.getHostConfig(), hostAbbreviation);
     }
 
     public void setHostAbbreviation(String hostAbbreviation) {

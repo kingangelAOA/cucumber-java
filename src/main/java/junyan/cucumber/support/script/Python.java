@@ -14,9 +14,8 @@ import java.util.Map;
 public class Python {
 
     public static PythonInterpreter INTERPRETER;
-    private static List<String> paths = Config.getPyPackage();
 
-    public static void initPython(){
+    public static void initPython(List<String> paths){
         PythonInterpreter.initialize(System.getProperties(),
                 System.getProperties(), new String[0]);
         PythonInterpreter interpreter = new PythonInterpreter();
@@ -50,4 +49,5 @@ public class Python {
         Map<String, String> scripData = Script.parseScript(script);
         return evalFunction(scripData.get("path"), scripData.get("method"), scripData.get("args"));
     }
+
 }
