@@ -2,6 +2,7 @@ package junyan.cucumber.support.env;
 
 import com.google.gson.*;
 import com.jayway.restassured.response.Response;
+import junyan.cucumber.support.exceptions.InterfaceException;
 import junyan.cucumber.support.models.RequestData;
 import junyan.cucumber.support.util.*;
 
@@ -80,9 +81,11 @@ public class InterfaceEnv {
     }
 
 
-    public void updateGlobal(String json){
+    public void updateGlobal(String json) throws InterfaceException {
         JsonObject newGlobal = JsonUtil.toElement(Config.GLOBAL).getAsJsonObject();
         JsonObject updateJson = JsonUtil.toElement(json).getAsJsonObject();
+        if (updateJson == null)
+            throw new InterfaceException("更新到全局变量的数据不是json格式的字符串.........");
         Config.GLOBAL = JsonUtil.update(newGlobal, updateJson).toString();
     }
 

@@ -15,7 +15,7 @@ import java.util.Map;
 public class Config {
     public static final String API_LOG_PATH = "/target/api";
     public static Map<String, ?> DBCONFIG;
-    public static final String[] PARAMS = {"-e", "-ep", "-rp"};
+    public static final String[] PARAMS = {"-e", "-pn", "-rp", "-m"};
     public static String ENV;
     public static String ENV_VALUE;
     public static String GLOBAL = "{}";

@@ -17,8 +17,7 @@ public class Script {
         try {
             Map<String, String> scriptData = parseScript(script);
             if (scriptData.get("path").contains(".py")){
-                Python python = new Python();
-                String result = python.evalFunction(script).asString();
+                String result = Python.evalFunction(script).asString();
                 result = Common.decodeUnicode(result);
                 script = script.replaceAll("\\<\\["+scriptData.get("path")+"\\]-\\["+scriptData.get("method")+"\\]-\\["+scriptData.get("args")+"\\]\\>"
                         , result);
@@ -35,8 +34,7 @@ public class Script {
         PyObject pyObject = null;
         try {
             if (path.contains(".py")){
-                Python python = new Python();
-                pyObject = python.evalFunction(path, method, args);
+                pyObject = Python.evalFunction(path, method, args);
             }else if (path.contains(".rb")){
             } else
                 throw new Exception("不支持除python和ruby的脚本......");

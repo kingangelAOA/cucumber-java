@@ -16,10 +16,9 @@ import java.util.*;
 public class RunCucumber{
     private static final String[] BASE_PARAMS = {"-p","json:cucumber-reports/cucumber.json", "-g", "junyan/cucumber/step_definitions"};
     public static void main(String[] args){
-//        String[] help = {"-p","pretty","-g", "junyan/cucumber/step_definitions", "--help" ,"-e" ,"alpha"};
-        String[] test = {"/feature", "-e", "alpha", "-ep", "/Users/kingangelTOT/Application/git_work/cucumber-java/feature/env.yml", "-t",
-                "@script"};
-        List<String[]> result = getParams(addParams(test));
+        String[] test = {"-rp", "/Users/kingangeltot/Applications/git_work/cucumber_project",
+                "-e", "alpha", "-pn", "eleme", "-t", "@script"};
+        List<String[]> result = getParams(addParams(args));
         initSystem(result.get(1));
         byte status = create(getCucumberParams(result.get(0)));
         CucumberReportMonitor.create(new String[]{"-f", "cucumber-reports", "-o", "cucumber-reports", "-n"});
@@ -29,12 +28,12 @@ public class RunCucumber{
     private static String[] getCucumberParams(String[] args){
         String[] results = new String[args.length+1];
         for (int i = 0; i < results.length; i++){
-            if (i <= args.length)
+            if (i <= args.length-1)
                 results[i] = args[i];
             else
                 results[i] = Config.RUN_PATH;
         }
-        return args;
+        return results;
     }
 
     private static void initSystem(String[] args) {
@@ -50,10 +49,10 @@ public class RunCucumber{
     }
 
     private static void runPath(){
-        if (Config.MODULE.equals("all"))
+        if (Config.MODULE == null)
             Config.RUN_PATH = Config.PROJECT;
         else
-            Config.RUN_PATH = Config.PROJECT+"/"+Config.MODULE;
+            Config.RUN_PATH = Config.PROJECT+"/feature/interface/"+Config.MODULE;
     }
 
     private static List<String[]> getParams(String[] args){

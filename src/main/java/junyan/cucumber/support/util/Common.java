@@ -80,6 +80,19 @@ public class Common {
         return fileList;
     }
 
+    public static List<String> getFolders(String path, List<String> fileList){
+        File root = new File(path);
+        File[] files = root.listFiles();
+        for (File file: files != null ? files : new File[0]){
+            if (file.isDirectory()) {
+                fileList.add(path+"/"+file.getName());
+                getFolders(file.getAbsolutePath(), fileList);
+            }
+
+        }
+        return fileList;
+    }
+
     public static void puts(Object object){
         System.out.println(object);
     }

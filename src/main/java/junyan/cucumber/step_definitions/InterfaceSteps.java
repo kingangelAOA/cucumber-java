@@ -74,10 +74,20 @@ public class InterfaceSteps extends InterfaceEnv implements En{
         (String path, String method, String args) -> {
             path = Config.PROJECT+"/python"+path;
             String string = Script.evalScript(path, method, args).asString();
-            updateGlobal(string);
+            try {
+                updateGlobal(string);
+            } catch (InterfaceException e) {
+               Assert.assertEquals(false, e.getMessage());
+            }
         });
 
-        Given("^设置全局变量 (.*)$", this::updateGlobal);
+        Given("^设置全局变量 (.*)$", (String json) ->{
+            try {
+                updateGlobal(json);
+            } catch (InterfaceException e) {
+                Assert.assertTrue(false, e.getMessage());
+            }
+        });
 
         Given("^查看全局变量$", () -> {
             Config.getLogger().info("全局变量:\n"+Config.GLOBAL);
